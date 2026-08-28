@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — FeedNow</title>
+  <meta name="description" content="Join FeedNow as a food donor or NGO. Start making an impact today.">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/pages/auth.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="auth-layout">
+    <div class="auth-card" style="max-width: 540px;">
+      <!-- Logo -->
+      <a href="../index.html" class="auth-card__logo">
+        <img src="../favicon.png" alt="FeedNow">
+        <span class="navbar__logo-text">Feed<span>Now</span></span>
+      </a>
+
+      <!-- Step Indicator -->
+      <div class="form-steps" id="formSteps">
+        <div class="form-step active" data-step="1"></div>
+        <div class="form-step" data-step="2"></div>
+      </div>
+
+      <!-- ══════ STEP 1: Role Selection ══════ -->
+      <div id="step1">
+        <h1 class="auth-card__title">Join FeedNow</h1>
+        <p class="auth-card__subtitle">How would you like to contribute?</p>
+
+        <div class="role-selection" id="roleSelection">
+          <div class="role-card" data-role="donor" onclick="selectRole('donor')">
+            <div class="role-card__check"><i class="ph ph-check"></i></div>
+            <div class="role-card__icon"><i class="ph ph-fork-knife"></i></div>
+            <div>
+              <div class="role-card__title">I Want to Donate</div>
+              <p class="role-card__text">I have surplus food and want to share it with those in need</p>
+            </div>
+          </div>
+
+          <div class="role-card" data-role="ngo" onclick="selectRole('ngo')">
+            <div class="role-card__check"><i class="ph ph-check"></i></div>
+            <div class="role-card__icon"><i class="ph ph-buildings"></i></div>
+            <div>
+              <div class="role-card__title">I Represent an NGO</div>
+              <p class="role-card__text">Our organization distributes food to communities in need</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn--primary btn--full btn--lg" id="continueBtn" onclick="goToStep2()" disabled>
+          Continue →
+        </button>
+
+        <p class="auth-footer-text">
+          Already have an account? <a href="login.html">Log In</a>
+        </p>
+      </div>
+
+      <!-- ══════ STEP 2: DONOR Registration ══════ -->
+      <div id="step2-donor" class="hidden">
+        <a href="#" class="auth-back" onclick="goBackToStep1(); return false;">← Back</a>
+        <h1 class="auth-card__title">Create Donor Account</h1>
+        <p class="auth-card__subtitle">Start donating surplus food today</p>
+
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label" for="donorName">Full Name <span class="required">*</span></label>
+            <input type="text" id="donorName" class="form-input" placeholder="John Doe" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="donorEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="donorEmail" class="form-input" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="donorPhone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="donorPhone" class="form-input" placeholder="+91 98765 43210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="donorPassword">Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" id="donorPassword" class="form-input" placeholder="At least 6 characters" required minlength="6">
+              <button type="button" class="password-toggle" onclick="togglePassword('donorPassword', this)"><i class="ph ph-eye"></i></button>
+            </div>
+            <span class="form-hint">Minimum 6 characters</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="donorConfirmPassword">Confirm Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" id="donorConfirmPassword" class="form-input" placeholder="Confirm your password" required>
+              <button type="button" class="password-toggle" onclick="togglePassword('donorConfirmPassword', this)"><i class="ph ph-eye"></i></button>
+            </div>
+          </div>
+
+          <span class="form-error hidden" id="donorFormError"></span>
+
+          <button type="submit" class="btn btn--primary btn--full btn--lg" id="donorSignupBtn" onclick="handleDonorSignup()" style="margin-top: var(--space-2);">
+            Create Account
+          </button>
+        </form>
+
+        <p class="auth-footer-text">
+          Already have an account? <a href="login.html">Log In</a>
+        </p>
+      </div>
+
+      <!-- ══════ STEP 2: NGO Registration ══════ -->
+      <div id="step2-ngo" class="hidden">
+        <a href="#" class="auth-back" onclick="goBackToStep1(); return false;">← Back</a>
+        <h1 class="auth-card__title">Register Your NGO</h1>
+        <p class="auth-card__subtitle">Help us reach food to communities in need</p>
+
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label" for="ngoName">NGO Name <span class="required">*</span></label>
+            <input type="text" id="ngoName" class="form-input" placeholder="Hope Foundation" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoRepName">Representative Name <span class="required">*</span></label>
+            <input type="text" id="ngoRepName" class="form-input" placeholder="Full name of representative" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoEmail">Email Address <span class="required">*</span></label>
+            <input type="email" id="ngoEmail" class="form-input" placeholder="contact@ngo.org" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoPhone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="ngoPhone" class="form-input" placeholder="+91 98765 43210" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoAddress">NGO Address <span class="required">*</span></label>
+            <input type="text" id="ngoAddress" class="form-input" placeholder="Full address of your NGO" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoPassword">Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" id="ngoPassword" class="form-input" placeholder="At least 6 characters" required minlength="6">
+              <button type="button" class="password-toggle" onclick="togglePassword('ngoPassword', this)"><i class="ph ph-eye"></i></button>
+            </div>
+            <span class="form-hint">Minimum 6 characters</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ngoConfirmPassword">Confirm Password <span class="required">*</span></label>
+            <div class="password-field">
+              <input type="password" id="ngoConfirmPassword" class="form-input" placeholder="Confirm your password" required>
+              <button type="button" class="password-toggle" onclick="togglePassword('ngoConfirmPassword', this)"><i class="ph ph-eye"></i></button>
+            </div>
+          </div>
+
+          <span class="form-error hidden" id="ngoFormError"></span>
+
+          <button type="submit" class="btn btn--primary btn--full btn--lg" id="ngoSignupBtn" onclick="handleNgoSignup()" style="margin-top: var(--space-2);">
+            Register NGO
+          </button>
+        </form>
+
+        <p class="auth-footer-text">
+          Already have an account? <a href="login.html">Log In</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/navigation.js"></script>
+  <script src="../assets/js/auth-bg.js"></script>
+  <script>
+    let selectedRole = null;
+
+    // Auto-select role from URL param
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const role = params.get('role');
+      if (role === 'ngo' || role === 'donor') {
+        selectRole(role);
+      }
+    })();
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-card').forEach(card => {
+        card.classList.toggle('selected', card.dataset.role === role);
+      });
+      document.getElementById('continueBtn').disabled = false;
+    }
+
+    function goToStep2() {
+      if (!selectedRole) return;
+
+      document.getElementById('step1').classList.add('hidden');
+
+      // Update step indicator
+      document.querySelector('.form-step[data-step="1"]').classList.remove('active');
+      document.querySelector('.form-step[data-step="1"]').classList.add('completed');
+      document.querySelector('.form-step[data-step="2"]').classList.add('active');
+
+      if (selectedRole === 'donor') {
+        document.getElementById('step2-donor').classList.remove('hidden');
+      } else {
+        document.getElementById('step2-ngo').classList.remove('hidden');
+      }
+    }
+
+    function goBackToStep1() {
+      document.getElementById('step2-donor').classList.add('hidden');
+      document.getElementById('step2-ngo').classList.add('hidden');
+      document.getElementById('step1').classList.remove('hidden');
+
+      // Reset step indicator
+      document.querySelector('.form-step[data-step="2"]').classList.remove('active');
+      document.querySelector('.form-step[data-step="1"]').classList.remove('completed');
+      document.querySelector('.form-step[data-step="1"]').classList.add('active');
+    }
+
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '<i class="ph ph-eye-slash"></i>';
+      } else {
+        input.type = 'password';
+        btn.textContent = '<i class="ph ph-eye"></i>';
+      }
+    }
+
+    function handleDonorSignup() {
+      const name = document.getElementById('donorName').value.trim();
+      const email = document.getElementById('donorEmail').value.trim();
+      const phone = document.getElementById('donorPhone').value.trim();
+      const pass = document.getElementById('donorPassword').value;
+      const confirm = document.getElementById('donorConfirmPassword').value;
+      const error = document.getElementById('donorFormError');
+
+      error.classList.add('hidden');
+
+      if (!name || !email || !phone || !pass || !confirm) {
+        error.textContent = 'All fields are required';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.textContent = 'Please enter a valid email address';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (pass.length < 6) {
+        error.textContent = 'Password must be at least 6 characters';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (pass !== confirm) {
+        error.textContent = 'Passwords do not match';
+        error.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('donorSignupBtn');
+      btn.innerHTML = '<span class="spinner"></span> Creating Account...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        // Will connect to Supabase in Round 2
+        window.location.href = '../pages/donor/dashboard.html';
+      }, 1500);
+    }
+
+    function handleNgoSignup() {
+      const ngoName = document.getElementById('ngoName').value.trim();
+      const repName = document.getElementById('ngoRepName').value.trim();
+      const email = document.getElementById('ngoEmail').value.trim();
+      const phone = document.getElementById('ngoPhone').value.trim();
+      const address = document.getElementById('ngoAddress').value.trim();
+      const pass = document.getElementById('ngoPassword').value;
+      const confirm = document.getElementById('ngoConfirmPassword').value;
+      const error = document.getElementById('ngoFormError');
+
+      error.classList.add('hidden');
+
+      if (!ngoName || !repName || !email || !phone || !address || !pass || !confirm) {
+        error.textContent = 'All fields are required';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.textContent = 'Please enter a valid email address';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (pass.length < 6) {
+        error.textContent = 'Password must be at least 6 characters';
+        error.classList.remove('hidden');
+        return;
+      }
+      if (pass !== confirm) {
+        error.textContent = 'Passwords do not match';
+        error.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('ngoSignupBtn');
+      btn.innerHTML = '<span class="spinner"></span> Registering NGO...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        // Will connect to Supabase in Round 2
+        window.location.href = '../pages/ngo/dashboard.html';
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>
