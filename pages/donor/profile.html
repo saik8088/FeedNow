@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donor Profile — FeedNow</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="sidebar__header"><a href="../../index.html" class="sidebar__logo"><img src="../../favicon.png" alt="FeedNow"><span class="sidebar__logo-text">Feed<span>Now</span></span></a></div>
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">Donor Menu</div>
+        <a href="dashboard.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span> Dashboard</a>
+        <a href="nearby-ngos.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-map-pin"></i></span> Find NGOs</a>
+        <a href="donations.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-package"></i></span> My Donations</a>
+        <a href="notifications.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-bell"></i></span> Notifications</a>
+        <a href="profile.html" class="sidebar__link active"><span class="sidebar__link-icon"><i class="ph ph-user"></i></span> Profile</a>
+      </nav>
+    
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link">
+          <span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home
+        </a>
+        <a href="#" class="sidebar__footer-link sidebar__footer-link--danger" onclick="logout()">
+          <span class="sidebar__link-icon"><i class="ph ph-sign-out"></i></span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-main__header" style="max-width: 600px; margin-inline: auto; width: 100%;">
+        <h1 class="dashboard-main__title">Profile Settings</h1>
+      </header>
+
+      <div class="dashboard-main__content" style="max-width: 600px; margin-inline: auto; width: 100%;">
+        <div class="card animate-fade-in-up">
+          <form onsubmit="return false;">
+            <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6);">
+              <div class="avatar avatar--xl" style="font-size: 2rem;">JD</div>
+              <button class="btn btn--secondary btn--sm">Change Avatar</button>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" value="John Doe">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" value="john@example.com" disabled>
+              <span class="form-hint">Email cannot be changed directly.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-input" value="+91 98765 43210">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Default Location</label>
+              <input type="text" class="form-input" value="Koramangala, Bengaluru">
+            </div>
+            
+            <hr class="divider">
+            <button class="btn btn--primary" onclick="alert('Profile updated (Mock)')">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../../assets/js/navigation.js"></script>
+</body>
+</html>

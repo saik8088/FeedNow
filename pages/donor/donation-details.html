@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Details — FeedNow</title>
+  <meta name="description" content="Track your donation request.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <div class="sidebar__overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <a href="../../index.html" class="sidebar__logo">
+          <img src="../../favicon.png" alt="FeedNow">
+          <span class="sidebar__logo-text">Feed<span>Now</span></span>
+        </a>
+      </div>
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">Donor Menu</div>
+        <a href="dashboard.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span> Dashboard</a>
+        <a href="nearby-ngos.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-map-pin"></i></span> Find NGOs</a>
+        <a href="donations.html" class="sidebar__link active"><span class="sidebar__link-icon"><i class="ph ph-package"></i></span> My Donations</a>
+      </nav>
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link"><span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+      <header class="dashboard-main__header">
+        <div style="display: flex; align-items: center; gap: var(--space-4);">
+          <a href="donations.html" class="btn btn--icon btn--ghost" style="font-size: 1.2rem;">←</a>
+          <div>
+            <h1 class="dashboard-main__title">Donation #DN-8492</h1>
+            <p class="dashboard-main__subtitle">Sent to Hope Foundation on Oct 14, 2026</p>
+          </div>
+        </div>
+        <span class="badge badge--pending" style="font-size: var(--text-sm);">Pending Review</span>
+      </header>
+
+      <div class="dashboard-main__content">
+        <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
+          
+          <!-- Left Column -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            
+            <!-- Food Details -->
+            <div class="card animate-fade-in-up">
+              <h2 class="card__title margin-bottom-4">Food Details</h2>
+              <div style="display: flex; gap: var(--space-6); align-items: flex-start;">
+                <div style="width: 80px; height: 80px; border-radius: var(--radius-lg); background: var(--primary-50); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
+                  <i class="ph ph-bowl-food"></i>
+                </div>
+                <div style="flex: 1;">
+                  <h3 class="text-xl font-bold margin-bottom-1">Vegetable Curry & Rice</h3>
+                  <p class="text-sm text-secondary margin-bottom-4">Vegetarian • 50 Meals</p>
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                    <div>
+                      <p class="text-xs text-muted text-uppercase">Prepared At</p>
+                      <p class="font-medium">Today, 1:00 PM</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-muted text-uppercase">Available Until</p>
+                      <p class="font-medium text-danger">Today, 8:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coordination / Status Action (If accepted, this would show pickup details) -->
+            <div class="card animate-fade-in-up delay-1">
+              <h2 class="card__title margin-bottom-2">Coordination Status</h2>
+              <div style="background: var(--warning-bg); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: center; gap: var(--space-3); color: var(--warning-text);">
+                  <span class="text-xl"><i class="ph ph-hourglass-high"></i></span>
+                  <div>
+                    <h4 class="font-semibold text-sm">Waiting for NGO Acceptance</h4>
+                    <p class="text-xs opacity-80">Hope Foundation is reviewing your request. You will be notified once they accept it.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            
+            <!-- Status Timeline -->
+            <div class="card animate-fade-in-up delay-2">
+              <h2 class="card__title margin-bottom-6">Status Timeline</h2>
+              
+              <div class="timeline">
+                
+                <div class="timeline__item">
+                  <div class="timeline__dot timeline__dot--completed"></div>
+                  <div class="timeline__content">
+                    <h4 class="timeline__title">Request Sent</h4>
+                    <p class="timeline__time">Today, 2:30 PM</p>
+                  </div>
+                </div>
+
+                <div class="timeline__item">
+                  <div class="timeline__dot timeline__dot--active"></div>
+                  <div class="timeline__content">
+                    <h4 class="timeline__title">NGO Reviewing</h4>
+                    <p class="timeline__time">Currently pending</p>
+                  </div>
+                </div>
+
+                <div class="timeline__item">
+                  <div class="timeline__dot"></div>
+                  <div class="timeline__content">
+                    <h4 class="timeline__title" style="color: var(--text-muted);">Accepted</h4>
+                  </div>
+                </div>
+
+                <div class="timeline__item">
+                  <div class="timeline__dot"></div>
+                  <div class="timeline__content">
+                    <h4 class="timeline__title" style="color: var(--text-muted);">Pickup Scheduled</h4>
+                  </div>
+                </div>
+
+                <div class="timeline__item">
+                  <div class="timeline__dot"></div>
+                  <div class="timeline__content">
+                    <h4 class="timeline__title" style="color: var(--text-muted);">Completed</h4>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Cancel Button -->
+            <button class="btn btn--danger btn--full animate-fade-in-up delay-3" onclick="UI.openModal('cancelModal')">Cancel Request</button>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Cancel Modal -->
+  <div class="modal-overlay" id="cancelModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Cancel Donation Request?</h3>
+        <button class="modal__close" onclick="UI.closeModal('cancelModal')">✕</button>
+      </div>
+      <div class="modal__body">
+        <p class="text-secondary">Are you sure you want to cancel this request? The NGO will be notified that this food is no longer available.</p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" onclick="UI.closeModal('cancelModal')">Keep Request</button>
+        <button class="btn btn--danger" onclick="window.location.href='donations.html'">Yes, Cancel It</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/shared/ui.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+</body>
+</html>

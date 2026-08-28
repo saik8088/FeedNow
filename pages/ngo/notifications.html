@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications — FeedNow (NGO)</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+  <style>
+    .notification-list { 
+      display: flex; 
+      flex-direction: column; 
+      background: #ffffff; 
+      border: 1px solid var(--border-light); 
+      border-radius: var(--radius-xl); 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
+      overflow: hidden; 
+    }
+    .notification-item { 
+      padding: var(--space-6); 
+      display: flex; 
+      gap: var(--space-5); 
+      align-items: flex-start; 
+      transition: background 0.2s ease; 
+      cursor: pointer; 
+      border-bottom: 1px solid var(--border-light); 
+      background: #ffffff;
+    }
+    .notification-item:last-child { 
+      border-bottom: none; 
+    }
+    .notification-item:hover { 
+      background: var(--gray-50); 
+    }
+    .notification-item.unread .notification-title::after { 
+      content: ''; 
+      display: inline-block; 
+      width: 8px; 
+      height: 8px; 
+      border-radius: 50%; 
+      background: var(--primary); 
+      margin-left: 8px;
+      vertical-align: middle;
+      transform: translateY(-1px);
+    }
+    .notification-icon { 
+      width: 48px; 
+      height: 48px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 1.5rem; 
+      flex-shrink: 0; 
+    }
+    .notification-content { 
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+    }
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .notification-title { 
+      font-size: var(--text-base); 
+      font-weight: var(--weight-bold); 
+      color: var(--text-primary); 
+    }
+    .notification-time { 
+      font-size: var(--text-xs); 
+      color: var(--text-muted); 
+      font-weight: var(--weight-medium); 
+    }
+    .notification-desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: var(--leading-relaxed);
+    }
+  </style>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+  <div class="dashboard-layout">
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <div class="sidebar__overlay"></div>
+
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <a href="../../index.html" class="sidebar__logo">
+          <img src="../../favicon.png" alt="FeedNow">
+          <span class="sidebar__logo-text">Feed<span>Now</span></span>
+        </a>
+      </div>
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">NGO Menu</div>
+        <a href="dashboard.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span> Dashboard</a>
+        <a href="requests.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-tray-arrow-down"></i></span> Food Requests</a>
+        <a href="notifications.html" class="sidebar__link active"><span class="sidebar__link-icon"><i class="ph ph-bell"></i></span> Notifications <span class="sidebar__link-badge">3</span></a>
+        <a href="profile.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-buildings"></i></span> NGO Profile</a>
+      </nav>
+    
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link">
+          <span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home
+        </a>
+        <a href="#" class="sidebar__footer-link sidebar__footer-link--danger" onclick="logout()">
+          <span class="sidebar__link-icon"><i class="ph ph-sign-out"></i></span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-main__header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4); max-width: 900px; margin-inline: auto; width: 100%;">
+        <div>
+          <h1 class="dashboard-main__title">Notifications</h1>
+          <p class="dashboard-main__subtitle">Stay updated on your donation requests and activity.</p>
+        </div>
+        <button class="btn btn--secondary btn--sm" style="background: white;">Mark all as read</button>
+      </header>
+
+      <div class="dashboard-main__content" style="max-width: 900px; margin-inline: auto; width: 100%;">
+        <div class="notification-list animate-fade-in-up">
+          
+          <div class="notification-item unread" onclick="window.location.href='request-details.html?id=1'">
+            <div class="notification-icon" style="background: var(--warning-bg); color: var(--warning-text);"><i class="ph ph-package"></i></div>
+            <div class="notification-content">
+              <div class="notification-header">
+                <div class="notification-title">New Donation Request!</div>
+                <div class="notification-time">5 mins ago</div>
+              </div>
+              <div class="notification-desc">Fresh Bakery has offered 20 Packs of Assorted Breads. Please review and accept if needed.</div>
+            </div>
+          </div>
+
+          <div class="notification-item unread">
+            <div class="notification-icon" style="background: var(--info-bg); color: var(--info);"><i class="ph ph-info"></i></div>
+            <div class="notification-content">
+              <div class="notification-header">
+                <div class="notification-title">System Update</div>
+                <div class="notification-time">1 hour ago</div>
+              </div>
+              <div class="notification-desc">We have updated our terms regarding pickup schedules. Please review when you have a moment.</div>
+            </div>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-icon" style="background: var(--success-bg); color: var(--success);"><i class="ph ph-check-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-header">
+                <div class="notification-title">Pickup Completed</div>
+                <div class="notification-time">Oct 12, 2026</div>
+              </div>
+              <div class="notification-desc">You successfully picked up 50 Meals from Green Valley Tech.</div>
+            </div>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-icon" style="background: var(--success-bg); color: var(--success);"><i class="ph ph-check-circle"></i></div>
+            <div class="notification-content">
+              <div class="notification-header">
+                <div class="notification-title">Pickup Completed</div>
+                <div class="notification-time">Oct 10, 2026</div>
+              </div>
+              <div class="notification-desc">You successfully picked up 15 kg of Fresh Fruits from Local Market.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../../assets/js/navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Details — FeedNow</title>
+  <meta name="description" content="Review and accept a donation request.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <div class="sidebar__overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <a href="../../index.html" class="sidebar__logo">
+          <img src="../../favicon.png" alt="FeedNow">
+          <span class="sidebar__logo-text">Feed<span>Now</span></span>
+        </a>
+      </div>
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">NGO Menu</div>
+        <a href="dashboard.html" class="sidebar__link"><span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span> Dashboard</a>
+        <a href="requests.html" class="sidebar__link active"><span class="sidebar__link-icon"><i class="ph ph-tray-arrow-down"></i></span> Donation Requests</a>
+      </nav>
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link"><span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+      <header class="dashboard-main__header">
+        <div style="display: flex; align-items: center; gap: var(--space-4);">
+          <a href="requests.html" class="btn btn--icon btn--ghost" style="font-size: 1.2rem;">←</a>
+          <div>
+            <h1 class="dashboard-main__title">Review Request #DN-8492</h1>
+          </div>
+        </div>
+        <span class="badge badge--pending" style="font-size: var(--text-sm);">Pending Review</span>
+      </header>
+
+      <div class="dashboard-main__content">
+        <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-6);">
+          
+          <!-- Left Column -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            
+            <!-- Food Details -->
+            <div class="card animate-fade-in-up">
+              <h2 class="card__title margin-bottom-4">Donation Offer</h2>
+              <div style="display: flex; gap: var(--space-6); align-items: flex-start;">
+                <div style="width: 80px; height: 80px; border-radius: var(--radius-lg); background: var(--primary-50); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
+                  <i class="ph ph-bowl-food"></i>
+                </div>
+                <div style="flex: 1;">
+                  <h3 class="text-xl font-bold margin-bottom-1">Vegetable Curry & Rice</h3>
+                  <p class="text-sm text-secondary margin-bottom-4">Vegetarian • 50 Meals</p>
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                    <div>
+                      <p class="text-xs text-muted text-uppercase">Prepared At</p>
+                      <p class="font-medium">Today, 1:00 PM</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-muted text-uppercase">Available Until</p>
+                      <p class="font-medium text-danger">Today, 8:00 PM</p>
+                    </div>
+                  </div>
+
+                  <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-light);">
+                    <p class="text-xs text-muted text-uppercase margin-bottom-1">Donor Notes</p>
+                    <p class="text-sm">"Needs to be picked up in large containers. Please handle with care as it is freshly cooked."</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card animate-fade-in-up delay-1" style="display: flex; gap: var(--space-4);">
+              <button class="btn btn--danger btn--lg" style="flex: 1;" onclick="UI.openModal('declineModal')">Decline Request</button>
+              <button class="btn btn--primary btn--lg" style="flex: 2;" onclick="UI.openModal('acceptModal')">Accept & Coordinate</button>
+            </div>
+
+          </div>
+
+          <!-- Right Column -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            
+            <!-- Donor Details -->
+            <div class="card animate-fade-in-up delay-2">
+              <h2 class="card__title margin-bottom-4">Donor Information</h2>
+              
+              <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4);">
+                <div class="avatar avatar--md">JD</div>
+                <div>
+                  <h4 class="font-semibold">John Doe</h4>
+                  <p class="text-xs text-muted">First-time donor</p>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-4);">
+                <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
+                  <span><i class="ph ph-map-pin"></i></span>
+                  <p class="text-sm">Approx 3.2 km away<br><span class="text-xs text-muted">Koramangala area</span></p>
+                </div>
+              </div>
+
+              <div class="badge badge--info" style="display: flex; white-space: normal;">
+                <span style="margin-right: 4px;"><i class="ph ph-info"></i></span>
+                Exact address and phone number will be revealed after you accept the donation.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Decline Modal -->
+  <div class="modal-overlay" id="declineModal">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Decline Donation?</h3>
+        <button class="modal__close" onclick="UI.closeModal('declineModal')">✕</button>
+      </div>
+      <div class="modal__body">
+        <form onsubmit="return false;" id="declineForm">
+          <div class="form-group">
+            <label class="form-label">Please provide a reason (optional):</label>
+            <select class="form-select" id="declineReason">
+              <option value="">Select a reason...</option>
+              <option value="capacity">Capacity Full</option>
+              <option value="foodType">Food Type Not Accepted</option>
+              <option value="distance">Too Far</option>
+              <option value="pickup">Pickup Not Possible</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" onclick="UI.closeModal('declineModal')">Cancel</button>
+        <button class="btn btn--danger" onclick="handleDecline()">Confirm Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accept Modal (Coordination Form) -->
+  <div class="modal-overlay" id="acceptModal">
+    <div class="modal" style="max-width: 600px;">
+      <div class="modal__header">
+        <h3 class="modal__title">Accept & Coordinate Pickup</h3>
+        <button class="modal__close" onclick="UI.closeModal('acceptModal')">✕</button>
+      </div>
+      <div class="modal__body">
+        <form onsubmit="return false;" id="acceptForm">
+          
+          <div class="form-group">
+            <label class="form-label">Collection Method <span class="required">*</span></label>
+            <div class="form-radio-group">
+              <label class="form-radio">
+                <input type="radio" name="collection" value="pickup" required>
+                <span class="form-radio__label">We will pick up from the donor</span>
+              </label>
+              <label class="form-radio">
+                <input type="radio" name="collection" value="dropoff">
+                <span class="form-radio__label">Request donor to drop off at NGO</span>
+              </label>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+            <div class="form-group">
+              <label class="form-label" for="coordTime">Estimated Time <span class="required">*</span></label>
+              <input type="time" id="coordTime" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="coordContact">Driver/Contact Name</label>
+              <input type="text" id="coordContact" class="form-input" placeholder="e.g., Rajesh">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="coordNotes">Instructions for Donor</label>
+            <textarea id="coordNotes" class="form-textarea" placeholder="e.g., Please keep the food packed in separate boxes..." style="min-height: 80px;"></textarea>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" onclick="UI.closeModal('acceptModal')">Cancel</button>
+        <button class="btn btn--primary" id="acceptConfirmBtn" onclick="handleAccept()">Confirm Acceptance</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/js/shared/ui.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script>
+    function handleDecline() {
+      UI.closeModal('declineModal');
+      UI.showToast('Donation request declined.', 'error');
+      setTimeout(() => {
+        window.location.href = 'requests.html';
+      }, 1500);
+    }
+
+    function handleAccept() {
+      const form = document.getElementById('acceptForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const btn = document.getElementById('acceptConfirmBtn');
+      UI.setButtonLoading(btn, true);
+
+      setTimeout(() => {
+        UI.closeModal('acceptModal');
+        UI.showToast('Donation accepted successfully! Donor has been notified.', 'success');
+        
+        setTimeout(() => {
+          window.location.href = 'requests.html';
+        }, 1500);
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

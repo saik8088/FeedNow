@@ -1,0 +1,198 @@
+/* ============================================================
+   FEEDNOW — AUTH PAGE STYLES
+   Login, Signup, and role selection designs
+   ============================================================ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AUTH SHARED
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.auth-footer-text {
+  text-align: center;
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.auth-footer-text a {
+  color: var(--primary);
+  font-weight: var(--weight-semibold);
+  transition: var(--transition-colors);
+}
+
+.auth-footer-text a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+  transition: var(--transition-colors);
+}
+
+.auth-back:hover {
+  color: var(--primary);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ROLE SELECTION
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.role-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.role-card {
+  position: relative;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-5);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-all);
+  background: var(--surface);
+}
+
+.role-card:hover {
+  border-color: var(--primary-200);
+  background: var(--primary-50);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.role-card.selected {
+  border-color: var(--primary);
+  background: var(--primary-50);
+  box-shadow: 0 0 0 3px hsla(142, 72%, 42%, 0.12);
+}
+
+.role-card__check {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition-all);
+}
+
+.role-card.selected .role-card__check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.role-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-4);
+}
+
+.role-card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.role-card__text {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PASSWORD FIELD
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.password-field {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-colors);
+}
+
+.password-toggle:hover {
+  color: var(--text-primary);
+  background: var(--gray-100);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FORM STEPS INDICATOR
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.form-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.form-step {
+  width: 32px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+  transition: var(--transition-colors);
+}
+
+.form-step.active {
+  background: var(--primary);
+  width: 48px;
+}
+
+.form-step.completed {
+  background: var(--primary-200);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   AUTH RESPONSIVE
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@media (max-width: 480px) {
+  .role-selection {
+    grid-template-columns: 1fr;
+  }
+
+  .role-card {
+    padding: var(--space-6) var(--space-4);
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: var(--space-4);
+  }
+
+  .role-card__icon {
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+}

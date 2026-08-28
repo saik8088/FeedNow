@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donor Dashboard — FeedNow</title>
+  <meta name="description" content="Manage your food donations and see your impact.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+  <style>
+    /* Dashboard specific mock styles for Round 1 */
+    .recent-donations {
+      margin-top: var(--space-8);
+    }
+    .donation-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .donation-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4);
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      transition: var(--transition-all);
+    }
+    .donation-item:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary-200);
+    }
+    .donation-item__info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .donation-item__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--primary-50);
+      color: var(--primary-dark);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+    }
+    .donation-item__details h4 {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      margin-bottom: 2px;
+    }
+    .donation-item__details p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+    .donation-item__status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-2);
+    }
+    @media (max-width: 768px) {
+      .donation-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+      .donation-item__status {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+  </style>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <div class="sidebar__overlay"></div>
+
+    <!-- ═══════════════════════════════════════
+         SIDEBAR
+         ═══════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <a href="../../index.html" class="sidebar__logo">
+          <img src="../../favicon.png" alt="FeedNow">
+          <span class="sidebar__logo-text">Feed<span>Now</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">Donor Menu</div>
+        <a href="dashboard.html" class="sidebar__link active">
+          <span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span>
+          Dashboard
+        </a>
+        <a href="nearby-ngos.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-map-pin"></i></span>
+          Find NGOs
+        </a>
+        <a href="donations.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-package"></i></span>
+          My Donations
+        </a>
+        <a href="notifications.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-bell"></i></span>
+          Notifications
+          <span class="sidebar__link-badge">2</span>
+        </a>
+        <a href="profile.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-user"></i></span>
+          Profile
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link">
+          <span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home
+        </a>
+        <a href="#" class="sidebar__footer-link sidebar__footer-link--danger" onclick="logout()">
+          <span class="sidebar__link-icon"><i class="ph ph-sign-out"></i></span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════
+         MAIN CONTENT
+         ═══════════════════════════════════════ -->
+    <main class="dashboard-main">
+      
+      <header class="dashboard-main__header">
+        <div>
+          <h1 class="dashboard-main__title">Welcome back, John! 👋</h1>
+          <p class="dashboard-main__subtitle">Here's the impact you've made so far.</p>
+        </div>
+        <a href="nearby-ngos.html" class="btn btn--primary">
+          <i class="ph ph-fork-knife"></i> Donate Food
+        </a>
+      </header>
+
+      <div class="dashboard-main__content">
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid animate-fade-in-up">
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--green"><i class="ph ph-fork-knife"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">124</div>
+              <div class="stat-card__label">Total Meals Donated</div>
+            </div>
+          </div>
+
+          <div class="stat-card delay-1">
+            <div class="stat-card__icon stat-card__icon--blue"><i class="ph ph-package"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">15</div>
+              <div class="stat-card__label">Donations Completed</div>
+            </div>
+          </div>
+
+          <div class="stat-card delay-2">
+            <div class="stat-card__icon stat-card__icon--amber"><i class="ph ph-hourglass-high"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">1</div>
+              <div class="stat-card__label">Pending Request</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Donations -->
+        <div class="recent-donations animate-fade-in-up delay-3">
+          <div class="card__header">
+            <h2 class="card__title">Recent Donations</h2>
+            <a href="donations.html" class="btn btn--ghost btn--sm">View All →</a>
+          </div>
+
+          <div class="donation-list">
+            
+            <div class="donation-item">
+              <div class="donation-item__info">
+                <div class="donation-item__icon"><i class="ph ph-bowl-food"></i></div>
+                <div class="donation-item__details">
+                  <h4>Vegetable Curry & Rice</h4>
+                  <p>50 Meals • To: Hope Foundation</p>
+                </div>
+              </div>
+              <div class="donation-item__status">
+                <span class="badge badge--pending">Pending NGO Acceptance</span>
+                <span class="text-xs text-muted">2 hours ago</span>
+              </div>
+            </div>
+
+            <div class="donation-item">
+              <div class="donation-item__info">
+                <div class="donation-item__icon"><i class="ph ph-bread"></i></div>
+                <div class="donation-item__details">
+                  <h4>Assorted Breads</h4>
+                  <p>20 Packs • To: City Relief Center</p>
+                </div>
+              </div>
+              <div class="donation-item__status">
+                <span class="badge badge--pickup">Pickup Scheduled</span>
+                <span class="text-xs text-muted">Yesterday at 4:30 PM</span>
+              </div>
+            </div>
+
+            <div class="donation-item">
+              <div class="donation-item__info">
+                <div class="donation-item__icon"><i class="ph ph-carrot"></i></div>
+                <div class="donation-item__details">
+                  <h4>Fresh Fruits</h4>
+                  <p>15 Kilograms • To: Community Kitchen</p>
+                </div>
+              </div>
+              <div class="donation-item__status">
+                <span class="badge badge--completed">Completed</span>
+                <span class="text-xs text-muted">Oct 12, 2026</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script>
+    function logout() {
+      // Mock logout for Round 1
+      window.location.href = '../../index.html';
+    }
+  </script>
+
+</body>
+</html>

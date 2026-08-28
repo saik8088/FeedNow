@@ -1,9 +1,3 @@
-🍱 FEEDNOW
-
-Right Food, Right Place, Right Time
-
-
-````markdown
 # 🍱 FEEDNOW
 
 ### Right Food. Right Place. Right Time.
@@ -464,13 +458,13 @@ Make sure you have installed:
 Clone the repository:
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/saik8088/FeedNow.git
 ```
 
 Navigate to the project:
 
 ```bash
-cd FEEDNOW
+cd FeedNow
 ```
 
 Install dependencies:
@@ -518,10 +512,10 @@ By making food donation faster, more organized, and location-aware, FEEDNOW can 
 
 ## 📌 Project Status
 
-**Project:** FEEDNOW
-**Category:** Food Rescue / Social Impact Technology
-**Platform:** Web Application
-**Focus:** Donor–NGO Food Donation Workflow
+**Project:** FEEDNOW  
+**Category:** Food Rescue / Social Impact Technology  
+**Platform:** Web Application  
+**Focus:** Donor–NGO Food Donation Workflow  
 
 ---
 
@@ -529,15 +523,3 @@ By making food donation faster, more organized, and location-aware, FEEDNOW can 
 
 Developed as a hackathon project focused on solving food wastage through technology and real-time community connection.
 
----
-
-# FEEDNOW
-
-### Right Food. Right Place. Right Time.
-
-```
-
-This README follows the workflow you provided, particularly the **donor → nearby NGO → donation request → NGO response → coordination → completion** flow, rather than adding unrelated features. :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1}
-
-**For GitHub, I'd recommend using this as `README.md` and replacing `<YOUR_GITHUB_REPOSITORY_URL>` with your actual repository URL.**
-```

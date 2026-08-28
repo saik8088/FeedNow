@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NGO Dashboard — FeedNow</title>
+  <meta name="description" content="Manage your food donation requests.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+  <style>
+    /* Dashboard specific mock styles for Round 1 */
+    .recent-requests {
+      margin-top: var(--space-8);
+    }
+    .request-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    .request-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4);
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      transition: var(--transition-all);
+    }
+    .request-item:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary-200);
+    }
+    .request-item__info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .request-item__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+    }
+    .request-item__details h4 {
+      font-size: var(--text-base);
+      font-weight: var(--weight-semibold);
+      margin-bottom: 2px;
+    }
+    .request-item__details p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+    .request-item__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .status-banner {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5) var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-sm);
+    }
+    .status-banner__info h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-semibold);
+      margin-bottom: 2px;
+    }
+    .status-banner__info p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+    @media (max-width: 768px) {
+      .request-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+      .request-item__actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .status-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <div class="sidebar__overlay"></div>
+
+    <!-- ═══════════════════════════════════════
+         SIDEBAR
+         ═══════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <a href="../../index.html" class="sidebar__logo">
+          <img src="../../favicon.png" alt="FeedNow">
+          <span class="sidebar__logo-text">Feed<span>Now</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar__nav">
+        <div class="sidebar__section-label">NGO Menu</div>
+        <a href="dashboard.html" class="sidebar__link active">
+          <span class="sidebar__link-icon"><i class="ph ph-chart-bar"></i></span>
+          Dashboard
+        </a>
+        <a href="requests.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-tray-arrow-down"></i></span>
+          Donation Requests
+          <span class="sidebar__link-badge">3</span>
+        </a>
+        <a href="notifications.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-bell"></i></span>
+          Notifications
+        </a>
+        <a href="profile.html" class="sidebar__link">
+          <span class="sidebar__link-icon"><i class="ph ph-buildings"></i></span>
+          NGO Profile
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <a href="../../index.html" class="sidebar__footer-link">
+          <span class="sidebar__link-icon"><i class="ph ph-house"></i></span> Back to Home
+        </a>
+        <a href="#" class="sidebar__footer-link sidebar__footer-link--danger" onclick="logout()">
+          <span class="sidebar__link-icon"><i class="ph ph-sign-out"></i></span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════
+         MAIN CONTENT
+         ═══════════════════════════════════════ -->
+    <main class="dashboard-main">
+      
+      <header class="dashboard-main__header">
+        <div>
+          <h1 class="dashboard-main__title">Hope Foundation Dashboard</h1>
+          <p class="dashboard-main__subtitle">Manage your incoming food donations.</p>
+        </div>
+      </header>
+
+      <div class="dashboard-main__content">
+        
+        <!-- Status Banner -->
+        <div class="status-banner animate-fade-in-up">
+          <div class="status-banner__info">
+            <h3 id="statusTitle">Currently Accepting Donations</h3>
+            <p id="statusDesc">Donors in your area can see your NGO and send requests.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="acceptingToggle" checked onchange="toggleAcceptingStatus(this)">
+            <span class="toggle__slider"></span>
+          </label>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid animate-fade-in-up delay-1">
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--amber"><i class="ph ph-tray-arrow-down"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">3</div>
+              <div class="stat-card__label">New Requests</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--blue"><i class="ph ph-arrows-clockwise"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">5</div>
+              <div class="stat-card__label">Pending Pickups</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--green"><i class="ph ph-fork-knife"></i></div>
+            <div class="stat-card__content">
+              <div class="stat-card__value">450</div>
+              <div class="stat-card__label">Meals Received (Month)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Requests -->
+        <div class="recent-requests animate-fade-in-up delay-2">
+          <div class="card__header">
+            <h2 class="card__title">Recent Requests</h2>
+            <a href="requests.html" class="btn btn--ghost btn--sm">View All →</a>
+          </div>
+
+          <div class="request-list">
+            
+            <div class="request-item">
+              <div class="request-item__info">
+                <div class="request-item__icon"><i class="ph ph-bowl-food"></i></div>
+                <div class="request-item__details">
+                  <h4>Vegetable Curry & Rice</h4>
+                  <p>50 Meals • From: John Doe (3.2 km away)</p>
+                  <p class="text-xs text-muted" style="margin-top: 4px;">Available until 8:00 PM tonight</p>
+                </div>
+              </div>
+              <div class="request-item__actions">
+                <span class="badge badge--pending" style="margin-right: var(--space-3);">New Request</span>
+                <a href="request-details.html" class="btn btn--secondary btn--sm">Review</a>
+              </div>
+            </div>
+
+            <div class="request-item">
+              <div class="request-item__info">
+                <div class="request-item__icon" style="background: var(--info-bg); color: var(--info-text);"><i class="ph ph-bread"></i></div>
+                <div class="request-item__details">
+                  <h4>Assorted Breads</h4>
+                  <p>20 Packs • From: City Bakery (1.5 km away)</p>
+                  <p class="text-xs text-muted" style="margin-top: 4px;">Pickup scheduled for 4:30 PM</p>
+                </div>
+              </div>
+              <div class="request-item__actions">
+                <span class="badge badge--pickup" style="margin-right: var(--space-3);">Pickup Scheduled</span>
+                <a href="request-details.html" class="btn btn--ghost btn--sm">View Details</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script>
+    function logout() {
+      window.location.href = '../../index.html';
+    }
+
+    function toggleAcceptingStatus(checkbox) {
+      const title = document.getElementById('statusTitle');
+      const desc = document.getElementById('statusDesc');
+      
+      if (checkbox.checked) {
+        title.textContent = 'Currently Accepting Donations';
+        desc.textContent = 'Donors in your area can see your NGO and send requests.';
+        title.style.color = 'var(--text-primary)';
+      } else {
+        title.textContent = 'Not Accepting Donations';
+        desc.textContent = 'You are temporarily hidden from nearby donors.';
+        title.style.color = 'var(--text-muted)';
+      }
+
+      // Simulate API call
+      console.log('Status updated to:', checkbox.checked);
+    }
+  </script>
+
+</body>
+</html>

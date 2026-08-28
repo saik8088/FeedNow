@@ -1,0 +1,189 @@
+/* ============================================================
+   FEEDNOW — GLOBAL STYLES
+   Base typography, body, and global element styles
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  color: var(--text-primary);
+  background-color: var(--background);
+  line-height: var(--leading-normal);
+}
+
+/* ── Headings ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--text-5xl); letter-spacing: -0.025em; }
+h2 { font-size: var(--text-4xl); letter-spacing: -0.02em; }
+h3 { font-size: var(--text-2xl); letter-spacing: -0.015em; }
+h4 { font-size: var(--text-xl); }
+h5 { font-size: var(--text-lg); }
+h6 { font-size: var(--text-base); }
+
+p {
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+a {
+  transition: var(--transition-colors);
+}
+
+strong, b {
+  font-weight: var(--weight-semibold);
+}
+
+small {
+  font-size: var(--text-sm);
+}
+
+/* ── Selection ── */
+::selection {
+  background-color: var(--primary-100);
+  color: var(--primary-dark);
+}
+
+/* ── Scrollbar (webkit) ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* ── Container ── */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.container--sm { max-width: var(--container-sm); }
+.container--md { max-width: var(--container-md); }
+.container--lg { max-width: var(--container-lg); }
+
+/* ── Section ── */
+.section {
+  padding-block: var(--space-20);
+}
+
+.section--lg {
+  padding-block: var(--space-24);
+}
+
+/* ── Text Utilities ── */
+.text-center { text-align: center; }
+.text-left   { text-align: left; }
+.text-right  { text-align: right; }
+.text-muted  { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
+.text-primary-color { color: var(--primary); }
+
+/* ── Visibility ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.hidden { display: none !important; }
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.animate-fade-in      { animation: fadeIn 0.5s var(--ease-out) forwards; }
+.animate-fade-in-up   { animation: fadeInUp 0.6s var(--ease-out) forwards; }
+.animate-fade-in-down { animation: fadeInDown 0.5s var(--ease-out) forwards; }
+.animate-slide-left   { animation: slideInLeft 0.5s var(--ease-out) forwards; }
+.animate-slide-right  { animation: slideInRight 0.5s var(--ease-out) forwards; }
+.animate-scale-in     { animation: scaleIn 0.3s var(--ease-bounce) forwards; }
+.animate-pulse        { animation: pulse 2s var(--ease-default) infinite; }
+.animate-float        { animation: float 3s ease-in-out infinite; }
+
+/* Staggered animation delays */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* Intersection Observer trigger */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — FeedNow</title>
+  <meta name="description" content="Log in to FeedNow to donate food or manage your NGO donations.">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/pages/auth.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+  <div class="auth-layout">
+    <div class="auth-card">
+      <!-- Logo -->
+      <a href="../index.html" class="auth-card__logo">
+        <img src="../favicon.png" alt="FeedNow">
+        <span class="navbar__logo-text">Feed<span>Now</span></span>
+      </a>
+
+      <h1 class="auth-card__title">Welcome back</h1>
+      <p class="auth-card__subtitle">Log in to continue your impact</p>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+          <span class="form-error hidden" id="emailError">Please enter a valid email address</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-field">
+            <input type="password" id="password" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Toggle password visibility"><i class="ph ph-eye"></i></button>
+          </div>
+          <span class="form-error hidden" id="passwordError">Password is required</span>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="loginBtn" onclick="handleLogin()">
+          Log In
+        </button>
+      </form>
+
+      <p class="auth-footer-text">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/navigation.js"></script>
+  <script src="../assets/js/auth-bg.js"></script>
+  <script>
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '<i class="ph ph-eye-slash"></i>';
+      } else {
+        input.type = 'password';
+        btn.textContent = '<i class="ph ph-eye"></i>';
+      }
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      let valid = true;
+
+      // Reset
+      emailError.classList.add('hidden');
+      passwordError.classList.add('hidden');
+      email.classList.remove('error');
+      password.classList.remove('error');
+
+      if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        emailError.classList.remove('hidden');
+        email.classList.add('error');
+        valid = false;
+      }
+
+      if (!password.value || password.value.length < 6) {
+        passwordError.textContent = password.value ? 'Password must be at least 6 characters' : 'Password is required';
+        passwordError.classList.remove('hidden');
+        password.classList.add('error');
+        valid = false;
+      }
+
+      if (valid) {
+        const btn = document.getElementById('loginBtn');
+        btn.innerHTML = '<span class="spinner"></span> Logging in...';
+        btn.disabled = true;
+
+        // Simulate — will connect to Supabase in Round 2
+        setTimeout(() => {
+          // For demo: redirect based on a mock role
+          // In Round 2, this will read from Supabase profile
+          alert('Login will connect to Supabase in Round 2.\n\nFor now, use the sidebar links to explore dashboards.');
+          btn.innerHTML = 'Log In';
+          btn.disabled = false;
+        }, 1500);
+      }
+    }
+  </script>
+
+</body>
+</html>
