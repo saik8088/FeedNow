@@ -12,6 +12,7 @@ body {
   color: var(--text-primary);
   background-color: var(--background);
   line-height: var(--leading-normal);
+  overflow-x: hidden;
 }
 
 /* ── Headings ── */

@@ -87,6 +87,11 @@
     grid-template-columns: 1fr;
   }
 
+  .grid-2-col,
+  .grid-sidebar {
+    grid-template-columns: 1fr;
+  }
+
   /* --- Auth --- */
   .auth-card {
     padding: var(--space-8) var(--space-6);

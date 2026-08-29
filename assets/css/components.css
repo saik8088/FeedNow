@@ -136,16 +136,19 @@
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   box-shadow: var(--shadow-card);
-  transition: var(--transition-shadow), var(--transition-transform);
+  transition: var(--transition-all);
 }
 
 .card:hover {
   box-shadow: var(--shadow-card-hover);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .card--interactive:hover {

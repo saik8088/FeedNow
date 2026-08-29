@@ -231,6 +231,44 @@
     </main>
   </div>
 
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.tab');
+      const rows = document.querySelectorAll('tbody tr');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          tab.classList.add('active');
+
+          const filterText = tab.textContent.replace(/[0-9]/g, '').trim().toLowerCase();
+
+          rows.forEach(row => {
+            const statusBadge = row.querySelector('.badge');
+            if (!statusBadge) return;
+            const statusText = statusBadge.textContent.toLowerCase();
+
+            let isMatch = false;
+            if (filterText === 'all') {
+              isMatch = true;
+            } else if (filterText === 'active') {
+              isMatch = ['pending review', 'pickup scheduled'].includes(statusText);
+            } else if (filterText === 'completed') {
+              isMatch = statusText === 'completed';
+            } else if (filterText === 'cancelled') {
+              isMatch = statusText === 'cancelled';
+            }
+
+            row.style.display = isMatch ? '' : 'none';
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>

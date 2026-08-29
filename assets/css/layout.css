@@ -13,18 +13,19 @@
   left: 0;
   right: 0;
   height: var(--navbar-height);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-light);
+  background: rgba(236, 253, 245, 0.65); /* light green tint */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
   z-index: var(--z-fixed);
   transition: background var(--duration-normal) var(--ease-default),
               box-shadow var(--duration-normal) var(--ease-default);
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: var(--shadow-sm);
+  background: rgba(236, 253, 245, 0.85);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
 }
 
 .navbar__inner {
@@ -32,9 +33,9 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  max-width: var(--container-xl);
+  max-width: var(--container-2xl);
   margin-inline: auto;
-  padding-inline: var(--space-6);
+  padding-inline: var(--space-8);
 }
 
 .navbar__logo {
@@ -147,57 +148,135 @@
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Mobile nav */
-.navbar__mobile-menu {
+/* Mobile nav overlay */
+.navbar__mobile-overlay {
   display: none;
   position: fixed;
-  top: var(--navbar-height);
-  left: 0;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: calc(var(--z-fixed) + 1);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-default);
+}
+.navbar__mobile-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Mobile nav */
+.navbar__mobile-menu {
+  position: fixed;
+  top: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: var(--z-fixed);
-  padding: var(--space-8) var(--space-6);
+  width: 320px;
+  max-width: 85vw;
+  background: #ffffff;
+  z-index: calc(var(--z-fixed) + 2);
+  display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
+  transform: translateX(100%);
+  transition: transform var(--duration-normal) var(--ease-default);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
 }
 
 .navbar__mobile-menu.active {
+  transform: translateX(0);
+}
+
+.navbar__mobile-header {
   display: flex;
-  opacity: 1;
-  transform: translateY(0);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.navbar__mobile-close {
+  background: none;
+  border: none;
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: background var(--duration-normal);
+}
+.navbar__mobile-close:hover {
+  background: var(--gray-100);
+}
+
+.navbar__mobile-content {
+  flex: 1;
+  padding: var(--space-6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .navbar__mobile-link {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-4);
-  font-size: var(--text-lg);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-base);
   font-weight: var(--weight-medium);
   color: var(--text-primary);
   border-radius: var(--radius-lg);
   transition: var(--transition-colors);
+  text-decoration: none;
+}
+
+.navbar__mobile-link i {
+  font-size: var(--text-xl);
+  color: var(--text-muted);
 }
 
 .navbar__mobile-link:hover {
-  background: var(--primary-50);
-  color: var(--primary);
+  background: var(--gray-100);
+}
+
+.navbar__mobile-footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
 .navbar__mobile-actions {
-  margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border);
+}
+
+.navbar__mobile-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.navbar__mobile-social .footer__social-link {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+  transition: var(--transition-colors);
+}
+
+.navbar__mobile-social .footer__social-link:hover {
+  background: var(--gray-200);
+  color: var(--text-primary);
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -215,8 +294,11 @@
   left: 0;
   bottom: 0;
   width: var(--sidebar-width);
-  background: var(--surface);
-  border-right: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 1px 0 20px rgba(0,0,0,0.03);
   display: flex;
   flex-direction: column;
   z-index: var(--z-sticky);
@@ -392,18 +474,19 @@
 
 .dashboard-main {
   flex: 1;
+  min-width: 0;
   margin-left: var(--sidebar-width);
   min-height: 100vh;
-  background: var(--background);
+  background: linear-gradient(160deg, #f0fdf4 0%, #ecfdf5 25%, #f0f9ff 50%, #fefce8 75%, #fff7ed 100%);
 }
 
 .dashboard-main__header {
   position: sticky;
   top: 0;
-  background: rgba(248, 249, 251, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   z-index: var(--z-sticky);
   padding: var(--space-5) var(--space-8);
   display: flex;
@@ -533,5 +616,19 @@
 /* Content grid */
 .content-grid {
   display: grid;
+  gap: var(--space-6);
+}
+
+/* 2 Column Grid */
+.grid-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* Sidebar Grid (2fr 1fr) */
+.grid-sidebar {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   gap: var(--space-6);
 }

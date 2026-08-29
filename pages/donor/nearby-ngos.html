@@ -187,21 +187,21 @@
         </div>
 
         <!-- Filters (Mock) -->
-        <div class="tabs animate-fade-in-up delay-1">
-          <div class="tab active">All NGOs</div>
-          <div class="tab">Accepting Cooked Food</div>
-          <div class="tab">Accepting Raw Rations</div>
-          <div class="tab">Provides Pickup</div>
+        <div class="tabs animate-fade-in-up delay-1" id="ngoFilters">
+          <div class="tab active" data-filter="all">All NGOs</div>
+          <div class="tab" data-filter="cooked">Accepting Cooked Food</div>
+          <div class="tab" data-filter="raw">Accepting Raw Rations</div>
+          <div class="tab" data-filter="pickup">Provides Pickup</div>
         </div>
 
         <!-- NGO Grid -->
         <div class="ngo-grid animate-fade-in-up delay-2">
           
           <!-- NGO Card 1 -->
-          <div class="ngo-card card--interactive">
+          <div class="ngo-card card--interactive" data-categories="cooked raw">
             <div class="ngo-card__image">
-              <!-- Placeholder for NGO image -->
-              <div style="width: 100%; height: 100%; background: linear-gradient(45deg, var(--primary-200), var(--primary-100));"></div>
+              <!-- Embedded Map for NGO -->
+              <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Hope+Foundation+Koramangala+Bangalore&t=&z=14&ie=UTF8&iwloc=&output=embed" style="pointer-events: none; filter: contrast(1.1) opacity(0.85);"></iframe>
               <div class="ngo-card__distance">1.2 km away</div>
             </div>
             <div class="ngo-card__content">
@@ -220,9 +220,9 @@
           </div>
 
           <!-- NGO Card 2 -->
-          <div class="ngo-card card--interactive">
+          <div class="ngo-card card--interactive" data-categories="packaged">
             <div class="ngo-card__image">
-              <div style="width: 100%; height: 100%; background: linear-gradient(45deg, var(--info-bg), #e0f2fe);"></div>
+              <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Indiranagar+Bangalore&t=&z=14&ie=UTF8&iwloc=&output=embed" style="pointer-events: none; filter: contrast(1.1) opacity(0.85);"></iframe>
               <div class="ngo-card__distance">3.5 km away</div>
             </div>
             <div class="ngo-card__content">
@@ -241,9 +241,9 @@
           </div>
 
           <!-- NGO Card 3 -->
-          <div class="ngo-card card--interactive">
+          <div class="ngo-card card--interactive" data-categories="raw pickup">
             <div class="ngo-card__image">
-              <div style="width: 100%; height: 100%; background: linear-gradient(45deg, var(--warning-bg), #fef3c7);"></div>
+              <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Jayanagar+Bangalore&t=&z=14&ie=UTF8&iwloc=&output=embed" style="pointer-events: none; filter: contrast(1.1) opacity(0.85);"></iframe>
               <div class="ngo-card__distance">5.8 km away</div>
             </div>
             <div class="ngo-card__content">
@@ -269,5 +269,35 @@
   </div>
 
   <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const filters = document.querySelectorAll('#ngoFilters .tab');
+      const cards = document.querySelectorAll('.ngo-card');
+
+      filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+          // Update active class
+          filters.forEach(f => f.classList.remove('active'));
+          filter.classList.add('active');
+
+          const category = filter.getAttribute('data-filter');
+
+          // Filter cards
+          cards.forEach(card => {
+            if (category === 'all') {
+              card.style.display = 'flex';
+            } else {
+              const categories = card.getAttribute('data-categories') || '';
+              if (categories.includes(category)) {
+                card.style.display = 'flex';
+              } else {
+                card.style.display = 'none';
+              }
+            }
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>

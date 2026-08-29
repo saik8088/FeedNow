@@ -53,18 +53,41 @@
         <span></span>
       </button>
     </div>
+  </nav>
 
-    <!-- Mobile Menu -->
-    <div class="navbar__mobile-menu" id="mobileMenu">
+  <!-- Mobile Menu Overlay -->
+  <div class="navbar__mobile-overlay" id="mobileMenuOverlay"></div>
+
+  <!-- Mobile Menu -->
+  <div class="navbar__mobile-menu" id="mobileMenu">
+    <div class="navbar__mobile-header">
+      <a href="index.html" class="navbar__logo" aria-label="FeedNow Home">
+        <img src="favicon.png" alt="FeedNow Logo">
+        <span class="navbar__logo-text">Feed<span>Now</span></span>
+      </a>
+      <button class="navbar__mobile-close" aria-label="Close menu">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="navbar__mobile-content">
       <a href="#how-it-works" class="navbar__mobile-link"><i class="ph ph-arrows-clockwise"></i> How It Works</a>
       <a href="#features" class="navbar__mobile-link"><i class="ph ph-sparkle"></i> Features</a>
       <a href="#impact" class="navbar__mobile-link"><i class="ph ph-globe-hemisphere-west"></i> Impact</a>
+    </div>
+
+    <div class="navbar__mobile-footer">
       <div class="navbar__mobile-actions">
-        <a href="pages/login.html" class="btn btn--secondary btn--full">Log In</a>
         <a href="pages/signup.html" class="btn btn--primary btn--full">Get Started</a>
+        <a href="pages/login.html" class="btn btn--secondary btn--full" style="background: transparent; border: 1px solid var(--border);">Log In</a>
+      </div>
+      <div class="navbar__mobile-social">
+        <a href="#" class="footer__social-link" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="#" class="footer__social-link" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+        <a href="#" class="footer__social-link" aria-label="Github"><i class="ph ph-github-logo"></i></a>
       </div>
     </div>
-  </nav>
+  </div>
 
 
   <!-- ═══════════════════════════════════════
@@ -378,6 +401,7 @@
 
 
   <!-- Scripts -->
+  <script src="assets/js/zoom-fix.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/navigation.js"></script>
 
