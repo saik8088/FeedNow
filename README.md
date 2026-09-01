@@ -2,9 +2,7 @@
 
 ### Right Food. Right Place. Right Time.
 
-FEEDNOW is a smart food-rescue platform designed to connect people and organizations with surplus food to nearby NGOs that need food in real time.
-
-The platform simplifies the donation process by helping donors discover nearby NGOs, understand their current requirements, submit food donation requests, and coordinate pickup or delivery.
+FEEDNOW is a smart food-rescue platform that connects surplus food donors with nearby NGOs in real time. It helps donors find NGOs based on their location and food requirements, submit donation requests, and coordinate pickup or delivery, reducing food waste and helping people in need.
 
 ---
 
