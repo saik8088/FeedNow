@@ -47,35 +47,71 @@
         <div class="card animate-fade-in-up">
           <form onsubmit="return false;">
             <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6);">
-              <div class="avatar avatar--xl" style="font-size: 2rem;">JD</div>
-              <button class="btn btn--secondary btn--sm">Change Avatar</button>
+              <div class="avatar avatar--xl" id="avatarInitials" style="font-size: 2rem;">--</div>
+              <span class="badge badge--success">Active Donor</span>
             </div>
             
             <div class="form-group">
               <label class="form-label">Full Name</label>
-              <input type="text" class="form-input" value="John Doe">
+              <input type="text" class="form-input" id="profileName" value="">
             </div>
             <div class="form-group">
               <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" value="john@example.com" disabled>
+              <input type="email" class="form-input" id="profileEmail" value="" disabled>
               <span class="form-hint">Email cannot be changed directly.</span>
             </div>
             <div class="form-group">
               <label class="form-label">Phone Number</label>
-              <input type="tel" class="form-input" value="+91 98765 43210">
+              <input type="tel" class="form-input" id="profilePhone" value="">
             </div>
             <div class="form-group">
-              <label class="form-label">Default Location</label>
-              <input type="text" class="form-input" value="Koramangala, Bengaluru">
+              <label class="form-label">Role</label>
+              <input type="text" class="form-input" value="Food Donor" disabled>
             </div>
             
             <hr class="divider">
-            <button class="btn btn--primary" onclick="alert('Profile updated (Mock)')">Save Changes</button>
+            <button class="btn btn--primary" id="saveBtn" onclick="alert('Profile details saved.')">Save Changes</button>
           </form>
         </div>
+
+        <!-- Verification Profile Card -->
+        <div id="verificationProfileCard"></div>
       </div>
     </main>
   </div>
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/verification-state.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('donor')) return;
+
+      VerificationManager.renderProfileCard('verificationProfileCard', 'donor');
+
+      try {
+        const res = await API.auth.getMe();
+        if (res.success && res.user) {
+          const u = res.user;
+          document.getElementById('profileName').value = u.name || '';
+          document.getElementById('profileEmail').value = u.email || '';
+          document.getElementById('profilePhone').value = u.phone || '';
+
+          // Initials
+          const initials = (u.name || 'D').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+          document.getElementById('avatarInitials').textContent = initials;
+        }
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+      }
+    });
+
+    function logout() {
+      API.auth.logout();
+    }
+  </script>
 </body>
 </html>

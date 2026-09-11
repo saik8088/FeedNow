@@ -47,10 +47,11 @@
         <div style="display: flex; align-items: center; gap: var(--space-4);">
           <a href="requests.html" class="btn btn--icon btn--ghost" style="font-size: 1.2rem;">←</a>
           <div>
-            <h1 class="dashboard-main__title">Review Request #DN-8492</h1>
+          <div>
+            <h1 class="dashboard-main__title" id="pageTitle">Review Request</h1>
           </div>
         </div>
-        <span class="badge badge--pending" style="font-size: var(--text-sm);">Pending Review</span>
+        <span class="badge badge--pending" id="statusBadge" style="font-size: var(--text-sm);">Loading...</span>
       </header>
 
       <div class="dashboard-main__content">
@@ -67,32 +68,31 @@
                   <i class="ph ph-bowl-food"></i>
                 </div>
                 <div style="flex: 1;">
-                  <h3 class="text-xl font-bold margin-bottom-1">Vegetable Curry & Rice</h3>
-                  <p class="text-sm text-secondary margin-bottom-4">Vegetarian • 50 Meals</p>
+                  <h3 class="text-xl font-bold margin-bottom-1" id="foodName">Food</h3>
+                  <p class="text-sm text-secondary margin-bottom-4" id="foodMeta">Details</p>
                   
                   <div class="grid-2-col">
                     <div>
                       <p class="text-xs text-muted text-uppercase">Prepared At</p>
-                      <p class="font-medium">Today, 1:00 PM</p>
+                      <p class="font-medium" id="preparedAt">--</p>
                     </div>
                     <div>
-                      <p class="text-xs text-muted text-uppercase">Available Until</p>
-                      <p class="font-medium text-danger">Today, 8:00 PM</p>
+                      <p class="text-xs text-muted text-uppercase">Available Until (Deadline)</p>
+                      <p class="font-medium text-danger" id="availableUntil">--</p>
                     </div>
                   </div>
 
                   <div style="margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--border-light);">
                     <p class="text-xs text-muted text-uppercase margin-bottom-1">Donor Notes</p>
-                    <p class="text-sm">"Needs to be picked up in large containers. Please handle with care as it is freshly cooked."</p>
+                    <p class="text-sm" id="donorNotes">None provided.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="card animate-fade-in-up delay-1" style="display: flex; gap: var(--space-4);">
-              <button class="btn btn--danger btn--lg" style="flex: 1;" onclick="UI.openModal('declineModal')">Decline Request</button>
-              <button class="btn btn--primary btn--lg" style="flex: 2;" onclick="UI.openModal('acceptModal')">Accept & Coordinate</button>
+            <!-- Action Buttons Container -->
+            <div class="card animate-fade-in-up delay-1" id="actionContainer" style="display: flex; gap: var(--space-4);">
+              <!-- Populated dynamically based on status -->
             </div>
 
           </div>
@@ -105,21 +105,25 @@
               <h2 class="card__title margin-bottom-4">Donor Information</h2>
               
               <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4);">
-                <div class="avatar avatar--md">JD</div>
+                <div class="avatar avatar--md" id="donorAvatar">--</div>
                 <div>
-                  <h4 class="font-semibold">John Doe</h4>
-                  <p class="text-xs text-muted">First-time donor</p>
+                  <h4 class="font-semibold" id="donorName">Donor</h4>
+                  <p class="text-xs text-muted" id="donorEmail">donor@example.com</p>
                 </div>
               </div>
 
               <div style="display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-4);">
                 <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
+                  <span><i class="ph ph-phone"></i></span>
+                  <p class="text-sm" id="donorPhone">Contact visible once accepted</p>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
                   <span><i class="ph ph-map-pin"></i></span>
-                  <p class="text-sm">Approx 3.2 km away<br><span class="text-xs text-muted">Koramangala area</span></p>
+                  <p class="text-sm" id="donorAddress">Address on file</p>
                 </div>
               </div>
 
-              <div class="badge badge--info" style="display: flex; white-space: normal;">
+              <div class="badge badge--info" id="privacyNotice" style="display: flex; white-space: normal;">
                 <span style="margin-right: 4px;"><i class="ph ph-info"></i></span>
                 Exact address and phone number will be revealed after you accept the donation.
               </div>
@@ -140,23 +144,11 @@
         <button class="modal__close" onclick="UI.closeModal('declineModal')">✕</button>
       </div>
       <div class="modal__body">
-        <form onsubmit="return false;" id="declineForm">
-          <div class="form-group">
-            <label class="form-label">Please provide a reason (optional):</label>
-            <select class="form-select" id="declineReason">
-              <option value="">Select a reason...</option>
-              <option value="capacity">Capacity Full</option>
-              <option value="foodType">Food Type Not Accepted</option>
-              <option value="distance">Too Far</option>
-              <option value="pickup">Pickup Not Possible</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-        </form>
+        <p class="text-secondary">Are you sure you want to decline this donation offer?</p>
       </div>
       <div class="modal__footer">
         <button class="btn btn--ghost" onclick="UI.closeModal('declineModal')">Cancel</button>
-        <button class="btn btn--danger" onclick="handleDecline()">Confirm Decline</button>
+        <button class="btn btn--danger" id="declineConfirmBtn" onclick="handleDecline()">Confirm Decline</button>
       </div>
     </div>
   </div>
@@ -170,37 +162,9 @@
       </div>
       <div class="modal__body">
         <form onsubmit="return false;" id="acceptForm">
-          
-          <div class="form-group">
-            <label class="form-label">Collection Method <span class="required">*</span></label>
-            <div class="form-radio-group">
-              <label class="form-radio">
-                <input type="radio" name="collection" value="pickup" required>
-                <span class="form-radio__label">We will pick up from the donor</span>
-              </label>
-              <label class="form-radio">
-                <input type="radio" name="collection" value="dropoff">
-                <span class="form-radio__label">Request donor to drop off at NGO</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="grid-2-col">
-            <div class="form-group">
-              <label class="form-label" for="coordTime">Estimated Time <span class="required">*</span></label>
-              <input type="time" id="coordTime" class="form-input" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="coordContact">Driver/Contact Name</label>
-              <input type="text" id="coordContact" class="form-input" placeholder="e.g., Rajesh">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="coordNotes">Instructions for Donor</label>
-            <textarea id="coordNotes" class="form-textarea" placeholder="e.g., Please keep the food packed in separate boxes..." style="min-height: 80px;"></textarea>
-          </div>
-
+          <p class="text-secondary" style="margin-bottom: var(--space-4);">
+            By accepting, you commit to picking up this food before the deadline. The donor will be notified immediately.
+          </p>
         </form>
       </div>
       <div class="modal__footer">
@@ -210,35 +174,158 @@
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/shared/ui.js"></script>
   <script src="../../assets/js/navigation.js"></script>
   <script>
-    function handleDecline() {
-      UI.closeModal('declineModal');
-      UI.showToast('Donation request declined.', 'error');
-      setTimeout(() => {
-        window.location.href = 'requests.html';
-      }, 1500);
-    }
+    let currentDonationId = null;
 
-    function handleAccept() {
-      const form = document.getElementById('acceptForm');
-      if (!form.checkValidity()) {
-        form.reportValidity();
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('ngo')) return;
+
+      const params = new URLSearchParams(window.location.search);
+      currentDonationId = params.get('id');
+
+      if (!currentDonationId) {
+        document.getElementById('pageTitle').textContent = 'Request not found';
         return;
       }
 
+      try {
+        const res = await API.donations.getById(currentDonationId);
+        if (res.success && res.donation) {
+          renderDonationDetails(res.donation);
+        }
+      } catch (err) {
+        console.error('Failed to load donation:', err);
+        document.getElementById('pageTitle').textContent = 'Error loading request';
+      }
+    });
+
+    function renderDonationDetails(d) {
+      const shortId = d._id.slice(-6).toUpperCase();
+      document.getElementById('pageTitle').textContent = `Review Request #${shortId}`;
+
+      const statusBadge = document.getElementById('statusBadge');
+      statusBadge.textContent = d.status;
+      if (d.status === 'PENDING') statusBadge.className = 'badge badge--pending';
+      else if (d.status === 'ACCEPTED' || d.status === 'COORDINATED') statusBadge.className = 'badge badge--pickup';
+      else if (d.status === 'COMPLETED') statusBadge.className = 'badge badge--completed';
+      else statusBadge.className = 'badge badge--declined';
+
+      document.getElementById('foodName').textContent = d.foodName;
+      document.getElementById('foodMeta').textContent = `${d.foodType} • ${d.quantity}`;
+      document.getElementById('preparedAt').textContent = d.preparedAt ? new Date(d.preparedAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Not specified';
+      document.getElementById('availableUntil').textContent = d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Flexible';
+      document.getElementById('donorNotes').textContent = d.notes || 'None provided.';
+
+      // Donor details
+      const donor = d.donorId || {};
+      const donorName = donor.name || 'Anonymous Donor';
+      document.getElementById('donorName').textContent = donorName;
+      document.getElementById('donorEmail').textContent = donor.email || '';
+      document.getElementById('donorAvatar').textContent = donorName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+      const privacyNotice = document.getElementById('privacyNotice');
+      if (d.status === 'PENDING') {
+        document.getElementById('donorPhone').textContent = 'Hidden until accepted';
+        document.getElementById('donorAddress').textContent = 'Approximate area on file';
+        privacyNotice.style.display = 'flex';
+      } else {
+        document.getElementById('donorPhone').textContent = donor.phone || 'No phone provided';
+        document.getElementById('donorAddress').textContent = d.pickupAddress || 'Address on file';
+        privacyNotice.style.display = 'none';
+      }
+
+      // Action Buttons
+      const actions = document.getElementById('actionContainer');
+      if (d.status === 'PENDING') {
+        actions.innerHTML = `
+          <button class="btn btn--danger btn--lg" style="flex: 1;" onclick="UI.openModal('declineModal')">Decline Request</button>
+          <button class="btn btn--primary btn--lg" style="flex: 2;" onclick="UI.openModal('acceptModal')">Accept & Coordinate</button>
+        `;
+      } else if (d.status === 'ACCEPTED') {
+        actions.innerHTML = `
+          <button class="btn btn--secondary btn--lg" style="flex: 1;" onclick="handleCoordinate()">Coordinate Pickup</button>
+          <button class="btn btn--primary btn--lg" style="flex: 1;" onclick="handleComplete()">Complete Donation</button>
+        `;
+      } else if (d.status === 'COORDINATED') {
+        actions.innerHTML = `
+          <button class="btn btn--primary btn--lg" style="flex: 1;" onclick="handleComplete()">Mark as Completed</button>
+        `;
+      } else if (d.status === 'COMPLETED') {
+        actions.innerHTML = `
+          <div style="color: var(--success); font-weight: var(--weight-semibold); width: 100%; text-align: center; padding: var(--space-2);">
+            ✓ This donation has been completed.
+          </div>
+        `;
+      } else if (d.status === 'DECLINED') {
+        actions.innerHTML = `
+          <div style="color: var(--danger); font-weight: var(--weight-semibold); width: 100%; text-align: center; padding: var(--space-2);">
+            ✕ This donation was declined.
+          </div>
+        `;
+      }
+    }
+
+    async function handleAccept() {
       const btn = document.getElementById('acceptConfirmBtn');
       UI.setButtonLoading(btn, true);
 
-      setTimeout(() => {
+      try {
+        const res = await API.donations.updateStatus(currentDonationId, 'ACCEPTED');
         UI.closeModal('acceptModal');
         UI.showToast('Donation accepted successfully! Donor has been notified.', 'success');
-        
-        setTimeout(() => {
-          window.location.href = 'requests.html';
-        }, 1500);
-      }, 1000);
+        if (res.donation) renderDonationDetails(res.donation);
+        setTimeout(() => window.location.href = 'requests.html', 1200);
+      } catch (err) {
+        alert(err.message || 'Failed to accept donation');
+        UI.setButtonLoading(btn, false);
+      }
+    }
+
+    async function handleDecline() {
+      const btn = document.getElementById('declineConfirmBtn');
+      UI.setButtonLoading(btn, true);
+
+      try {
+        await API.donations.updateStatus(currentDonationId, 'DECLINED');
+        UI.closeModal('declineModal');
+        UI.showToast('Donation request declined.', 'info');
+        setTimeout(() => window.location.href = 'requests.html', 1200);
+      } catch (err) {
+        alert(err.message || 'Failed to decline donation');
+        UI.setButtonLoading(btn, false);
+      }
+    }
+
+    async function handleCoordinate() {
+      try {
+        const res = await API.donations.updateStatus(currentDonationId, 'COORDINATED');
+        UI.showToast('Pickup marked as coordinated!', 'success');
+        if (res.donation) renderDonationDetails(res.donation);
+      } catch (err) {
+        alert(err.message || 'Failed to coordinate donation');
+      }
+    }
+
+    async function handleComplete() {
+      try {
+        const res = await API.donations.updateStatus(currentDonationId, 'COMPLETED');
+        UI.showToast('Donation marked as completed! Thank you.', 'success');
+        if (res.donation) renderDonationDetails(res.donation);
+      } catch (err) {
+        alert(err.message || 'Failed to complete donation');
+      }
+    }
+
+    function logout() {
+      API.auth.logout();
     }
   </script>
 </body>

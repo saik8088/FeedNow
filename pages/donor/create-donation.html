@@ -62,8 +62,8 @@
             <div style="display: flex; align-items: center; gap: var(--space-4);">
               <div class="avatar avatar--lg"><i class="ph ph-buildings"></i></div>
               <div>
-                <h3 class="text-lg font-semibold">Hope Foundation</h3>
-                <p class="text-sm text-secondary"><i class="ph ph-map-pin"></i> 1.2 km away • Accepts: Cooked Meals, Raw Rations</p>
+                <h3 class="text-lg font-semibold" id="ngoNameHeader">Select an NGO</h3>
+                <p class="text-sm text-secondary" id="ngoMetaHeader"><i class="ph ph-map-pin"></i> Loading organization details...</p>
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@
               <hr class="divider">
 
               <div style="display: flex; justify-content: flex-end; gap: var(--space-4);">
-                <a href="ngo-details.html?id=1" class="btn btn--ghost">Cancel</a>
+                <a href="nearby-ngos.html" id="cancelBtn" class="btn btn--ghost">Cancel</a>
                 <button type="button" class="btn btn--primary" id="submitBtn" onclick="submitDonation()">Review & Send Request</button>
               </div>
             </form>
@@ -147,30 +147,129 @@
     </main>
   </div>
 
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/shared/ui.js"></script>
   <script src="../../assets/js/navigation.js"></script>
   <script>
-    // Set default prepared time to now
-    document.addEventListener('DOMContentLoaded', () => {
+    let currentNgoId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('donor')) return;
+
+      // Set default prepared time to now
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       document.getElementById('preparedTime').value = now.toISOString().slice(0, 16);
+
+      // Set default available until to 4 hours from now
+      const deadline = new Date(Date.now() + 4 * 3600 * 1000);
+      const hours = String(deadline.getHours()).padStart(2, '0');
+      const minutes = String(deadline.getMinutes()).padStart(2, '0');
+      document.getElementById('availableUntil').value = `${hours}:${minutes}`;
+
+      const params = new URLSearchParams(window.location.search);
+      currentNgoId = params.get('ngo');
+
+      if (currentNgoId) {
+        document.getElementById('cancelBtn').href = `ngo-details.html?id=${currentNgoId}`;
+        try {
+          const res = await API.ngos.getById(currentNgoId);
+          if (res.success && res.profile) {
+            const p = res.profile;
+            document.getElementById('ngoNameHeader').textContent = p.organizationName || 'NGO';
+            document.getElementById('ngoMetaHeader').innerHTML = `<i class="ph ph-map-pin"></i> ${p.city || 'Bengaluru'} • Accepts: ${(p.foodTypes || ['Vegetarian']).join(', ')}`;
+            // If the profile has userId ObjectId, store it
+            if (p.userId?._id) currentNgoId = p.userId._id;
+            else if (p.userId) currentNgoId = p.userId;
+          }
+        } catch (err) {
+          console.error('Failed to load NGO info:', err);
+        }
+      } else {
+        // Fetch first available NGO
+        try {
+          const res = await API.ngos.getAll();
+          if (res.success && res.ngos && res.ngos.length > 0) {
+            const first = res.ngos[0];
+            currentNgoId = first.userId?._id || first.userId || first._id;
+            document.getElementById('ngoNameHeader').textContent = first.organizationName || 'NGO';
+            document.getElementById('ngoMetaHeader').innerHTML = `<i class="ph ph-map-pin"></i> ${first.city || 'Bengaluru'} • Accepts: ${(first.foodTypes || ['Vegetarian']).join(', ')}`;
+          } else {
+            document.getElementById('ngoNameHeader').textContent = 'No NGOs available';
+            document.getElementById('ngoMetaHeader').textContent = 'Please register an NGO account first.';
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
     });
 
-    function submitDonation() {
+    async function submitDonation() {
       const form = document.getElementById('donationForm');
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
-      
+
+      if (!currentNgoId) {
+        alert('Please select a valid NGO to donate to.');
+        window.location.href = 'nearby-ngos.html';
+        return;
+      }
+
+      const foodName = document.getElementById('foodName').value.trim();
+      const foodTypeEl = document.querySelector('input[name="foodType"]:checked');
+      const foodType = foodTypeEl ? foodTypeEl.value : 'Vegetarian';
+      const quantity = document.getElementById('quantity').value.trim();
+      const unit = document.getElementById('unit').value;
+      const preparedTime = document.getElementById('preparedTime').value;
+      const timeVal = document.getElementById('availableUntil').value;
+      const pickupAddress = document.getElementById('pickupAddress').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+
+      // Compute pickupDeadline Date
+      const [h, m] = timeVal.split(':').map(Number);
+      const deadlineDate = new Date();
+      deadlineDate.setHours(h, m, 0, 0);
+      if (deadlineDate <= new Date()) {
+        // If the time is earlier today, set for tomorrow
+        deadlineDate.setDate(deadlineDate.getDate() + 1);
+      }
+
       const btn = document.getElementById('submitBtn');
       UI.setButtonLoading(btn, true);
 
-      setTimeout(() => {
-        // Redirect to success page
-        window.location.href = 'donation-success.html';
-      }, 1500);
+      try {
+        const res = await API.donations.create({
+          ngoId: currentNgoId,
+          foodName,
+          foodType,
+          quantity: `${quantity} ${unit}`,
+          preparedAt: preparedTime ? new Date(preparedTime).toISOString() : new Date().toISOString(),
+          pickupDeadline: deadlineDate.toISOString(),
+          pickupAddress,
+          notes,
+        });
+
+        if (res.success) {
+          window.location.href = 'donation-success.html';
+        } else {
+          alert(res.message || 'Failed to create donation');
+          UI.setButtonLoading(btn, false);
+        }
+      } catch (err) {
+        alert(err.message || 'Failed to submit donation');
+        UI.setButtonLoading(btn, false);
+      }
+    }
+
+    function logout() {
+      API.auth.logout();
     }
   </script>
 </body>

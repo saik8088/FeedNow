@@ -165,13 +165,16 @@
       
       <header class="dashboard-main__header">
         <div>
-          <h1 class="dashboard-main__title">Hope Foundation Dashboard</h1>
+          <h1 class="dashboard-main__title" id="ngoDashboardTitle">NGO Dashboard</h1>
           <p class="dashboard-main__subtitle">Manage your incoming food donations.</p>
         </div>
       </header>
 
       <div class="dashboard-main__content">
         
+        <!-- Verification Status Banner -->
+        <div id="verificationBanner"></div>
+
         <!-- Status Banner -->
         <div class="status-banner animate-fade-in-up">
           <div class="status-banner__info">
@@ -189,7 +192,7 @@
           <div class="stat-card">
             <div class="stat-card__icon stat-card__icon--amber"><i class="ph ph-tray-arrow-down"></i></div>
             <div class="stat-card__content">
-              <div class="stat-card__value">3</div>
+              <div class="stat-card__value" id="newRequestsVal">0</div>
               <div class="stat-card__label">New Requests</div>
             </div>
           </div>
@@ -197,7 +200,7 @@
           <div class="stat-card">
             <div class="stat-card__icon stat-card__icon--blue"><i class="ph ph-arrows-clockwise"></i></div>
             <div class="stat-card__content">
-              <div class="stat-card__value">5</div>
+              <div class="stat-card__value" id="pendingPickupsVal">0</div>
               <div class="stat-card__label">Pending Pickups</div>
             </div>
           </div>
@@ -205,8 +208,8 @@
           <div class="stat-card">
             <div class="stat-card__icon stat-card__icon--green"><i class="ph ph-fork-knife"></i></div>
             <div class="stat-card__content">
-              <div class="stat-card__value">450</div>
-              <div class="stat-card__label">Meals Received (Month)</div>
+              <div class="stat-card__value" id="completedDonationsVal">0</div>
+              <div class="stat-card__label">Donations Completed</div>
             </div>
           </div>
         </div>
@@ -218,38 +221,10 @@
             <a href="requests.html" class="btn btn--ghost btn--sm">View All →</a>
           </div>
 
-          <div class="request-list">
-            
-            <div class="request-item">
-              <div class="request-item__info">
-                <div class="request-item__icon"><i class="ph ph-bowl-food"></i></div>
-                <div class="request-item__details">
-                  <h4>Vegetable Curry & Rice</h4>
-                  <p>50 Meals • From: John Doe (3.2 km away)</p>
-                  <p class="text-xs text-muted" style="margin-top: 4px;">Available until 8:00 PM tonight</p>
-                </div>
-              </div>
-              <div class="request-item__actions">
-                <span class="badge badge--pending" style="margin-right: var(--space-3);">New Request</span>
-                <a href="request-details.html" class="btn btn--secondary btn--sm">Review</a>
-              </div>
+          <div class="request-list" id="recentRequestsList">
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading requests...
             </div>
-
-            <div class="request-item">
-              <div class="request-item__info">
-                <div class="request-item__icon" style="background: var(--info-bg); color: var(--info-text);"><i class="ph ph-bread"></i></div>
-                <div class="request-item__details">
-                  <h4>Assorted Breads</h4>
-                  <p>20 Packs • From: City Bakery (1.5 km away)</p>
-                  <p class="text-xs text-muted" style="margin-top: 4px;">Pickup scheduled for 4:30 PM</p>
-                </div>
-              </div>
-              <div class="request-item__actions">
-                <span class="badge badge--pickup" style="margin-right: var(--space-3);">Pickup Scheduled</span>
-                <a href="request-details.html" class="btn btn--ghost btn--sm">View Details</a>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -261,17 +236,91 @@
   <!-- Scripts -->
   <script src="../../assets/js/zoom-fix.js"></script>
   <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/verification-state.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('ngo')) return;
+
+      VerificationManager.renderBanner('verificationBanner', 'ngo');
+
+      try {
+        // Load NGO Profile
+        const profileRes = await API.ngos.getMyProfile().catch(() => null);
+        if (profileRes && profileRes.profile) {
+          const orgName = profileRes.profile.organizationName;
+          if (orgName) {
+            document.getElementById('ngoDashboardTitle').textContent = `${orgName} Dashboard`;
+          }
+          const toggle = document.getElementById('acceptingToggle');
+          toggle.checked = profileRes.profile.isAcceptingDonations !== false;
+          updateAcceptingLabel(toggle.checked);
+        }
+
+        // Load Dashboard stats & recent requests
+        const res = await API.dashboard.getNgo();
+        if (res.success && res.stats) {
+          document.getElementById('newRequestsVal').textContent = res.stats.pending;
+          document.getElementById('pendingPickupsVal').textContent = (res.stats.accepted || 0) + (res.stats.coordinated || 0);
+          document.getElementById('completedDonationsVal').textContent = res.stats.completed;
+        }
+
+        const list = document.getElementById('recentRequestsList');
+        if (res.recentDonations && res.recentDonations.length > 0) {
+          list.innerHTML = res.recentDonations.map(d => {
+            const donorName = d.donorId?.name || 'Anonymous Donor';
+            const statusMap = {
+              PENDING: '<span class="badge badge--pending">New Request</span>',
+              ACCEPTED: '<span class="badge badge--pickup">Accepted</span>',
+              COORDINATED: '<span class="badge badge--pickup">Pickup Coordinated</span>',
+              COMPLETED: '<span class="badge badge--completed">Completed</span>',
+              DECLINED: '<span class="badge" style="background:#fee2e2;color:#991b1b;">Declined</span>',
+            };
+            const badge = statusMap[d.status] || `<span class="badge">${d.status}</span>`;
+            const actionText = d.status === 'PENDING' ? 'Review' : 'View Details';
+            const btnClass = d.status === 'PENDING' ? 'btn--secondary' : 'btn--ghost';
+
+            return `
+              <div class="request-item">
+                <div class="request-item__info">
+                  <div class="request-item__icon"><i class="ph ph-bowl-food"></i></div>
+                  <div class="request-item__details">
+                    <h4>${d.foodName}</h4>
+                    <p>${d.quantity} • From: ${donorName}</p>
+                    <p class="text-xs text-muted" style="margin-top: 4px;">Deadline: ${d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Flexible'}</p>
+                  </div>
+                </div>
+                <div class="request-item__actions">
+                  <span style="margin-right: var(--space-3);">${badge}</span>
+                  <a href="request-details.html?id=${d._id}" class="btn ${btnClass} btn--sm">${actionText}</a>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          list.innerHTML = `
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <i class="ph ph-tray" style="font-size: 2.5rem; margin-bottom: var(--space-2); display: block; opacity: 0.5;"></i>
+              <p>No donation requests yet.</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading NGO dashboard data:', err);
+      }
+    });
+
     function logout() {
-      window.location.href = '../../index.html';
+      API.auth.logout();
     }
 
-    function toggleAcceptingStatus(checkbox) {
+    function updateAcceptingLabel(isAccepting) {
       const title = document.getElementById('statusTitle');
       const desc = document.getElementById('statusDesc');
-      
-      if (checkbox.checked) {
+      if (isAccepting) {
         title.textContent = 'Currently Accepting Donations';
         desc.textContent = 'Donors in your area can see your NGO and send requests.';
         title.style.color = 'var(--text-primary)';
@@ -280,9 +329,15 @@
         desc.textContent = 'You are temporarily hidden from nearby donors.';
         title.style.color = 'var(--text-muted)';
       }
+    }
 
-      // Simulate API call
-      console.log('Status updated to:', checkbox.checked);
+    async function toggleAcceptingStatus(checkbox) {
+      updateAcceptingLabel(checkbox.checked);
+      try {
+        await API.ngos.updateMyProfile({ isAcceptingDonations: checkbox.checked });
+      } catch (err) {
+        console.error('Failed to update accepting status:', err);
+      }
     }
   </script>
 

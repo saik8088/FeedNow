@@ -16,6 +16,155 @@
 
   <!-- Phosphor Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    /* ── Verification Notice ── */
+    .verification-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      background: var(--info-bg);
+      border: 1px solid hsl(210, 85%, 85%);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .verification-notice__icon {
+      font-size: 1.25rem;
+      color: var(--info-text);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .verification-notice__content strong {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--info-text);
+      margin-bottom: var(--space-1);
+    }
+    .verification-notice__content p {
+      font-size: var(--text-xs);
+      color: hsl(210, 50%, 35%);
+      line-height: var(--leading-relaxed);
+    }
+
+    /* ── Verification Section Block ── */
+    .verification-section {
+      background: var(--gray-50);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      margin-bottom: var(--space-5);
+    }
+    .verification-section__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--primary-dark);
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .verification-section__header i {
+      font-size: var(--text-lg);
+    }
+
+    /* ── Upload Zone ── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8) var(--space-4);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-all);
+      background: var(--surface);
+    }
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-50);
+    }
+    .upload-zone__icon {
+      font-size: 2rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-3);
+    }
+    .upload-zone.drag-over .upload-zone__icon {
+      color: var(--primary);
+    }
+    .upload-zone__text {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+    .upload-zone__text strong {
+      color: var(--primary);
+    }
+    .upload-zone__hint {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+
+    /* ── Upload Preview ── */
+    .upload-preview {
+      margin-top: var(--space-3);
+    }
+    .upload-preview__file {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--primary-50);
+      border: 1px solid var(--primary-200);
+      border-radius: var(--radius-lg);
+    }
+    .upload-preview__icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-100);
+      color: var(--primary-dark);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-lg);
+      flex-shrink: 0;
+    }
+    .upload-preview__info {
+      flex: 1;
+      min-width: 0;
+    }
+    .upload-preview__name {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .upload-preview__size {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+    .upload-preview__remove {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition-colors);
+      cursor: pointer;
+    }
+    .upload-preview__remove:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+  </style>
 </head>
 <body>
 
@@ -73,6 +222,15 @@
         <h1 class="auth-card__title">Create Donor Account</h1>
         <p class="auth-card__subtitle">Start donating surplus food today</p>
 
+        <!-- Verification Notice -->
+        <div class="verification-notice" id="donorVerificationNotice">
+          <div class="verification-notice__icon"><i class="ph ph-shield-check"></i></div>
+          <div class="verification-notice__content">
+            <strong>Verification Required</strong>
+            <p>Food donors must provide a valid FSSAI Number and certificate to ensure food safety compliance.</p>
+          </div>
+        </div>
+
         <form onsubmit="return false;">
           <div class="form-group">
             <label class="form-label" for="donorName">Full Name <span class="required">*</span></label>
@@ -106,6 +264,76 @@
             </div>
           </div>
 
+          <!-- ── FSSAI Verification Section ── -->
+          <div class="verification-section">
+            <div class="verification-section__header">
+              <i class="ph ph-certificate"></i>
+              <span>FSSAI Verification</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="donorFssaiNumber">FSSAI License Number <span class="required">*</span></label>
+              <input
+                type="text"
+                id="donorFssaiNumber"
+                class="form-input"
+                placeholder="e.g. 12345678901234"
+                maxlength="14"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              >
+              <span class="form-hint">
+                <i class="ph ph-info" style="font-size: 11px;"></i>
+                14-digit number printed on your FSSAI license certificate.
+              </span>
+              <span class="form-error hidden" id="fssaiNumberError">Please enter a valid 14-digit FSSAI number</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">FSSAI Certificate / Proof <span class="required">*</span></label>
+              <!-- Upload Drop Zone -->
+              <div
+                class="upload-zone"
+                id="donorFssaiDropZone"
+                onclick="document.getElementById('donorFssaiFile').click()"
+                ondragover="handleDragOver(event, 'donorFssaiDropZone')"
+                ondragleave="handleDragLeave('donorFssaiDropZone')"
+                ondrop="handleDrop(event, 'donorFssaiFile', 'donorFssaiDropZone')"
+              >
+                <input
+                  type="file"
+                  id="donorFssaiFile"
+                  accept="image/jpeg,image/png,application/pdf"
+                  style="display:none"
+                  onchange="handleFileSelect('donorFssaiFile', 'donorFssaiPreview', 'donorFssaiDropZone')"
+                >
+                <div class="upload-zone__content" id="donorFssaiDropZoneContent">
+                  <div class="upload-zone__icon"><i class="ph ph-upload-simple"></i></div>
+                  <p class="upload-zone__text"><strong>Click to upload</strong> or drag & drop</p>
+                  <p class="upload-zone__hint">JPG, PNG or PDF · Max 5 MB</p>
+                </div>
+              </div>
+              <!-- Preview -->
+              <div class="upload-preview hidden" id="donorFssaiPreview">
+                <div class="upload-preview__file">
+                  <div class="upload-preview__icon"><i class="ph ph-file-text"></i></div>
+                  <div class="upload-preview__info">
+                    <span class="upload-preview__name" id="donorFssaiFileName">certificate.pdf</span>
+                    <span class="upload-preview__size" id="donorFssaiFileSize">0 KB</span>
+                  </div>
+                  <button type="button" class="upload-preview__remove" onclick="removeFile('donorFssaiFile', 'donorFssaiPreview', 'donorFssaiDropZone')" aria-label="Remove file">
+                    <i class="ph ph-x"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="form-error hidden" id="fssaiFileError">Please upload your FSSAI certificate</span>
+              <span class="form-hint">
+                <i class="ph ph-lock" style="font-size: 11px;"></i>
+                Your document is securely stored and only reviewed by FeedNow admins.
+              </span>
+            </div>
+          </div>
+          <!-- ── End FSSAI Verification Section ── -->
+
           <span class="form-error hidden" id="donorFormError"></span>
 
           <button type="submit" class="btn btn--primary btn--full btn--lg" id="donorSignupBtn" onclick="handleDonorSignup()" style="margin-top: var(--space-2);">
@@ -123,6 +351,15 @@
         <a href="#" class="auth-back" onclick="goBackToStep1(); return false;">← Back</a>
         <h1 class="auth-card__title">Register Your NGO</h1>
         <p class="auth-card__subtitle">Help us reach food to communities in need</p>
+
+        <!-- Verification Notice -->
+        <div class="verification-notice" id="ngoVerificationNotice">
+          <div class="verification-notice__icon"><i class="ph ph-shield-check"></i></div>
+          <div class="verification-notice__content">
+            <strong>Verification Required</strong>
+            <p>NGOs must provide a valid NITI Aayog NGO DARPAN ID and official registration certificate to claim and distribute food.</p>
+          </div>
+        </div>
 
         <form onsubmit="return false;">
           <div class="form-group">
@@ -167,6 +404,77 @@
             </div>
           </div>
 
+          <!-- ── NGO DARPAN Verification Section ── -->
+          <div class="verification-section">
+            <div class="verification-section__header">
+              <i class="ph ph-shield-check"></i>
+              <span>NGO DARPAN Verification</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="ngoDarpanId">NGO DARPAN ID <span class="required">*</span></label>
+              <input
+                type="text"
+                id="ngoDarpanId"
+                class="form-input"
+                placeholder="e.g. DL/2021/0123456"
+                maxlength="25"
+                style="text-transform: uppercase;"
+                oninput="this.value = this.value.toUpperCase()"
+              >
+              <span class="form-hint">
+                <i class="ph ph-info" style="font-size: 11px;"></i>
+                Unique ID from NITI Aayog NGO-DARPAN portal (format: XX/YYYY/NNNNNNN).
+              </span>
+              <span class="form-error hidden" id="ngoDarpanIdError">Please enter a valid NGO DARPAN ID (e.g. DL/2021/0123456)</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Registration / DARPAN Certificate Proof <span class="required">*</span></label>
+              <!-- Upload Drop Zone -->
+              <div
+                class="upload-zone"
+                id="ngoProofDropZone"
+                onclick="document.getElementById('ngoProofFile').click()"
+                ondragover="handleDragOver(event, 'ngoProofDropZone')"
+                ondragleave="handleDragLeave('ngoProofDropZone')"
+                ondrop="handleDrop(event, 'ngoProofFile', 'ngoProofDropZone')"
+              >
+                <input
+                  type="file"
+                  id="ngoProofFile"
+                  accept="image/jpeg,image/png,application/pdf"
+                  style="display:none"
+                  onchange="handleFileSelect('ngoProofFile', 'ngoProofPreview', 'ngoProofDropZone')"
+                >
+                <div class="upload-zone__content" id="ngoProofDropZoneContent">
+                  <div class="upload-zone__icon"><i class="ph ph-upload-simple"></i></div>
+                  <p class="upload-zone__text"><strong>Click to upload</strong> or drag & drop</p>
+                  <p class="upload-zone__hint">JPG, PNG or PDF · Max 5 MB</p>
+                </div>
+              </div>
+              <!-- Preview -->
+              <div class="upload-preview hidden" id="ngoProofPreview">
+                <div class="upload-preview__file">
+                  <div class="upload-preview__icon"><i class="ph ph-file-text"></i></div>
+                  <div class="upload-preview__info">
+                    <span class="upload-preview__name" id="ngoProofFileName">certificate.pdf</span>
+                    <span class="upload-preview__size" id="ngoProofFileSize">0 KB</span>
+                  </div>
+                  <button type="button" class="upload-preview__remove" onclick="removeFile('ngoProofFile', 'ngoProofPreview', 'ngoProofDropZone')" aria-label="Remove file">
+                    <i class="ph ph-x"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="form-error hidden" id="ngoProofFileError">Please upload your NGO registration or DARPAN certificate</span>
+              <span class="form-hint">
+                <i class="ph ph-lock" style="font-size: 11px;"></i>
+                Your document is securely stored and only reviewed by FeedNow admins.
+              </span>
+            </div>
+          </div>
+          <!-- ── End NGO DARPAN Verification Section ── -->
+
           <span class="form-error hidden" id="ngoFormError"></span>
 
           <button type="submit" class="btn btn--primary btn--full btn--lg" id="ngoSignupBtn" onclick="handleNgoSignup()" style="margin-top: var(--space-2);">
@@ -185,9 +493,16 @@
   <!-- Scripts -->
   <script src="../assets/js/zoom-fix.js"></script>
   <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/shared/guards.js"></script>
   <script src="../assets/js/navigation.js"></script>
   <script src="../assets/js/auth-bg.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Guards.redirectIfLoggedIn();
+    });
+
     let selectedRole = null;
 
     // Auto-select role from URL param
@@ -252,42 +567,84 @@
       const phone = document.getElementById('donorPhone').value.trim();
       const pass = document.getElementById('donorPassword').value;
       const confirm = document.getElementById('donorConfirmPassword').value;
+      const fssaiNumber = document.getElementById('donorFssaiNumber').value.trim();
+      const fssaiFile = document.getElementById('donorFssaiFile').files[0];
       const error = document.getElementById('donorFormError');
+      const fssaiNumErr = document.getElementById('fssaiNumberError');
+      const fssaiFileErr = document.getElementById('fssaiFileError');
 
+      // Reset all errors
       error.classList.add('hidden');
+      fssaiNumErr.classList.add('hidden');
+      fssaiFileErr.classList.add('hidden');
+      document.getElementById('donorFssaiNumber').classList.remove('error');
+
+      let valid = true;
 
       if (!name || !email || !phone || !pass || !confirm) {
         error.textContent = 'All fields are required';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (valid && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         error.textContent = 'Please enter a valid email address';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (pass.length < 6) {
+      if (valid && pass.length < 6) {
         error.textContent = 'Password must be at least 6 characters';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (pass !== confirm) {
+      if (valid && pass !== confirm) {
         error.textContent = 'Passwords do not match';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
+      // FSSAI Number validation: must be exactly 14 digits
+      if (!/^\d{14}$/.test(fssaiNumber)) {
+        document.getElementById('donorFssaiNumber').classList.add('error');
+        fssaiNumErr.classList.remove('hidden');
+        valid = false;
+      }
+      // FSSAI File validation
+      if (!fssaiFile) {
+        fssaiFileErr.classList.remove('hidden');
+        valid = false;
+      }
+
+      if (!valid) return;
 
       const btn = document.getElementById('donorSignupBtn');
       btn.innerHTML = '<span class="spinner"></span> Creating Account...';
       btn.disabled = true;
 
-      setTimeout(() => {
-        // Will connect to Supabase in Round 2
-        window.location.href = '../pages/donor/dashboard.html';
-      }, 1500);
+      try {
+        const res = await API.auth.signup({
+          name,
+          email,
+          password: pass,
+          role: 'donor',
+          phone,
+        });
+
+        if (res.success) {
+          window.location.href = '../pages/donor/dashboard.html';
+        } else {
+          error.textContent = res.message || 'Signup failed';
+          error.classList.remove('hidden');
+          btn.innerHTML = 'Create Account';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        error.textContent = err.message || 'Signup failed';
+        error.classList.remove('hidden');
+        btn.innerHTML = 'Create Account';
+        btn.disabled = false;
+      }
     }
 
-    function handleNgoSignup() {
+    async function handleNgoSignup() {
       const ngoName = document.getElementById('ngoName').value.trim();
       const repName = document.getElementById('ngoRepName').value.trim();
       const email = document.getElementById('ngoEmail').value.trim();
@@ -295,41 +652,160 @@
       const address = document.getElementById('ngoAddress').value.trim();
       const pass = document.getElementById('ngoPassword').value;
       const confirm = document.getElementById('ngoConfirmPassword').value;
+      const darpanId = document.getElementById('ngoDarpanId').value.trim();
+      const proofFile = document.getElementById('ngoProofFile').files[0];
       const error = document.getElementById('ngoFormError');
+      const darpanErr = document.getElementById('ngoDarpanIdError');
+      const proofErr = document.getElementById('ngoProofFileError');
 
+      // Reset errors
       error.classList.add('hidden');
+      darpanErr.classList.add('hidden');
+      proofErr.classList.add('hidden');
+      document.getElementById('ngoDarpanId').classList.remove('error');
+
+      let valid = true;
 
       if (!ngoName || !repName || !email || !phone || !address || !pass || !confirm) {
         error.textContent = 'All fields are required';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (valid && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         error.textContent = 'Please enter a valid email address';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (pass.length < 6) {
+      if (valid && pass.length < 6) {
         error.textContent = 'Password must be at least 6 characters';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
-      if (pass !== confirm) {
+      if (valid && pass !== confirm) {
         error.textContent = 'Passwords do not match';
         error.classList.remove('hidden');
-        return;
+        valid = false;
       }
+
+      // NGO DARPAN ID validation: e.g. DL/2021/0123456 or at least 6 alphanumeric/slash chars
+      const darpanRegex = /^[A-Z]{2}\/\d{4}\/\d{4,8}$/i;
+      const lenientRegex = /^[A-Z0-9\/-]{6,25}$/i;
+      if (!darpanId || (!darpanRegex.test(darpanId) && !lenientRegex.test(darpanId))) {
+        document.getElementById('ngoDarpanId').classList.add('error');
+        darpanErr.classList.remove('hidden');
+        valid = false;
+      }
+
+      // Proof File validation
+      if (!proofFile) {
+        proofErr.classList.remove('hidden');
+        valid = false;
+      }
+
+      if (!valid) return;
 
       const btn = document.getElementById('ngoSignupBtn');
       btn.innerHTML = '<span class="spinner"></span> Registering NGO...';
       btn.disabled = true;
 
-      setTimeout(() => {
-        // Will connect to Supabase in Round 2
-        window.location.href = '../pages/ngo/dashboard.html';
-      }, 1500);
+      try {
+        const res = await API.auth.signup({
+          name: repName,
+          organizationName: ngoName,
+          email,
+          password: pass,
+          role: 'ngo',
+          phone,
+          address,
+        });
+
+        if (res.success) {
+          window.location.href = '../pages/ngo/dashboard.html';
+        } else {
+          error.textContent = res.message || 'Registration failed';
+          error.classList.remove('hidden');
+          btn.innerHTML = 'Register NGO';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        error.textContent = err.message || 'Registration failed';
+        error.classList.remove('hidden');
+        btn.innerHTML = 'Register NGO';
+        btn.disabled = false;
+      }
+    }
+    // ──────────────────────────────────────────────
+    // FILE UPLOAD HELPERS (shared for donor & NGO)
+    // ──────────────────────────────────────────────
+    function handleFileSelect(inputId, previewId, dropZoneId) {
+      const file = document.getElementById(inputId).files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be 5 MB or less.');
+        document.getElementById(inputId).value = '';
+        return;
+      }
+      showFilePreview(file, previewId, dropZoneId);
+    }
+
+    function showFilePreview(file, previewId, dropZoneId) {
+      const preview = document.getElementById(previewId);
+      const dropZone = document.getElementById(dropZoneId);
+      const nameEl = preview.querySelector('[id$="FileName"]');
+      const sizeEl = preview.querySelector('[id$="FileSize"]');
+      const iconEl = preview.querySelector('.upload-preview__icon i');
+
+      nameEl.textContent = file.name;
+      sizeEl.textContent = formatFileSize(file.size);
+
+      // Image-specific icon
+      if (file.type.startsWith('image/')) {
+        iconEl.className = 'ph ph-image';
+      } else {
+        iconEl.className = 'ph ph-file-pdf';
+      }
+
+      dropZone.classList.add('hidden');
+      preview.classList.remove('hidden');
+    }
+
+    function removeFile(inputId, previewId, dropZoneId) {
+      document.getElementById(inputId).value = '';
+      document.getElementById(previewId).classList.add('hidden');
+      document.getElementById(dropZoneId).classList.remove('hidden');
+    }
+
+    function handleDragOver(e, dropZoneId) {
+      e.preventDefault();
+      document.getElementById(dropZoneId).classList.add('drag-over');
+    }
+
+    function handleDragLeave(dropZoneId) {
+      document.getElementById(dropZoneId).classList.remove('drag-over');
+    }
+
+    function handleDrop(e, inputId, dropZoneId) {
+      e.preventDefault();
+      document.getElementById(dropZoneId).classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      if (!files.length) return;
+      const input = document.getElementById(inputId);
+      // Determine preview ID from input ID convention
+      const previewId = inputId.replace('File', 'Preview');
+      // Transfer file to hidden input (workaround for read-only FileList)
+      const dt = new DataTransfer();
+      dt.items.add(files[0]);
+      input.files = dt.files;
+      handleFileSelect(inputId, previewId, dropZoneId);
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     }
   </script>
 
 </body>
 </html>
+ 

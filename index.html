@@ -41,7 +41,7 @@
         <a href="#impact" class="navbar__link">Impact</a>
       </div>
 
-      <div class="navbar__actions">
+      <div class="navbar__actions" id="navActions">
         <a href="pages/login.html" class="btn btn--ghost">Log In</a>
         <a href="pages/signup.html" class="btn btn--primary">Get Started</a>
       </div>
@@ -375,6 +375,7 @@
             <a href="pages/signup.html" class="footer__link">Donate Food</a>
             <a href="pages/signup.html?role=ngo" class="footer__link">Join as NGO</a>
             <a href="pages/login.html" class="footer__link">Log In</a>
+            <a href="pages/admin/dashboard.html" class="footer__link">Admin Portal</a>
           </div>
         </div>
 
@@ -403,7 +404,22 @@
   <!-- Scripts -->
   <script src="assets/js/zoom-fix.js"></script>
   <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
   <script src="assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.API && API.isAuthenticated()) {
+        const user = API.getUser();
+        const nav = document.getElementById('navActions');
+        if (nav && user) {
+          const dashboardUrl = user.role === 'ngo' ? 'pages/ngo/dashboard.html' : 'pages/donor/dashboard.html';
+          nav.innerHTML = `
+            <a href="${dashboardUrl}" class="btn btn--primary">Dashboard →</a>
+          `;
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>

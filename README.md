@@ -1,523 +1,315 @@
-# 🍱 FEEDNOW
+# 🍱 FEEDNOW — Food-Rescue Platform
 
-### Right Food. Right Place. Right Time.
-
-FEEDNOW is a smart food-rescue platform that connects surplus food donors with nearby NGOs in real time. It helps donors find NGOs based on their location and food requirements, submit donation requests, and coordinate pickup or delivery, reducing food waste and helping people in need.
-
----
-
-## 🌱 Overview
-
-A large amount of edible food is wasted every day while many people and communities still face food shortages.
-
-FEEDNOW aims to bridge this gap through a simple digital platform where:
-
-**Donors → Find Nearby NGOs → Send Food Requests → NGO Accepts → Coordinate → Donation Completed**
-
-The frontend provides separate experiences for **Donors** and **NGOs**, making the entire food-rescue workflow simple and transparent.
+> **Right Food. Right Place. Right Time.**  
+> A full-stack food-rescue platform connecting surplus food donors with verified NGOs in real time to eliminate food waste and fight hunger.
 
 ---
 
-## 🎯 Objectives
+## 🌟 Overview
 
-- Reduce avoidable food wastage.
-- Connect surplus food with organizations that need it.
-- Help donors find nearby NGOs quickly.
-- Provide NGOs with an organized way to receive donation requests.
-- Simplify food pickup and delivery coordination.
-- Provide real-time status updates through notifications.
-- Create a simple and user-friendly food donation experience.
+FEEDNOW bridges the gap between food donors (restaurants, caterers, households, event organizers) and nearby NGOs/food banks. Instead of edible food ending up in landfills, donors can easily discover nearby organizations, dispatch donation requests with food shelf-life and urgency details, and coordinate seamless pickup and delivery.
 
----
-
-## 🔄 Complete Workflow
-
+### Complete Donation Lifecycle
 ```text
-                    FEEDNOW
-                       │
-                       ▼
-                 Landing Page
-                       │
-                       ▼
-                Login / Signup
-                       │
-                       ▼
-                  Select Role
-                  /         \
-                 /           \
-                ▼             ▼
-             DONOR           NGO
-                │             │
-                ▼             ▼
-        Donor Dashboard   NGO Dashboard
-                │             │
-                ▼             │
-          Find Nearby NGOs    │
-                │             │
-                ▼             │
-          View NGO Details    │
-                │             │
-                ▼             │
-        Create Donation       │
-             Request          │
-                │             │
-                └──────┬──────┘
-                       ▼
-                NGO Receives
-                   Request
-                       │
-                 ┌─────┴─────┐
-                 ▼           ▼
-              Accept       Decline
-                 │
-                 ▼
-             Coordinate
-          Pickup / Delivery
-                 │
-                 ▼
-          Donation Completed
-                 │
-                 ▼
-              Impact
-````
-
----
-
-## 👥 User Roles
-
-### 🙋 Donor
-
-Donors can:
-
-* Create an account.
-* Select the donor role.
-* Allow location access.
-* View nearby NGOs.
-* Check NGO requirements.
-* View NGO details.
-* Create food donation requests.
-* Enter food information and quantity.
-* Specify preparation and pickup deadlines.
-* Add additional notes.
-* Submit donation requests.
-* Track donation status.
-* Receive notifications.
-
-### 🏢 NGO
-
-NGOs can:
-
-* Create an NGO account.
-* Access the NGO dashboard.
-* View incoming donation requests.
-* Check food details.
-* Review quantity and availability.
-* Accept or decline donations.
-* Coordinate pickup or delivery.
-* Track accepted donations.
-* View completed donations.
-* Receive notifications.
-
----
-
-## 🖥️ Frontend Pages
-
-### 1. Landing Page
-
-The landing page introduces FEEDNOW and explains its purpose.
-
-Main navigation includes:
-
-* Home
-* How It Works
-* About / Impact
-* Login
-* Donate Food
-* Join as NGO
-
-Primary message:
-
-> Good food deserves a second destination.
-
----
-
-### 2. Authentication
-
-Users can:
-
-* Login using email and password.
-* Create a new account.
-* Select their role during registration.
-
-Available roles:
-
-```text
-I want to donate food
-        OR
-I represent an NGO
-```
-
-The selected role determines the dashboard and workflow shown to the user.
-
----
-
-### 3. Donor Dashboard
-
-After authentication, donors enter their dashboard.
-
-The dashboard provides access to:
-
-* Dashboard
-* Nearby NGOs
-* My Donations
-* Notifications
-* Profile
-
-The donor can also see donation statistics such as:
-
-* Donations Made
-* Pending Donations
-* Completed Donations
-* Recent Donations
-
----
-
-### 4. Nearby NGO Discovery
-
-FEEDNOW uses the donor's location to help discover nearby NGOs.
-
-Donors can view information such as:
-
-* NGO name
-* Distance
-* Food requirement
-* Food type accepted
-* Pickup availability
-* Current donation status
-
-This allows donors to identify NGOs that currently need the available food.
-
----
-
-### 5. NGO Details
-
-Before sending a donation, donors can view additional information about an NGO.
-
-This helps donors make an informed decision about where to send their surplus food.
-
----
-
-### 6. Create Donation Request
-
-Donors can create a donation request by entering information such as:
-
-* Food name
-* Food type
-* Quantity
-* Prepared time
-* Best-before / pickup deadline
-* Additional notes
-* Food image, where applicable
-
-The donor can review the donation information before sending the request.
-
----
-
-### 7. NGO Dashboard
-
-The NGO dashboard provides an overview of donation activity.
-
-It includes areas such as:
-
-* Dashboard
-* Donation Requests
-* Notifications
-* Profile
-
-The NGO can monitor:
-
-* New requests
-* Pending requests
-* Accepted donations
-* Completed donations
-
----
-
-### 8. Donation Request Management
-
-When an NGO receives a donation request, it can review:
-
-* Food name
-* Quantity
-* Food type
-* Preparation time
-* Availability deadline
-* Donor information
-* Relevant location information
-
-The NGO can then:
-
-```text
-ACCEPT DONATION
-       OR
-DECLINE DONATION
+[Donor] Create Donation Request (PENDING)
+                   │
+                   ▼
+       [NGO] Receives Notification & Request
+                   │
+         ┌─────────┴─────────┐
+         ▼                   ▼
+     [ACCEPTED]          [DECLINED]
+         │
+         ▼
+ [NGO / Donor] Coordinate Logistics (COORDINATED)
+         │
+         ▼
+ [NGO] Food Received & Verified (COMPLETED)
 ```
 
 ---
 
-### 9. Pickup / Delivery Coordination
+## 🛠️ Technology Stack
 
-After accepting a donation, the donor and NGO coordinate how the food will reach the NGO.
+FeedNow is built with a lightweight, decoupled full-stack architecture adhering strictly to modern standards without heavy ORMs or third-party cloud backends:
 
-Possible coordination options include:
+- **Frontend**:
+  - **HTML5 & Vanilla CSS3**: Custom design system using CSS variables, responsive grid/flexbox layouts, cards, and micro-animations.
+  - **Vanilla JavaScript (ES6+)**: Modular scripts, browser `fetch` API, JWT storage in `localStorage`.
+  - **Zero Frontend Frameworks**: High performance, pure browser-native implementation.
+- **Backend**:
+  - **Node.js & Express.js**: RESTful API architecture with structured routes, controllers, and middleware.
+  - **MongoDB & Mongoose**: Schemas for Users, NGO Profiles, Donations, and Notifications.
+  - **Authentication**: Stateless JSON Web Tokens (`jsonwebtoken`) + password hashing via `bcryptjs`.
+  - **Environment Configuration**: `dotenv` for secret isolation and configurable connection strings.
+  - **Cross-Origin Resource Sharing**: `cors` middleware enabled for seamless local development.
 
-* NGO pickup
-* Donor delivery
+---
 
-The donation status progresses through the workflow:
+## 📁 Project Structure
 
 ```text
-PENDING
-   ↓
-ACCEPTED
-   ↓
-COORDINATED
-   ↓
-COMPLETED
+FeedNow/
+├── index.html                     # Landing page with dynamic authenticated navigation
+├── assets/
+│   ├── css/
+│   │   ├── base.css               # Design tokens, typography, CSS resets
+│   │   ├── components.css         # Buttons, badges, cards, modal dialogs, forms
+│   │   └── pages/                 # Page-specific styling
+│   └── js/
+│       ├── api.js                 # Centralized API client & HTTP interceptor
+│       ├── auth.js                # Auth helper bridge
+│       └── shared/
+│           ├── guards.js          # Route guards: requireAuth, requireRole, redirectIfLoggedIn
+│           └── navbar.js          # Shared navbar logic
+├── pages/
+│   ├── login.html                 # Login page with role-based redirection
+│   ├── signup.html                # Donor and NGO registration with dual forms
+│   ├── donor/
+│   │   ├── dashboard.html         # Donor metrics, quick actions & recent donations
+│   │   ├── nearby-ngos.html       # Location-aware NGO discovery (Haversine search)
+│   │   ├── ngo-details.html       # Detailed NGO view with food preferences & contact
+│   │   ├── create-donation.html   # Donation creation form (shelf-life, quantity, urgency)
+│   │   ├── donations.html         # Complete donor history with filter tabs
+│   │   ├── donation-details.html  # Live donation tracking timeline & coordination details
+│   │   ├── notifications.html     # Real-time event notifications for donor
+│   │   └── profile.html           # Donor account details & statistics
+│   └── ngo/
+│       ├── dashboard.html         # NGO metrics, acceptance status toggle & recent requests
+│       ├── requests.html          # Incoming requests categorized by status tabs
+│       ├── request-details.html   # Request inspection, privacy-masked donor info & actions
+│       ├── notifications.html     # Real-time event notifications for NGO
+│       └── profile.html           # NGO operational profile & preferences editor
+└── backend/
+    ├── server.js                  # Express application entry point & route mounting
+    ├── package.json               # Backend dependencies & npm scripts
+    ├── .env.example               # Template environment configuration
+    ├── .env                       # Local secrets (ignored in version control)
+    ├── config/
+    │   └── db.js                  # Mongoose MongoDB connection handler
+    ├── models/
+    │   ├── User.js                # User model (name, email, password, role, phone, address)
+    │   ├── NgoProfile.js          # Extended NGO profile (mission, capacity, location, verified)
+    │   ├── Donation.js            # Food donation records & lifecycle status
+    │   └── Notification.js        # In-app notification records with read/unread tracking
+    ├── middleware/
+    │   └── auth.js                # JWT verification (`protect`) & role guard (`requireRole`)
+    ├── controllers/
+    │   ├── authController.js      # Register, login, getMe profile handler
+    │   ├── ngoController.js       # NGO listing, profile update, Haversine nearby lookup
+    │   ├── donationController.js  # Donation creation, status progression & privacy control
+    │   ├── notificationController.js # Notifications list & read state management
+    │   └── dashboardController.js # Aggregate statistics for Donor and NGO dashboards
+    ├── routes/
+    │   ├── authRoutes.js          # /api/auth
+    │   ├── ngoRoutes.js           # /api/ngos
+    │   ├── donationRoutes.js      # /api/donations
+    │   ├── notificationRoutes.js  # /api/notifications
+    │   └── dashboardRoutes.js     # /api/dashboard
+    ├── test_suite.js              # 30-step unit & integration testing suite
+    └── e2e_test.js                # 27-step end-to-end user journey & security suite
 ```
 
 ---
 
-### 10. Notifications
+## 🚀 Getting Started
 
-Notifications keep users informed about important donation events.
-
-Examples include:
-
-* Donation request sent.
-* Donation request accepted.
-* Donation request declined.
-* Pickup / delivery coordination.
-* Donation completed.
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- **Node.js** (v16.x or higher): [Download Node.js](https://nodejs.org/)
+- **npm** (comes bundled with Node.js)
+- **MongoDB**: A running local instance (`mongodb://localhost:27017`) or a free [MongoDB Atlas](https://www.mongodb.com/atlas) cloud cluster connection string.
 
 ---
 
-## 🧩 Key Features
+### 2. Backend Setup & Configuration
 
-* 🔐 User authentication
-* 👥 Donor and NGO role selection
-* 📍 Location-based NGO discovery
-* 🏢 NGO profiles
-* 🍱 Food donation creation
-* 📋 Donation request management
-* ✅ Accept / decline workflow
-* 🚚 Pickup and delivery coordination
-* 🔔 Notifications
-* 📊 Donation statistics
-* 📱 Responsive user interface
+1. **Navigate to the backend directory**:
+   ```bash
+   cd backend
+   ```
 
----
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-## 🎨 Design
+3. **Configure Environment Variables**:
+   Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Open `backend/.env` and configure your settings:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/feednow
+   JWT_SECRET=feednow_super_secure_jwt_secret_dev_key_2024
+   JWT_EXPIRES_IN=7d
+   ```
 
-FEEDNOW follows a clean and modern social-impact technology design.
-
-### Brand Colors
-
-| Color         | Hex       | Purpose                                    |
-| ------------- | --------- | ------------------------------------------ |
-| Fresh Green   | `#22C55E` | Food, freshness, sustainability and impact |
-| Dark Charcoal | `#17211B` | Text and primary UI elements               |
-| White         | `#FFFFFF` | Background and negative space              |
-
-The interface focuses on:
-
-* Clean layouts
-* Clear navigation
-* Simple cards
-* Strong typography
-* Intuitive actions
-* Minimal visual clutter
-* Responsive design
-
----
-
-## 🚀 User Journey
-
-### Donor Journey
-
-```text
-Landing Page
-     ↓
-Login / Signup
-     ↓
-Select Donor
-     ↓
-Allow Location
-     ↓
-Donor Dashboard
-     ↓
-Nearby NGOs
-     ↓
-View NGO Details
-     ↓
-Create Donation
-     ↓
-Send Request
-     ↓
-Wait for NGO Response
-     ↓
-Coordinate Pickup / Delivery
-     ↓
-Donation Completed
-```
-
-### NGO Journey
-
-```text
-Landing Page
-     ↓
-Login / Signup
-     ↓
-Select NGO
-     ↓
-NGO Dashboard
-     ↓
-View Donation Requests
-     ↓
-Review Food Details
-     ↓
-Accept / Decline
-     ↓
-Coordinate Pickup / Delivery
-     ↓
-Complete Donation
-```
+4. **Start the Backend Server**:
+   - Production mode:
+     ```bash
+     npm start
+     ```
+   - Development mode with auto-reload (using `nodemon`):
+     ```bash
+     npm run dev
+     ```
+   The backend will start and log:
+   ```text
+   MongoDB Connected: localhost:27017/feednow
+   FeedNow Backend running on port 5000
+   ```
 
 ---
 
-## 💡 Impact
+### 3. Frontend Setup
 
-FEEDNOW aims to create a direct connection between **surplus food and genuine need**.
+The frontend consists of static HTML, CSS, and JavaScript files and connects to the backend at `http://localhost:5000/api`.
 
-Instead of letting usable food go to waste, the platform provides a structured workflow for moving it toward organizations that can distribute it to people who need it.
-
-### FEEDNOW focuses on:
-
-**Food Rescue**
-Recover usable surplus food.
-
-**Real-Time Connection**
-Connect donors with nearby NGOs.
-
-**Efficient Coordination**
-Make pickup and delivery easier.
-
-**Social Impact**
-Turn surplus food into meaningful community support.
+You can run the frontend using any static file server:
+- **Option A — VS Code Live Server**: Right-click `index.html` and click **"Open with Live Server"**.
+- **Option B — Node `npx serve`**:
+  ```bash
+  # In the root project directory:
+  npx serve .
+  ```
+- **Option C — Python HTTP Server**:
+  ```bash
+  # In the root project directory:
+  python -m http.server 3000
+  ```
+Open your browser and navigate to `http://localhost:3000` or the Live Server URL.
 
 ---
 
-## 🏗️ Project Structure
+## 📡 API Reference
 
-```text
-FEEDNOW/
-│
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── layouts/
-│   ├── assets/
-│   └── ...
-│
-├── public/
-│
-├── package.json
-├── README.md
-└── ...
-```
+Base URL: `http://localhost:5000/api`
 
-> Update the folder structure above according to the final implementation of your project.
+### 1. Authentication (`/api/auth`)
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/signup` | Public | Register new Donor or NGO account |
+| `POST` | `/api/auth/login` | Public | Login with email & password, returns JWT |
+| `GET` | `/api/auth/me` | Authenticated | Retrieve authenticated user profile (password excluded) |
+
+### 2. NGOs (`/api/ngos`)
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/ngos` | Public | List all active NGOs with filter options |
+| `GET` | `/api/ngos/nearby` | Public | Location-based NGO discovery (query: `lat`, `lng`, `radiusKm`) |
+| `GET` | `/api/ngos/me` | NGO only | Retrieve own NGO organization profile |
+| `PUT` | `/api/ngos/me` | NGO only | Update own NGO details (capacity, address, accepting status) |
+| `GET` | `/api/ngos/:id` | Public | View individual NGO details by user ID or profile ID |
+
+### 3. Donations (`/api/donations`)
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/donations` | Donor only | Create a new food donation request targeted to an NGO |
+| `GET` | `/api/donations/my` | Donor only | Retrieve all donations created by authenticated donor |
+| `GET` | `/api/donations/received` | NGO only | Retrieve all donation requests sent to authenticated NGO |
+| `GET` | `/api/donations/:id` | Authenticated | Retrieve donation details with role-based privacy masking |
+| `PATCH` | `/api/donations/:id/status` | NGO only | Transition donation status (`ACCEPTED`, `DECLINED`, `COORDINATED`, `COMPLETED`) |
+
+### 4. Notifications (`/api/notifications`)
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/notifications` | Authenticated | Get user's notifications sorted by newest first |
+| `PATCH` | `/api/notifications/:id/read` | Authenticated | Mark a single notification as read |
+| `PATCH` | `/api/notifications/read-all` | Authenticated | Mark all notifications for the user as read |
+
+### 5. Dashboard (`/api/dashboard`)
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/dashboard/donor` | Donor only | Aggregate metrics (total, pending, completed) & recent items |
+| `GET` | `/api/dashboard/ngo` | NGO only | Aggregate metrics (requests, accepted, completed) & status |
+
+### 6. Health
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | Public | Backend system health & uptime verification |
 
 ---
 
-## 🛠️ Getting Started
+## 🔒 Security & Privacy Features
 
-### Prerequisites
+1. **Password Security**:
+   - All passwords are encrypted with `bcryptjs` using a salt work factor of 10.
+   - Passwords are never returned in API payloads (`select: false` on User schema).
+2. **Stateless JWT Authentication**:
+   - Secure token expiration (7-day default).
+   - Bearer token verified on every protected request via `protect` middleware.
+3. **Strict Role-Based Access Control (RBAC)**:
+   - Donors cannot access NGO-only endpoints (e.g., cannot accept donations, cannot edit NGO profiles).
+   - NGOs cannot access donor-only endpoints (e.g., cannot create donation requests).
+4. **Donor Privacy Shielding**:
+   - Precise donor contact details (phone, full street address) remain hidden from NGOs while a request is `PENDING`.
+   - Donor details become accessible to the NGO only once the donation is formally `ACCEPTED`.
+5. **Enforced Status Progression**:
+   - Donations can only move through approved lifecycle transitions:
+     `PENDING` ➔ `ACCEPTED` or `DECLINED` ➔ `COORDINATED` ➔ `COMPLETED`.
+   - Illegitimate status jumps (e.g. attempting to accept a completed donation) are rejected with HTTP 400.
 
-Make sure you have installed:
+---
 
-* Node.js
-* npm
-* Git
+## 🧪 Testing & Verification
 
-### Installation
+FeedNow features an automated testing pipeline with 57 comprehensive tests:
 
-Clone the repository:
-
+### Running Tests
+To run all tests from the backend directory:
 ```bash
-git clone https://github.com/saik8088/FeedNow.git
+cd backend
+npm test
 ```
 
-Navigate to the project:
+### Test Breakdown
+- **Unit & Integration Suite (`test_suite.js`)**: **30 / 30 Passed**
+  - Health check & database connection
+  - User registration & duplicate email prevention
+  - Password hashing & login authentication
+  - Token validation & missing token rejection
+  - Role-based route guard enforcement
+  - NGO profile updating & listing
+  - Haversine distance-based nearby search
+  - Donation creation & lifecycle transitions
+  - Automated notification dispatching & read state toggling
+  - Dashboard stats aggregation
+  - Error handling (404 for non-existent IDs, 400 for malformed ObjectIds)
 
-```bash
-cd FeedNow
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Open the local development URL shown in your terminal.
+- **End-to-End User Journey & Security Suite (`e2e_test.js`)**: **27 / 27 Passed**
+  - Complete lifecycle flow: NGO registration ➔ Donor registration ➔ Discovery ➔ Donation creation ➔ Real-time notifications ➔ NGO acceptance ➔ Coordination ➔ Completion.
+  - Verification of dashboard statistics synchronization.
+  - Security & negative checks:
+    - Rejection of invalid credentials (401)
+    - Rejection of duplicate accounts (400)
+    - Rejection of malformed requests (400)
+    - Rejection of unauthorized role access (403)
+    - Rejection of illegitimate status regressions (400)
+    - Protection of private donation records from unrelated users (403)
 
 ---
 
-## 🔮 Future Scope
+## 👥 User Roles & Walkthrough
 
-Potential future improvements can include:
+### 🙋 Donor Workflow
+1. **Sign Up / Log In**: Register as a donor at `/pages/signup.html`.
+2. **Discover NGOs**: Visit `/pages/donor/nearby-ngos.html` to find nearby charities sorted by proximity and food requirements.
+3. **Submit Donation**: Click **"Donate"** on an NGO card or use `/pages/donor/create-donation.html` to enter food type, quantity, prepared time, expiry deadline, and pickup address.
+4. **Track Donation**: Monitor progress in `/pages/donor/donations.html` and view the dynamic timeline at `/pages/donor/donation-details.html`.
+5. **Notifications**: Receive instant notifications when an NGO accepts, coordinates, or completes the donation.
 
-* Smarter donor-NGO matching.
-* Improved real-time availability.
-* Advanced impact analytics.
-* Better route and pickup optimization.
-* Mobile application support.
-* Multi-location NGO management.
-* Food safety and expiry monitoring.
-* Larger-scale community partnerships.
-
-These are future possibilities and are **not represented as current implemented features**.
-
----
-
-## 🤝 Social Impact
-
-FEEDNOW is built around a simple idea:
-
-> **Food should reach people, not landfills.**
-
-By making food donation faster, more organized, and location-aware, FEEDNOW can help create a more sustainable and connected food-rescue ecosystem.
+### 🏢 NGO Workflow
+1. **Sign Up / Log In**: Register as an NGO at `/pages/signup.html`.
+2. **Configure Profile**: Set operational hours, food categories accepted, and current accepting status at `/pages/ngo/profile.html`.
+3. **Review Requests**: View incoming requests categorized under New, Accepted, Completed, or Declined tabs at `/pages/ngo/requests.html`.
+4. **Accept & Coordinate**: Review food details and shelf-life urgency at `/pages/ngo/request-details.html`. Accept the request to reveal donor contact details, then mark as Coordinated and Completed.
+5. **Monitor Impact**: Track donation metrics and meals saved via the NGO dashboard at `/pages/ngo/dashboard.html`.
 
 ---
 
-## 📌 Project Status
-
-**Project:** FEEDNOW  
-**Category:** Food Rescue / Social Impact Technology  
-**Platform:** Web Application  
-**Focus:** Donor–NGO Food Donation Workflow  
-
----
-
-## 👨‍💻 Team
-
-Developed as a hackathon project focused on solving food wastage through technology and real-time community connection.
-
+## 📄 License
+This project is developed for educational and social-impact purposes.
+All rights reserved © 2024 FeedNow Team.

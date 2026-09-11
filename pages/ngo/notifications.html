@@ -123,60 +123,112 @@
           <h1 class="dashboard-main__title">Notifications</h1>
           <p class="dashboard-main__subtitle">Stay updated on your donation requests and activity.</p>
         </div>
-        <button class="btn btn--secondary btn--sm" style="background: white;">Mark all as read</button>
+        <button class="btn btn--secondary btn--sm" id="markAllBtn" style="background: white;" onclick="handleMarkAllRead()">Mark all as read</button>
       </header>
 
       <div class="dashboard-main__content" style="max-width: 900px; margin-inline: auto; width: 100%;">
-        <div class="notification-list animate-fade-in-up">
-          
-          <div class="notification-item unread" onclick="window.location.href='request-details.html?id=1'">
-            <div class="notification-icon" style="background: var(--warning-bg); color: var(--warning-text);"><i class="ph ph-package"></i></div>
-            <div class="notification-content">
-              <div class="notification-header">
-                <div class="notification-title">New Donation Request!</div>
-                <div class="notification-time">5 mins ago</div>
-              </div>
-              <div class="notification-desc">Fresh Bakery has offered 20 Packs of Assorted Breads. Please review and accept if needed.</div>
-            </div>
+        <div class="notification-list animate-fade-in-up" id="notificationsList">
+          <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+            <span class="spinner"></span> Loading notifications...
           </div>
-
-          <div class="notification-item unread">
-            <div class="notification-icon" style="background: var(--info-bg); color: var(--info);"><i class="ph ph-info"></i></div>
-            <div class="notification-content">
-              <div class="notification-header">
-                <div class="notification-title">System Update</div>
-                <div class="notification-time">1 hour ago</div>
-              </div>
-              <div class="notification-desc">We have updated our terms regarding pickup schedules. Please review when you have a moment.</div>
-            </div>
-          </div>
-
-          <div class="notification-item">
-            <div class="notification-icon" style="background: var(--success-bg); color: var(--success);"><i class="ph ph-check-circle"></i></div>
-            <div class="notification-content">
-              <div class="notification-header">
-                <div class="notification-title">Pickup Completed</div>
-                <div class="notification-time">Oct 12, 2026</div>
-              </div>
-              <div class="notification-desc">You successfully picked up 50 Meals from Green Valley Tech.</div>
-            </div>
-          </div>
-
-          <div class="notification-item">
-            <div class="notification-icon" style="background: var(--success-bg); color: var(--success);"><i class="ph ph-check-circle"></i></div>
-            <div class="notification-content">
-              <div class="notification-header">
-                <div class="notification-title">Pickup Completed</div>
-                <div class="notification-time">Oct 10, 2026</div>
-              </div>
-              <div class="notification-desc">You successfully picked up 15 kg of Fresh Fruits from Local Market.</div>
-            </div>
-          </div>
-
         </div>
       </div>
     </main>
   </div>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
+  <script src="../../assets/js/shared/ui.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('ngo')) return;
+      loadNotifications();
+    });
+
+    async function loadNotifications() {
+      const container = document.getElementById('notificationsList');
+
+      try {
+        const res = await API.notifications.getMy();
+        const notifs = res && res.notifications ? res.notifications : [];
+
+        if (notifs.length === 0) {
+          container.innerHTML = `
+            <div style="padding: var(--space-12); text-align: center; color: var(--text-muted);">
+              <i class="ph ph-bell-slash" style="font-size: 3rem; margin-bottom: var(--space-2); display: block; opacity: 0.5;"></i>
+              <h3>No Notifications Yet</h3>
+              <p>You will receive updates here when new food donations are submitted.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const iconConfig = {
+          DONATION_CREATED: { icon: 'ph-plus-circle', bg: 'var(--info-bg)', color: 'var(--info)' },
+          DONATION_ACCEPTED: { icon: 'ph-check-circle', bg: 'var(--success-bg)', color: 'var(--success)' },
+          DONATION_DECLINED: { icon: 'ph-x-circle', bg: '#fee2e2', color: '#991b1b' },
+          DONATION_COORDINATED: { icon: 'ph-truck', bg: 'var(--info-bg)', color: 'var(--info)' },
+          DONATION_COMPLETED: { icon: 'ph-check-circle', bg: 'var(--success-bg)', color: 'var(--success)' },
+        };
+
+        container.innerHTML = notifs.map(n => {
+          const cfg = iconConfig[n.type] || { icon: 'ph-bell', bg: 'var(--primary-50)', color: 'var(--primary)' };
+          const unreadClass = n.read ? '' : 'unread';
+          const timeAgo = UI.timeAgo(n.createdAt);
+          const clickAction = n.donationId ? `onclick="handleClickNotif('${n._id}', '${n.donationId}')"` : `onclick="handleMarkRead('${n._id}')"`;
+
+          return `
+            <div class="notification-item ${unreadClass}" style="cursor: pointer;" ${clickAction}>
+              <div class="notification-icon" style="background: ${cfg.bg}; color: ${cfg.color};">
+                <i class="ph ${cfg.icon}"></i>
+              </div>
+              <div class="notification-content">
+                <div class="notification-header">
+                  <div class="notification-title">${n.type.replace(/_/g, ' ')}</div>
+                  <div class="notification-time">${timeAgo}</div>
+                </div>
+                <div class="notification-desc">${n.message}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load notifications:', err);
+        container.innerHTML = `<div style="color: var(--danger); text-align: center;">Failed to load notifications: ${err.message}</div>`;
+      }
+    }
+
+    async function handleClickNotif(notifId, donationId) {
+      try {
+        await API.notifications.markOneRead(notifId);
+      } catch (e) {}
+      window.location.href = `request-details.html?id=${donationId}`;
+    }
+
+    async function handleMarkRead(notifId) {
+      try {
+        await API.notifications.markOneRead(notifId);
+        loadNotifications();
+      } catch (e) {}
+    }
+
+    async function handleMarkAllRead() {
+      try {
+        await API.notifications.markAllRead();
+        loadNotifications();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function logout() {
+      API.auth.logout();
+    }
+  </script>
 </body>
 </html>

@@ -1,31 +1,40 @@
 /* ============================================================
-   FEEDNOW — AUTH MODULE (Placeholder for Round 2)
+   FEEDNOW — AUTH MODULE
+   Connects to Node.js + Express + JWT Backend via API client
    ============================================================ */
 
 const Auth = {
-  // Will be replaced with real Supabase auth in Round 2
-  currentUser: null,
+  get currentUser() {
+    return (window.API && window.API.getUser()) || null;
+  },
 
   isLoggedIn() {
-    return !!this.currentUser;
+    return window.API ? window.API.isAuthenticated() : !!localStorage.getItem('feednow_token');
   },
 
   getRole() {
-    return this.currentUser?.role || null;
+    return window.API ? window.API.getUserRole() : null;
   },
 
-  login(email, password) {
-    console.log('[Auth] Login attempt — will connect in Round 2');
-    return Promise.resolve();
+  async login(email, password) {
+    if (!window.API) throw new Error('API client not loaded');
+    return window.API.auth.login({ email, password });
   },
 
-  signup(data) {
-    console.log('[Auth] Signup attempt — will connect in Round 2');
-    return Promise.resolve();
+  async signup(data) {
+    if (!window.API) throw new Error('API client not loaded');
+    return window.API.auth.signup(data);
   },
 
   logout() {
-    this.currentUser = null;
-    window.location.href = CONFIG.ROUTES.HOME;
+    if (window.API) {
+      window.API.auth.logout();
+    } else {
+      localStorage.removeItem('feednow_token');
+      localStorage.removeItem('feednow_user');
+      window.location.href = '/index.html';
+    }
   },
 };
+
+window.Auth = Auth;

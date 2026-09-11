@@ -190,17 +190,17 @@
           <div class="ngo-header__content">
             <div class="ngo-header__logo"><i class="ph ph-buildings"></i></div>
             <div class="ngo-header__info">
-              <h2 class="ngo-header__title">Hope Foundation</h2>
-              <div class="ngo-header__meta">
-                <span><i class="ph ph-map-pin"></i> 1.2 km away</span>
+              <h2 class="ngo-header__title" id="ngoTitle">Loading NGO...</h2>
+              <div class="ngo-header__meta" id="ngoMeta">
+                <span><i class="ph ph-map-pin"></i> <span id="ngoCity">City</span></span>
                 <span>•</span>
-                <span class="badge badge--success" style="font-size: 11px;">Accepting Donations</span>
+                <span class="badge badge--success" id="ngoStatusBadge" style="font-size: 11px;">Accepting Donations</span>
               </div>
-              <p class="text-secondary" style="max-width: 600px; margin-bottom: var(--space-4);">
-                Dedicated to providing daily nutritious meals to underprivileged children and shelters in the local area.
+              <p class="text-secondary" id="ngoDesc" style="max-width: 600px; margin-bottom: var(--space-4);">
+                ...
               </p>
               <div class="ngo-header__actions">
-                <a href="create-donation.html?ngo=1" class="btn btn--primary btn--lg"><i class="ph ph-fork-knife"></i> Donate to this NGO</a>
+                <a href="create-donation.html" id="ngoDonateBtn" class="btn btn--primary btn--lg"><i class="ph ph-fork-knife"></i> Donate to this NGO</a>
               </div>
             </div>
           </div>
@@ -211,19 +211,17 @@
           <div class="card card--flat">
             <div class="info-section">
               <h3>About the NGO</h3>
-              <p class="text-secondary line-height-relaxed text-sm">
-                Hope Foundation has been operating since 2015, focusing on zero hunger initiatives in urban areas. We distribute over 500 meals daily to various shelters and street communities. We strictly follow food safety guidelines and ensure all donated food is consumed within 2 hours of pickup.
+              <p class="text-secondary line-height-relaxed text-sm" id="ngoAbout">
+                ...
               </p>
             </div>
 
             <div class="info-section">
-              <h3>Current Requirements</h3>
-              <div class="tags-container" style="margin-bottom: var(--space-4);">
-                <span class="tag">Cooked Meals</span>
-                <span class="tag">Raw Rice & Dal</span>
-                <span class="tag">Fresh Fruits</span>
+              <h3>Current Requirements & Accepted Types</h3>
+              <div class="tags-container" id="ngoTags" style="margin-bottom: var(--space-4);">
+                <span class="tag">Vegetarian</span>
               </div>
-              <div class="badge badge--warning">Needs food before 8:00 PM today</div>
+              <div class="badge badge--warning" id="ngoReqNote">Accepts food donations</div>
             </div>
           </div>
 
@@ -234,15 +232,11 @@
               <div class="info-list">
                 <div class="info-item">
                   <span class="info-item__icon"><i class="ph ph-map-pin"></i></span>
-                  <span class="info-item__text">123 Charity Lane, Koramangala, Bengaluru 560034</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-item__icon"><i class="ph ph-clock"></i></span>
-                  <span class="info-item__text">Pickup Available: 10:00 AM - 8:00 PM</span>
+                  <span class="info-item__text" id="ngoAddress">...</span>
                 </div>
                 <div class="info-item">
                   <span class="info-item__icon"><i class="ph ph-truck"></i></span>
-                  <span class="info-item__text">NGO can arrange pickup within 5km radius.</span>
+                  <span class="info-item__text" id="ngoPickup">Pickup availability depends on distance.</span>
                 </div>
                 <div class="info-item" style="margin-top: var(--space-2); opacity: 0.7;">
                   <span class="info-item__icon"><i class="ph ph-lock-key"></i></span>
@@ -257,6 +251,58 @@
     </main>
   </div>
 
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('donor')) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const ngoId = params.get('id');
+
+      if (!ngoId) {
+        document.getElementById('ngoTitle').textContent = 'NGO not specified';
+        return;
+      }
+
+      try {
+        const res = await API.ngos.getById(ngoId);
+        if (res.success && res.profile) {
+          const p = res.profile;
+          const name = p.organizationName || p.userId?.name || 'NGO';
+          const targetNgoUserId = p.userId?._id || p.userId || ngoId;
+
+          document.getElementById('ngoTitle').textContent = name;
+          document.getElementById('ngoCity').textContent = p.city || 'Bengaluru';
+          document.getElementById('ngoDesc').textContent = p.description || 'Dedicated to food rescue and distribution.';
+          document.getElementById('ngoAbout').textContent = p.description || `${name} actively collects excess food from donors and delivers it to individuals and communities in need.`;
+          document.getElementById('ngoAddress').textContent = p.address || (p.city ? `${p.city}` : 'Bengaluru, India');
+          document.getElementById('ngoPickup').textContent = p.pickupAvailable ? 'NGO can arrange pickup from donor location.' : 'Donor drop-off preferred.';
+          
+          if (p.requirements) {
+            document.getElementById('ngoReqNote').textContent = p.requirements;
+          }
+
+          if (Array.isArray(p.foodTypes) && p.foodTypes.length > 0) {
+            document.getElementById('ngoTags').innerHTML = p.foodTypes.map(t => `<span class="tag">${t}</span>`).join(' ');
+          }
+
+          document.getElementById('ngoDonateBtn').href = `create-donation.html?ngo=${targetNgoUserId}`;
+        }
+      } catch (err) {
+        console.error('Failed to load NGO details:', err);
+        document.getElementById('ngoTitle').textContent = 'NGO not found';
+      }
+    });
+
+    function logout() {
+      API.auth.logout();
+    }
+  </script>
 </body>
 </html>

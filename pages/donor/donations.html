@@ -151,11 +151,11 @@
 
       <div class="dashboard-main__content">
         
-        <div class="tabs animate-fade-in-up">
-          <div class="tab active">All</div>
-          <div class="tab">Active <span class="tab__count">2</span></div>
-          <div class="tab">Completed</div>
-          <div class="tab">Cancelled</div>
+        <div class="tabs animate-fade-in-up" id="donationTabs">
+          <div class="tab active" data-filter="all">All</div>
+          <div class="tab" data-filter="active">Active <span class="tab__count" id="activeCount">0</span></div>
+          <div class="tab" data-filter="completed">Completed</div>
+          <div class="tab" data-filter="declined">Declined</div>
         </div>
 
         <div class="card card--flat animate-fade-in-up delay-1" style="padding: 0; overflow: hidden;">
@@ -170,59 +170,12 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              
-              <tr style="cursor: pointer;" onclick="window.location.href='donation-details.html?id=1'">
-                <td data-label="Donation Details" class="full-width">
-                  <div class="table-food-info">
-                    <div class="table-food-icon"><i class="ph ph-bowl-food"></i></div>
-                    <div class="table-food-details">
-                      <span class="table-food-title">Vegetable Curry & Rice</span>
-                      <span class="text-xs text-muted">Vegetarian</span>
-                    </div>
-                  </div>
+            <tbody id="donationsTbody">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
+                  <span class="spinner"></span> Loading donations...
                 </td>
-                <td data-label="NGO">Hope Foundation</td>
-                <td data-label="Quantity">50 Meals</td>
-                <td data-label="Date">Today, 2:30 PM</td>
-                <td data-label="Status"><span class="badge badge--pending">Pending Review</span></td>
-                <td data-label="Action"><a href="donation-details.html?id=1" class="btn btn--ghost btn--sm">View</a></td>
               </tr>
-
-              <tr style="cursor: pointer;" onclick="window.location.href='donation-details.html?id=2'">
-                <td data-label="Donation Details" class="full-width">
-                  <div class="table-food-info">
-                    <div class="table-food-icon"><i class="ph ph-bread"></i></div>
-                    <div class="table-food-details">
-                      <span class="table-food-title">Assorted Breads</span>
-                      <span class="text-xs text-muted">Vegan</span>
-                    </div>
-                  </div>
-                </td>
-                <td data-label="NGO">City Relief Center</td>
-                <td data-label="Quantity">20 Packs</td>
-                <td data-label="Date">Yesterday</td>
-                <td data-label="Status"><span class="badge badge--pickup">Pickup Scheduled</span></td>
-                <td data-label="Action"><a href="donation-details.html?id=2" class="btn btn--ghost btn--sm">View</a></td>
-              </tr>
-
-              <tr style="cursor: pointer;" onclick="window.location.href='donation-details.html?id=3'">
-                <td data-label="Donation Details" class="full-width">
-                  <div class="table-food-info">
-                    <div class="table-food-icon"><i class="ph ph-carrot"></i></div>
-                    <div class="table-food-details">
-                      <span class="table-food-title">Fresh Fruits</span>
-                      <span class="text-xs text-muted">Vegetarian</span>
-                    </div>
-                  </div>
-                </td>
-                <td data-label="NGO">Community Kitchen</td>
-                <td data-label="Quantity">15 Kilograms</td>
-                <td data-label="Date">Oct 12, 2026</td>
-                <td data-label="Status"><span class="badge badge--completed">Completed</span></td>
-                <td data-label="Action"><a href="donation-details.html?id=3" class="btn btn--ghost btn--sm">View</a></td>
-              </tr>
-
             </tbody>
           </table>
         </div>
@@ -231,44 +184,110 @@
     </main>
   </div>
 
+  <!-- Scripts -->
   <script src="../../assets/js/zoom-fix.js"></script>
   <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('.tab');
-      const rows = document.querySelectorAll('tbody tr');
+    let allDonations = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('donor')) return;
+
+      const tbody = document.getElementById('donationsTbody');
+
+      try {
+        const res = await API.donations.getMy();
+        allDonations = res && res.donations ? res.donations : [];
+
+        // Count active
+        const activeCount = allDonations.filter(d => ['PENDING', 'ACCEPTED', 'COORDINATED'].includes(d.status)).length;
+        document.getElementById('activeCount').textContent = activeCount;
+
+        renderTable(allDonations);
+        setupTabs();
+      } catch (err) {
+        console.error('Failed to load donations:', err);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger); padding: var(--space-6);">Failed to load donations: ${err.message}</td></tr>`;
+      }
+    });
+
+    function renderTable(donations) {
+      const tbody = document.getElementById('donationsTbody');
+      if (donations.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
+              No donations found in this category.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const statusMap = {
+        PENDING: '<span class="badge badge--pending">Pending Review</span>',
+        ACCEPTED: '<span class="badge badge--pickup">Accepted</span>',
+        COORDINATED: '<span class="badge badge--pickup">Pickup Scheduled</span>',
+        COMPLETED: '<span class="badge badge--completed">Completed</span>',
+        DECLINED: '<span class="badge" style="background:#fee2e2;color:#991b1b;">Declined</span>',
+      };
+
+      tbody.innerHTML = donations.map(d => {
+        const dateStr = d.createdAt ? new Date(d.createdAt).toLocaleString() : '';
+        const badge = statusMap[d.status] || `<span class="badge">${d.status}</span>`;
+        const ngoName = d.ngoName || d.ngoId?.name || 'NGO';
+
+        return `
+          <tr style="cursor: pointer;" onclick="window.location.href='donation-details.html?id=${d._id}'">
+            <td data-label="Donation Details" class="full-width">
+              <div class="table-food-info">
+                <div class="table-food-icon"><i class="ph ph-bowl-food"></i></div>
+                <div class="table-food-details">
+                  <span class="table-food-title">${d.foodName}</span>
+                  <span class="text-xs text-muted">${d.foodType}</span>
+                </div>
+              </div>
+            </td>
+            <td data-label="NGO">${ngoName}</td>
+            <td data-label="Quantity">${d.quantity}</td>
+            <td data-label="Date">${dateStr}</td>
+            <td data-label="Status">${badge}</td>
+            <td data-label="Action"><a href="donation-details.html?id=${d._id}" class="btn btn--ghost btn--sm">View</a></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setupTabs() {
+      const tabs = document.querySelectorAll('#donationTabs .tab');
 
       tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-          // Remove active class from all tabs
           tabs.forEach(t => t.classList.remove('active'));
-          // Add active class to clicked tab
           tab.classList.add('active');
 
-          const filterText = tab.textContent.replace(/[0-9]/g, '').trim().toLowerCase();
+          const filter = tab.getAttribute('data-filter');
 
-          rows.forEach(row => {
-            const statusBadge = row.querySelector('.badge');
-            if (!statusBadge) return;
-            const statusText = statusBadge.textContent.toLowerCase();
-
-            let isMatch = false;
-            if (filterText === 'all') {
-              isMatch = true;
-            } else if (filterText === 'active') {
-              isMatch = ['pending review', 'pickup scheduled'].includes(statusText);
-            } else if (filterText === 'completed') {
-              isMatch = statusText === 'completed';
-            } else if (filterText === 'cancelled') {
-              isMatch = statusText === 'cancelled';
-            }
-
-            row.style.display = isMatch ? '' : 'none';
-          });
+          if (filter === 'all') {
+            renderTable(allDonations);
+          } else if (filter === 'active') {
+            renderTable(allDonations.filter(d => ['PENDING', 'ACCEPTED', 'COORDINATED'].includes(d.status)));
+          } else if (filter === 'completed') {
+            renderTable(allDonations.filter(d => d.status === 'COMPLETED'));
+          } else if (filter === 'declined') {
+            renderTable(allDonations.filter(d => d.status === 'DECLINED'));
+          }
         });
       });
-    });
+    }
+
+    function logout() {
+      API.auth.logout();
+    }
   </script>
 </body>
 </html>

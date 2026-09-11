@@ -55,27 +55,38 @@
       <p class="auth-footer-text">
         Don't have an account? <a href="signup.html">Sign Up</a>
       </p>
+
+      <p class="auth-footer-text" style="margin-top: var(--space-3); font-size: 12px; opacity: 0.85;">
+        Portals: <a href="donor/dashboard.html">Donor</a> · <a href="ngo/dashboard.html">NGO</a> · <a href="admin/dashboard.html" style="font-weight: 600; color: var(--primary);">Admin Portal →</a>
+      </p>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="../assets/js/zoom-fix.js"></script>
   <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/shared/guards.js"></script>
   <script src="../assets/js/navigation.js"></script>
   <script src="../assets/js/auth-bg.js"></script>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Guards.redirectIfLoggedIn();
+    });
+
     function togglePassword(inputId, btn) {
       const input = document.getElementById(inputId);
       if (input.type === 'password') {
         input.type = 'text';
-        btn.textContent = '<i class="ph ph-eye-slash"></i>';
+        btn.innerHTML = '<i class="ph ph-eye-slash"></i>';
       } else {
         input.type = 'password';
-        btn.textContent = '<i class="ph ph-eye"></i>';
+        btn.innerHTML = '<i class="ph ph-eye"></i>';
       }
     }
 
-    function handleLogin() {
+    async function handleLogin() {
       const email = document.getElementById('email');
       const password = document.getElementById('password');
       const emailError = document.getElementById('emailError');
@@ -89,6 +100,7 @@
       password.classList.remove('error');
 
       if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        emailError.textContent = 'Please enter a valid email address';
         emailError.classList.remove('hidden');
         email.classList.add('error');
         valid = false;
@@ -106,14 +118,31 @@
         btn.innerHTML = '<span class="spinner"></span> Logging in...';
         btn.disabled = true;
 
-        // Simulate — will connect to Supabase in Round 2
-        setTimeout(() => {
-          // For demo: redirect based on a mock role
-          // In Round 2, this will read from Supabase profile
-          alert('Login will connect to Supabase in Round 2.\n\nFor now, use the sidebar links to explore dashboards.');
+        try {
+          const res = await API.auth.login({
+            email: email.value.trim(),
+            password: password.value,
+          });
+
+          if (res.success && res.user) {
+            if (res.user.role === 'ngo') {
+              window.location.href = 'ngo/dashboard.html';
+            } else {
+              window.location.href = 'donor/dashboard.html';
+            }
+          } else {
+            passwordError.textContent = res.message || 'Login failed';
+            passwordError.classList.remove('hidden');
+            btn.innerHTML = 'Log In';
+            btn.disabled = false;
+          }
+        } catch (err) {
+          passwordError.textContent = err.message || 'Invalid email or password';
+          passwordError.classList.remove('hidden');
+          password.classList.add('error');
           btn.innerHTML = 'Log In';
           btn.disabled = false;
-        }, 1500);
+        }
       }
     }
   </script>

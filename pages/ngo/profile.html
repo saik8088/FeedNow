@@ -45,33 +45,126 @@
         <div class="card animate-fade-in-up">
           <form onsubmit="return false;">
             <div class="form-group">
-              <label class="form-label">NGO Name</label>
-              <input type="text" class="form-input" value="Hope Foundation">
+              <label class="form-label">NGO Organization Name</label>
+              <input type="text" class="form-input" id="ngoName" value="">
             </div>
             <div class="form-group">
               <label class="form-label">Public Description</label>
-              <textarea class="form-textarea">Dedicated to providing daily nutritious meals to underprivileged children and shelters in the local area.</textarea>
+              <textarea class="form-textarea" id="ngoDesc"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-input" id="ngoPhone" value="">
             </div>
             <div class="form-group">
               <label class="form-label">Operating Address</label>
-              <input type="text" class="form-input" value="123 Charity Lane, Koramangala, Bengaluru 560034">
+              <input type="text" class="form-input" id="ngoAddress" value="">
+            </div>
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" id="ngoCity" value="">
             </div>
             <hr class="divider">
             <h3 class="margin-bottom-4">Donation Preferences</h3>
             <div class="form-group">
               <label class="form-label">Accepted Food Types</label>
-              <div class="form-checkbox-group">
-                <label class="form-checkbox"><input type="checkbox" checked> <span class="form-checkbox__label">Cooked Meals</span></label>
-                <label class="form-checkbox"><input type="checkbox" checked> <span class="form-checkbox__label">Raw Rations</span></label>
-                <label class="form-checkbox"><input type="checkbox" checked> <span class="form-checkbox__label">Fresh Fruits/Veg</span></label>
+              <div class="form-checkbox-group" id="foodTypesGroup">
+                <label class="form-checkbox"><input type="checkbox" value="Vegetarian" checked> <span class="form-checkbox__label">Vegetarian</span></label>
+                <label class="form-checkbox"><input type="checkbox" value="Non-Vegetarian"> <span class="form-checkbox__label">Non-Vegetarian</span></label>
+                <label class="form-checkbox"><input type="checkbox" value="Vegan"> <span class="form-checkbox__label">Vegan</span></label>
+                <label class="form-checkbox"><input type="checkbox" value="Cooked Meals"> <span class="form-checkbox__label">Cooked Meals</span></label>
+                <label class="form-checkbox"><input type="checkbox" value="Raw Rations"> <span class="form-checkbox__label">Raw Rations</span></label>
               </div>
             </div>
-            <button class="btn btn--primary margin-top-4" onclick="alert('Profile updated (Mock)')">Save Changes</button>
+            <div class="form-group">
+              <label class="form-checkbox">
+                <input type="checkbox" id="ngoPickupAvailable"> <span class="form-checkbox__label">We can arrange pickup from donor locations</span>
+              </label>
+            </div>
+            <button class="btn btn--primary margin-top-4" id="saveNgoBtn" onclick="saveNgoProfile()">Save Changes</button>
           </form>
         </div>
+
+        <!-- Verification Profile Card -->
+        <div id="verificationProfileCard"></div>
       </div>
     </main>
   </div>
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script src="../../assets/js/verification-state.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('ngo')) return;
+
+      VerificationManager.renderProfileCard('verificationProfileCard', 'ngo');
+
+      try {
+        const res = await API.ngos.getMyProfile();
+        if (res.success && res.profile) {
+          const p = res.profile;
+          document.getElementById('ngoName').value = p.organizationName || '';
+          document.getElementById('ngoDesc').value = p.description || '';
+          document.getElementById('ngoPhone').value = p.phone || '';
+          document.getElementById('ngoAddress').value = p.address || '';
+          document.getElementById('ngoCity').value = p.city || 'Bengaluru';
+          document.getElementById('ngoPickupAvailable').checked = !!p.pickupAvailable;
+
+          if (Array.isArray(p.foodTypes)) {
+            document.querySelectorAll('#foodTypesGroup input[type="checkbox"]').forEach(cb => {
+              cb.checked = p.foodTypes.includes(cb.value);
+            });
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load NGO profile:', err);
+      }
+    });
+
+    async function saveNgoProfile() {
+      const btn = document.getElementById('saveNgoBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const organizationName = document.getElementById('ngoName').value.trim();
+      const description = document.getElementById('ngoDesc').value.trim();
+      const phone = document.getElementById('ngoPhone').value.trim();
+      const address = document.getElementById('ngoAddress').value.trim();
+      const city = document.getElementById('ngoCity').value.trim();
+      const pickupAvailable = document.getElementById('ngoPickupAvailable').checked;
+
+      const foodTypes = [];
+      document.querySelectorAll('#foodTypesGroup input[type="checkbox"]:checked').forEach(cb => {
+        foodTypes.push(cb.value);
+      });
+
+      try {
+        const res = await API.ngos.updateMyProfile({
+          organizationName,
+          description,
+          phone,
+          address,
+          city,
+          pickupAvailable,
+          foodTypes,
+        });
+
+        alert('Profile saved successfully!');
+      } catch (err) {
+        alert(err.message || 'Failed to update profile');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Changes';
+      }
+    }
+
+    function logout() {
+      API.auth.logout();
+    }
+  </script>
 </body>
 </html>

@@ -153,7 +153,7 @@
       <div class="dashboard-main__content">
         
         <div class="tabs animate-fade-in-up" id="requestTabs">
-          <div class="tab active" data-tab="tab-new">New <span class="tab__count">3</span></div>
+          <div class="tab active" data-tab="tab-new">New <span class="tab__count" id="newCount">0</span></div>
           <div class="tab" data-tab="tab-accepted">Accepted</div>
           <div class="tab" data-tab="tab-completed">Completed</div>
           <div class="tab" data-tab="tab-declined">Declined</div>
@@ -163,94 +163,30 @@
           
           <!-- NEW TAB -->
           <div id="tab-new" class="tab-pane" style="display: block;">
-            <!-- Request Card 1 -->
-            <div class="request-card">
-              <div class="request-card__header">
-                <div class="request-card__donor">
-                  <div class="avatar avatar--md">JD</div>
-                  <div class="request-card__donor-info">
-                    <h4>John Doe</h4>
-                    <p><i class="ph ph-map-pin"></i> 3.2 km away (Koramangala)</p>
-                  </div>
-                </div>
-                <span class="badge badge--warning">Expires in 2 hours</span>
-              </div>
-              
-              <div class="request-card__food">
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Food Details</span>
-                  <span class="request-card__food-val">Vegetable Curry & Rice</span>
-                </div>
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Type & Quantity</span>
-                  <span class="request-card__food-val">Vegetarian • 50 Meals</span>
-                </div>
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Available Until</span>
-                  <span class="request-card__food-val text-danger">8:00 PM</span>
-                </div>
-              </div>
-
-              <div class="request-card__actions">
-                <button class="btn btn--danger" onclick="window.location.href='request-details.html?id=1'">Decline</button>
-                <button class="btn btn--primary" onclick="window.location.href='request-details.html?id=1'">Review & Accept</button>
-              </div>
-            </div>
-
-            <!-- Request Card 2 -->
-            <div class="request-card">
-              <div class="request-card__header">
-                <div class="request-card__donor">
-                  <div class="avatar avatar--md">SB</div>
-                  <div class="request-card__donor-info">
-                    <h4>Sarah Baker</h4>
-                    <p><i class="ph ph-map-pin"></i> 1.5 km away (Indiranagar)</p>
-                  </div>
-                </div>
-                <span class="badge badge--warning">Expires Tomorrow</span>
-              </div>
-              
-              <div class="request-card__food">
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Food Details</span>
-                  <span class="request-card__food-val">Packaged Biscuits & Bread</span>
-                </div>
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Type & Quantity</span>
-                  <span class="request-card__food-val">Vegetarian • 20 Packs</span>
-                </div>
-                <div class="request-card__food-item">
-                  <span class="request-card__food-label">Available Until</span>
-                  <span class="request-card__food-val">Tomorrow, 12:00 PM</span>
-                </div>
-              </div>
-
-              <div class="request-card__actions">
-                <button class="btn btn--danger" onclick="window.location.href='request-details.html?id=2'">Decline</button>
-                <button class="btn btn--primary" onclick="window.location.href='request-details.html?id=2'">Review & Accept</button>
-              </div>
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading requests...
             </div>
           </div>
 
           <!-- ACCEPTED TAB -->
-          <div id="tab-accepted" class="tab-pane" style="display: none; padding: var(--space-10) 0; text-align: center;">
-             <i class="ph ph-handshake" style="font-size: 3rem; color: var(--text-muted); margin-bottom: var(--space-4);"></i>
-             <h3 style="font-size: var(--text-lg); font-weight: var(--weight-bold); margin-bottom: var(--space-2);">No Accepted Requests</h3>
-             <p style="color: var(--text-secondary);">When you accept a donation, it will appear here for pickup coordination.</p>
+          <div id="tab-accepted" class="tab-pane" style="display: none;">
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading requests...
+            </div>
           </div>
 
           <!-- COMPLETED TAB -->
-          <div id="tab-completed" class="tab-pane" style="display: none; padding: var(--space-10) 0; text-align: center;">
-             <i class="ph ph-package" style="font-size: 3rem; color: var(--text-muted); margin-bottom: var(--space-4);"></i>
-             <h3 style="font-size: var(--text-lg); font-weight: var(--weight-bold); margin-bottom: var(--space-2);">No Completed Requests</h3>
-             <p style="color: var(--text-secondary);">Successfully picked up donations will be logged here.</p>
+          <div id="tab-completed" class="tab-pane" style="display: none;">
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading requests...
+            </div>
           </div>
 
           <!-- DECLINED TAB -->
-          <div id="tab-declined" class="tab-pane" style="display: none; padding: var(--space-10) 0; text-align: center;">
-             <i class="ph ph-x-circle" style="font-size: 3rem; color: var(--text-muted); margin-bottom: var(--space-4);"></i>
-             <h3 style="font-size: var(--text-lg); font-weight: var(--weight-bold); margin-bottom: var(--space-2);">No Declined Requests</h3>
-             <p style="color: var(--text-secondary);">Requests you decline will appear here for your records.</p>
+          <div id="tab-declined" class="tab-pane" style="display: none;">
+            <div style="padding: var(--space-8); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading requests...
+            </div>
           </div>
 
         </div>
@@ -258,22 +194,136 @@
     </main>
   </div>
 
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('ngo')) return;
+
+      setupTabs();
+
+      try {
+        const res = await API.donations.getReceived();
+        const donations = res && res.donations ? res.donations : [];
+
+        const newDonations = donations.filter(d => d.status === 'PENDING');
+        const acceptedDonations = donations.filter(d => ['ACCEPTED', 'COORDINATED'].includes(d.status));
+        const completedDonations = donations.filter(d => d.status === 'COMPLETED');
+        const declinedDonations = donations.filter(d => d.status === 'DECLINED');
+
+        document.getElementById('newCount').textContent = newDonations.length;
+
+        renderPane('tab-new', newDonations, 'new');
+        renderPane('tab-accepted', acceptedDonations, 'accepted');
+        renderPane('tab-completed', completedDonations, 'completed');
+        renderPane('tab-declined', declinedDonations, 'declined');
+
+      } catch (err) {
+        console.error('Failed to load NGO requests:', err);
+        document.getElementById('tab-new').innerHTML = `<div style="color: var(--danger); text-align: center;">Failed to load requests: ${err.message}</div>`;
+      }
+    });
+
+    function renderPane(paneId, list, type) {
+      const pane = document.getElementById(paneId);
+      if (!pane) return;
+
+      if (list.length === 0) {
+        const emptyConfig = {
+          new: { icon: 'ph-tray', title: 'No New Requests', desc: 'No pending food donations at the moment.' },
+          accepted: { icon: 'ph-handshake', title: 'No Accepted Requests', desc: 'When you accept a donation, it will appear here for pickup coordination.' },
+          completed: { icon: 'ph-package', title: 'No Completed Requests', desc: 'Successfully picked up donations will be logged here.' },
+          declined: { icon: 'ph-x-circle', title: 'No Declined Requests', desc: 'Requests you decline will appear here for your records.' },
+        };
+        const cfg = emptyConfig[type] || emptyConfig.new;
+        pane.innerHTML = `
+          <div style="padding: var(--space-10) 0; text-align: center;">
+            <i class="ph ${cfg.icon}" style="font-size: 3rem; color: var(--text-muted); margin-bottom: var(--space-4);"></i>
+            <h3 style="font-size: var(--text-lg); font-weight: var(--weight-bold); margin-bottom: var(--space-2);">${cfg.title}</h3>
+            <p style="color: var(--text-secondary);">${cfg.desc}</p>
+          </div>
+        `;
+        return;
+      }
+
+      pane.innerHTML = list.map(d => {
+        const donorName = d.donorId?.name || 'Anonymous Donor';
+        const donorPhone = d.donorId?.phone || '';
+        const initials = donorName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+        const deadlineStr = d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Flexible';
+        
+        let actionsHtml = '';
+        if (d.status === 'PENDING') {
+          actionsHtml = `
+            <div class="request-card__actions">
+              <a href="request-details.html?id=${d._id}" class="btn btn--danger">Decline</a>
+              <a href="request-details.html?id=${d._id}" class="btn btn--primary">Review & Accept</a>
+            </div>
+          `;
+        } else if (d.status === 'ACCEPTED' || d.status === 'COORDINATED') {
+          actionsHtml = `
+            <div class="request-card__actions">
+              <a href="request-details.html?id=${d._id}" class="btn btn--secondary">Manage Pickup</a>
+              <a href="request-details.html?id=${d._id}" class="btn btn--primary">View Details</a>
+            </div>
+          `;
+        } else {
+          actionsHtml = `
+            <div class="request-card__actions">
+              <a href="request-details.html?id=${d._id}" class="btn btn--ghost">View Summary</a>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="request-card">
+            <div class="request-card__header">
+              <div class="request-card__donor">
+                <div class="avatar avatar--md">${initials}</div>
+                <div class="request-card__donor-info">
+                  <h4>${donorName}</h4>
+                  <p><i class="ph ph-phone"></i> ${donorPhone || 'Donor Contact'}</p>
+                </div>
+              </div>
+              <span class="badge badge--warning">Deadline: ${deadlineStr}</span>
+            </div>
+            
+            <div class="request-card__food">
+              <div class="request-card__food-item">
+                <span class="request-card__food-label">Food Details</span>
+                <span class="request-card__food-val">${d.foodName}</span>
+              </div>
+              <div class="request-card__food-item">
+                <span class="request-card__food-label">Type & Quantity</span>
+                <span class="request-card__food-val">${d.foodType} • ${d.quantity}</span>
+              </div>
+              <div class="request-card__food-item">
+                <span class="request-card__food-label">Pickup Location</span>
+                <span class="request-card__food-val">${d.pickupAddress || 'Address provided'}</span>
+              </div>
+            </div>
+
+            ${actionsHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setupTabs() {
       const tabs = document.querySelectorAll('#requestTabs .tab');
       const panes = document.querySelectorAll('.tab-pane');
 
       tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-          // Remove active from all tabs
           tabs.forEach(t => t.classList.remove('active'));
-          // Add active to clicked tab
           tab.classList.add('active');
 
-          // Hide all panes
           panes.forEach(pane => pane.style.display = 'none');
-          // Show target pane
           const targetId = tab.getAttribute('data-tab');
           const target = document.getElementById(targetId);
           if (target) {
@@ -282,7 +332,11 @@
           }
         });
       });
-    });
+    }
+
+    function logout() {
+      API.auth.logout();
+    }
   </script>
 </body>
 </html>

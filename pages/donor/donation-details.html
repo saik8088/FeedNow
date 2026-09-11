@@ -48,11 +48,11 @@
         <div style="display: flex; align-items: center; gap: var(--space-4);">
           <a href="donations.html" class="btn btn--icon btn--ghost" style="font-size: 1.2rem;">←</a>
           <div>
-            <h1 class="dashboard-main__title">Donation #DN-8492</h1>
-            <p class="dashboard-main__subtitle">Sent to Hope Foundation on Oct 14, 2026</p>
+            <h1 class="dashboard-main__title" id="donationHeaderTitle">Donation Details</h1>
+            <p class="dashboard-main__subtitle" id="donationHeaderSubtitle">Loading details...</p>
           </div>
         </div>
-        <span class="badge badge--pending" style="font-size: var(--text-sm);">Pending Review</span>
+        <span class="badge badge--pending" id="donationStatusBadge" style="font-size: var(--text-sm);">Loading...</span>
       </header>
 
       <div class="dashboard-main__content">
@@ -69,32 +69,42 @@
                   <i class="ph ph-bowl-food"></i>
                 </div>
                 <div style="flex: 1;">
-                  <h3 class="text-xl font-bold margin-bottom-1">Vegetable Curry & Rice</h3>
-                  <p class="text-sm text-secondary margin-bottom-4">Vegetarian • 50 Meals</p>
+                  <h3 class="text-xl font-bold margin-bottom-1" id="foodName">Food</h3>
+                  <p class="text-sm text-secondary margin-bottom-4" id="foodMeta">Details</p>
                   
                   <div class="grid-2-col">
                     <div>
                       <p class="text-xs text-muted text-uppercase">Prepared At</p>
-                      <p class="font-medium">Today, 1:00 PM</p>
+                      <p class="font-medium" id="preparedAt">--</p>
                     </div>
                     <div>
-                      <p class="text-xs text-muted text-uppercase">Available Until</p>
-                      <p class="font-medium text-danger">Today, 8:00 PM</p>
+                      <p class="text-xs text-muted text-uppercase">Available Until (Deadline)</p>
+                      <p class="font-medium text-danger" id="pickupDeadline">--</p>
                     </div>
+                  </div>
+
+                  <div style="margin-top: var(--space-4);">
+                    <p class="text-xs text-muted text-uppercase">Pickup Address</p>
+                    <p class="font-medium text-sm" id="pickupAddress">--</p>
+                  </div>
+
+                  <div id="notesContainer" style="margin-top: var(--space-3); display: none;">
+                    <p class="text-xs text-muted text-uppercase">Donor Notes</p>
+                    <p class="text-sm text-secondary" id="notes">--</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Coordination / Status Action (If accepted, this would show pickup details) -->
-            <div class="card animate-fade-in-up delay-1">
+            <!-- Coordination / Status Action -->
+            <div class="card animate-fade-in-up delay-1" id="coordinationCard">
               <h2 class="card__title margin-bottom-2">Coordination Status</h2>
-              <div style="background: var(--warning-bg); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.05);">
+              <div id="coordinationContent" style="background: var(--warning-bg); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.05);">
                 <div style="display: flex; align-items: center; gap: var(--space-3); color: var(--warning-text);">
                   <span class="text-xl"><i class="ph ph-hourglass-high"></i></span>
                   <div>
-                    <h4 class="font-semibold text-sm">Waiting for NGO Acceptance</h4>
-                    <p class="text-xs opacity-80">Hope Foundation is reviewing your request. You will be notified once they accept it.</p>
+                    <h4 class="font-semibold text-sm" id="coordTitle">Waiting for NGO Acceptance</h4>
+                    <p class="text-xs opacity-80" id="coordDesc">The NGO is reviewing your request. You will be notified once they accept it.</p>
                   </div>
                 </div>
               </div>
@@ -109,50 +119,12 @@
             <div class="card animate-fade-in-up delay-2">
               <h2 class="card__title margin-bottom-6">Status Timeline</h2>
               
-              <div class="timeline">
-                
-                <div class="timeline__item">
-                  <div class="timeline__dot timeline__dot--completed"></div>
-                  <div class="timeline__content">
-                    <h4 class="timeline__title">Request Sent</h4>
-                    <p class="timeline__time">Today, 2:30 PM</p>
-                  </div>
-                </div>
-
-                <div class="timeline__item">
-                  <div class="timeline__dot timeline__dot--active"></div>
-                  <div class="timeline__content">
-                    <h4 class="timeline__title">NGO Reviewing</h4>
-                    <p class="timeline__time">Currently pending</p>
-                  </div>
-                </div>
-
-                <div class="timeline__item">
-                  <div class="timeline__dot"></div>
-                  <div class="timeline__content">
-                    <h4 class="timeline__title" style="color: var(--text-muted);">Accepted</h4>
-                  </div>
-                </div>
-
-                <div class="timeline__item">
-                  <div class="timeline__dot"></div>
-                  <div class="timeline__content">
-                    <h4 class="timeline__title" style="color: var(--text-muted);">Pickup Scheduled</h4>
-                  </div>
-                </div>
-
-                <div class="timeline__item">
-                  <div class="timeline__dot"></div>
-                  <div class="timeline__content">
-                    <h4 class="timeline__title" style="color: var(--text-muted);">Completed</h4>
-                  </div>
-                </div>
-
+              <div class="timeline" id="timelineList">
+                <!-- Dynamically generated timeline items -->
               </div>
             </div>
 
-            <!-- Cancel Button -->
-            <button class="btn btn--danger btn--full animate-fade-in-up delay-3" onclick="UI.openModal('cancelModal')">Cancel Request</button>
+            <a href="donations.html" class="btn btn--secondary btn--full animate-fade-in-up delay-3">← Back to My Donations</a>
 
           </div>
 
@@ -161,24 +133,136 @@
     </main>
   </div>
 
-  <!-- Cancel Modal -->
-  <div class="modal-overlay" id="cancelModal">
-    <div class="modal">
-      <div class="modal__header">
-        <h3 class="modal__title">Cancel Donation Request?</h3>
-        <button class="modal__close" onclick="UI.closeModal('cancelModal')">✕</button>
-      </div>
-      <div class="modal__body">
-        <p class="text-secondary">Are you sure you want to cancel this request? The NGO will be notified that this food is no longer available.</p>
-      </div>
-      <div class="modal__footer">
-        <button class="btn btn--ghost" onclick="UI.closeModal('cancelModal')">Keep Request</button>
-        <button class="btn btn--danger" onclick="window.location.href='donations.html'">Yes, Cancel It</button>
-      </div>
-    </div>
-  </div>
-
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/shared/ui.js"></script>
   <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Guards.requireRole('donor')) return;
+
+      const params = new URLSearchParams(window.location.search);
+      const donationId = params.get('id');
+
+      if (!donationId) {
+        document.getElementById('donationHeaderTitle').textContent = 'Donation Not Found';
+        return;
+      }
+
+      try {
+        const res = await API.donations.getById(donationId);
+        if (res.success && res.donation) {
+          const d = res.donation;
+          const ngoName = d.ngoName || d.ngoId?.name || 'NGO';
+          const shortId = d._id.slice(-6).toUpperCase();
+
+          document.getElementById('donationHeaderTitle').textContent = `Donation #${shortId}`;
+          document.getElementById('donationHeaderSubtitle').textContent = `Sent to ${ngoName} on ${new Date(d.createdAt).toLocaleDateString()}`;
+
+          // Status Badge
+          const statusBadge = document.getElementById('donationStatusBadge');
+          statusBadge.textContent = d.status;
+          if (d.status === 'COMPLETED') statusBadge.className = 'badge badge--completed';
+          else if (d.status === 'DECLINED') {
+            statusBadge.className = 'badge';
+            statusBadge.style.cssText = 'background:#fee2e2;color:#991b1b;';
+          } else if (d.status === 'ACCEPTED' || d.status === 'COORDINATED') {
+            statusBadge.className = 'badge badge--pickup';
+          } else {
+            statusBadge.className = 'badge badge--pending';
+          }
+
+          // Food Info
+          document.getElementById('foodName').textContent = d.foodName;
+          document.getElementById('foodMeta').textContent = `${d.foodType} • ${d.quantity}`;
+          document.getElementById('preparedAt').textContent = d.preparedAt ? new Date(d.preparedAt).toLocaleString() : 'Not specified';
+          document.getElementById('pickupDeadline').textContent = d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleString() : 'Not specified';
+          document.getElementById('pickupAddress').textContent = d.pickupAddress || 'Address on file';
+
+          if (d.notes) {
+            document.getElementById('notesContainer').style.display = 'block';
+            document.getElementById('notes').textContent = d.notes;
+          }
+
+          // Coordination box
+          const coordContent = document.getElementById('coordinationContent');
+          const coordTitle = document.getElementById('coordTitle');
+          const coordDesc = document.getElementById('coordDesc');
+
+          if (d.status === 'PENDING') {
+            coordTitle.textContent = 'Waiting for NGO Acceptance';
+            coordDesc.textContent = `${ngoName} is currently reviewing your food offer.`;
+          } else if (d.status === 'ACCEPTED') {
+            coordContent.style.background = 'var(--primary-50)';
+            coordContent.querySelector('div').style.color = 'var(--primary-dark)';
+            coordTitle.textContent = 'Donation Accepted!';
+            coordDesc.textContent = `${ngoName} has accepted your donation. Pickup coordination is underway.`;
+          } else if (d.status === 'COORDINATED') {
+            coordContent.style.background = 'var(--info-bg)';
+            coordContent.querySelector('div').style.color = 'var(--info-text)';
+            coordTitle.textContent = 'Pickup Scheduled';
+            coordDesc.textContent = `The NGO team will collect the food before ${new Date(d.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`;
+          } else if (d.status === 'COMPLETED') {
+            coordContent.style.background = 'var(--success-bg)';
+            coordContent.querySelector('div').style.color = 'var(--success-text)';
+            coordTitle.textContent = 'Donation Completed!';
+            coordDesc.textContent = `Food successfully collected and safely delivered. Thank you for your impact!`;
+          } else if (d.status === 'DECLINED') {
+            coordContent.style.background = '#fee2e2';
+            coordContent.querySelector('div').style.color = '#991b1b';
+            coordTitle.textContent = 'Donation Declined';
+            coordDesc.textContent = `Unfortunately the NGO could not accept this offer at this time.`;
+          }
+
+          // Render timeline
+          renderTimeline(d);
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('donationHeaderTitle').textContent = 'Error loading donation';
+      }
+    });
+
+    function renderTimeline(d) {
+      const list = document.getElementById('timelineList');
+      const steps = [
+        { key: 'CREATED', label: 'Request Sent', desc: new Date(d.createdAt).toLocaleString() },
+        { key: 'PENDING', label: 'NGO Reviewing', desc: 'Reviewed by NGO team' },
+        { key: 'ACCEPTED', label: 'Accepted', desc: 'NGO confirmed acceptance' },
+        { key: 'COORDINATED', label: 'Pickup Coordinated', desc: 'Pickup scheduled' },
+        { key: 'COMPLETED', label: 'Completed', desc: 'Delivered to beneficiaries' },
+      ];
+
+      const statusOrder = ['CREATED', 'PENDING', 'ACCEPTED', 'COORDINATED', 'COMPLETED'];
+      const currentIndex = d.status === 'DECLINED' ? 1 : statusOrder.indexOf(d.status);
+
+      list.innerHTML = steps.map((s, idx) => {
+        let dotClass = '';
+        if (idx < currentIndex) dotClass = 'timeline__dot--completed';
+        else if (idx === currentIndex) dotClass = 'timeline__dot--active';
+
+        const timeText = idx <= currentIndex ? s.desc : '';
+        const titleStyle = idx <= currentIndex ? '' : 'color: var(--text-muted);';
+
+        return `
+          <div class="timeline__item">
+            <div class="timeline__dot ${dotClass}"></div>
+            <div class="timeline__content">
+              <h4 class="timeline__title" style="${titleStyle}">${s.label}</h4>
+              ${timeText ? `<p class="timeline__time">${timeText}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function logout() {
+      API.auth.logout();
+    }
+  </script>
 </body>
 </html>
