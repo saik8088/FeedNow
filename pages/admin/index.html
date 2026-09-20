@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=dashboard.html">
-  <title>Redirecting to Admin Dashboard...</title>
+  <title>Admin Portal — FeedNow</title>
+  <script src="../../assets/js/shared/guards.js"></script>
+  <script>
+    const { token, user } = Guards.getAuthStatus();
+    if (token && user && user.role === 'admin') {
+      window.location.replace('dashboard.html');
+    } else {
+      window.location.replace('login.html');
+    }
+  </script>
 </head>
 <body>
-  <p>Redirecting to <a href="dashboard.html">Admin Dashboard</a>...</p>
+  <p>Loading Admin Portal...</p>
 </body>
 </html>

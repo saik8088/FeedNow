@@ -214,6 +214,9 @@
         <p class="auth-footer-text">
           Already have an account? <a href="login.html">Log In</a>
         </p>
+        <p class="auth-footer-text" style="margin-top: 6px; font-size: 12px; opacity: 0.8;">
+          Are you an admin? <a href="admin/login.html" style="font-weight: 600; color: var(--primary);">Admin Portal →</a>
+        </p>
       </div>
 
       <!-- ══════ STEP 2: DONOR Registration ══════ -->
@@ -561,7 +564,7 @@
       }
     }
 
-    function handleDonorSignup() {
+    async function handleDonorSignup() {
       const name = document.getElementById('donorName').value.trim();
       const email = document.getElementById('donorEmail').value.trim();
       const phone = document.getElementById('donorPhone').value.trim();
@@ -601,17 +604,14 @@
         error.classList.remove('hidden');
         valid = false;
       }
-      // FSSAI Number validation: must be exactly 14 digits
-      if (!/^\d{14}$/.test(fssaiNumber)) {
+      // FSSAI Number validation: at least 5 alphanumeric chars (lenient for demo/test)
+      if (fssaiNumber && !/^[A-Za-z0-9]{5,20}$/.test(fssaiNumber.replace(/[-\/\s]/g, ''))) {
         document.getElementById('donorFssaiNumber').classList.add('error');
+        fssaiNumErr.textContent = 'FSSAI number must be at least 5 alphanumeric characters';
         fssaiNumErr.classList.remove('hidden');
         valid = false;
       }
-      // FSSAI File validation
-      if (!fssaiFile) {
-        fssaiFileErr.classList.remove('hidden');
-        valid = false;
-      }
+      // FSSAI File is optional — upload after registration
 
       if (!valid) return;
 
@@ -687,20 +687,15 @@
         valid = false;
       }
 
-      // NGO DARPAN ID validation: e.g. DL/2021/0123456 or at least 6 alphanumeric/slash chars
-      const darpanRegex = /^[A-Z]{2}\/\d{4}\/\d{4,8}$/i;
-      const lenientRegex = /^[A-Z0-9\/-]{6,25}$/i;
-      if (!darpanId || (!darpanRegex.test(darpanId) && !lenientRegex.test(darpanId))) {
+      // NGO DARPAN ID validation: lenient — at least 4 characters
+      if (darpanId && darpanId.length < 4) {
         document.getElementById('ngoDarpanId').classList.add('error');
+        darpanErr.textContent = 'Please enter a valid DARPAN ID (at least 4 characters)';
         darpanErr.classList.remove('hidden');
         valid = false;
       }
 
-      // Proof File validation
-      if (!proofFile) {
-        proofErr.classList.remove('hidden');
-        valid = false;
-      }
+      // Proof File is optional — can be uploaded after registration
 
       if (!valid) return;
 

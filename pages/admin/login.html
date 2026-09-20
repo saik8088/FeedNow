@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — FeedNow</title>
+  <meta name="description" content="FeedNow platform administration sign in and registration.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/reset.css">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+  <link rel="stylesheet" href="../../assets/css/pages/auth.css">
+  <link rel="stylesheet" href="../../assets/css/responsive.css">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    .admin-auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-50);
+      color: var(--primary-700);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border-light);
+      margin-bottom: var(--space-6);
+      gap: var(--space-2);
+    }
+    .auth-tab {
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition-all);
+    }
+    .auth-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-layout">
+    <div class="auth-card animate-fade-in-up">
+      
+      <div class="auth-card__header">
+        <a href="../../index.html" class="auth-logo">
+          <img src="../../favicon.png" alt="FeedNow" width="36" height="36">
+          <span class="auth-logo__text">Feed<span>Now</span></span>
+        </a>
+        <div class="admin-auth-badge">
+          <i class="ph ph-shield-check"></i> Administrator Portal
+        </div>
+        <h1 class="auth-card__title" id="authTitle">Admin Access</h1>
+        <p class="auth-card__subtitle" id="authSubtitle">Sign in or register to manage compliance and verifications</p>
+      </div>
+
+      <!-- Auth Mode Tabs -->
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabSignIn" onclick="switchTab('signin')">Sign In</div>
+        <div class="auth-tab" id="tabSignUp" onclick="switchTab('signup')">Register Admin</div>
+      </div>
+
+      <!-- ══════ FORM: Sign In ══════ -->
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Admin Email <span class="required">*</span></label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="admin@feednow.org" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="input-icon-btn" onclick="togglePass('loginPassword', this)">
+              <i class="ph ph-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="loginError" style="margin-bottom: var(--space-4);"></div>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="loginBtn">
+          Sign In as Admin
+        </button>
+      </form>
+
+      <!-- ══════ FORM: Sign Up ══════ -->
+      <form id="adminSignupForm" onsubmit="handleAdminSignup(event)" class="hidden">
+        <div class="form-group">
+          <label class="form-label" for="signupName">Full Name <span class="required">*</span></label>
+          <input type="text" id="signupName" class="form-input" placeholder="Jane Admin" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupEmail">Admin Email <span class="required">*</span></label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="admin@feednow.org" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupPhone">Phone Number</label>
+          <input type="tel" id="signupPhone" class="form-input" placeholder="+91 98765 43210">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupPassword">Password <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <input type="password" id="signupPassword" class="form-input" placeholder="Minimum 6 characters" required minlength="6">
+            <button type="button" class="input-icon-btn" onclick="togglePass('signupPassword', this)">
+              <i class="ph ph-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="signupConfirmPassword">Confirm Password <span class="required">*</span></label>
+          <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Repeat password" required minlength="6">
+        </div>
+
+        <div class="form-error hidden" id="signupError" style="margin-bottom: var(--space-4);"></div>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="signupBtn">
+          Create Admin Account
+        </button>
+      </form>
+
+      <p class="auth-footer-text" style="margin-top: var(--space-6);">
+        Looking for user accounts? <a href="../login.html">Donor & NGO Sign In →</a>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../../assets/js/zoom-fix.js"></script>
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/shared/guards.js"></script>
+  <script src="../../assets/js/navigation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const { token, user } = Guards.getAuthStatus();
+      if (token && user && user.role === 'admin') {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    function switchTab(mode) {
+      const tabIn = document.getElementById('tabSignIn');
+      const tabUp = document.getElementById('tabSignUp');
+      const formIn = document.getElementById('adminLoginForm');
+      const formUp = document.getElementById('adminSignupForm');
+      const title = document.getElementById('authTitle');
+      const subtitle = document.getElementById('authSubtitle');
+
+      if (mode === 'signin') {
+        tabIn.classList.add('active');
+        tabUp.classList.remove('active');
+        formIn.classList.remove('hidden');
+        formUp.classList.add('hidden');
+        title.textContent = 'Admin Sign In';
+        subtitle.textContent = 'Sign in to access the platform moderation suite';
+      } else {
+        tabUp.classList.add('active');
+        tabIn.classList.remove('active');
+        formUp.classList.remove('hidden');
+        formIn.classList.add('hidden');
+        title.textContent = 'Register Administrator';
+        subtitle.textContent = 'Create an official admin account for FeedNow platform oversight';
+      }
+    }
+
+    function togglePass(id, btn) {
+      const input = document.getElementById(id);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'ph ph-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'ph ph-eye';
+      }
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Verifying...';
+
+      try {
+        const res = await API.auth.login({ email, password });
+        if (res.success && res.user) {
+          if (res.user.role !== 'admin') {
+            API.auth.logout();
+            errorEl.textContent = 'Access denied: This account does not have administrator privileges.';
+            errorEl.classList.remove('hidden');
+            btn.disabled = false;
+            btn.innerHTML = 'Sign In as Admin';
+            return;
+          }
+          window.location.href = 'dashboard.html';
+        } else {
+          errorEl.textContent = res.message || 'Login failed';
+          errorEl.classList.remove('hidden');
+          btn.disabled = false;
+          btn.innerHTML = 'Sign In as Admin';
+        }
+      } catch (err) {
+        errorEl.textContent = err.message || 'Invalid admin credentials';
+        errorEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In as Admin';
+      }
+    }
+
+    async function handleAdminSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const phone = document.getElementById('signupPhone').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupConfirmPassword').value;
+      const errorEl = document.getElementById('signupError');
+      const btn = document.getElementById('signupBtn');
+
+      errorEl.classList.add('hidden');
+
+      if (password !== confirm) {
+        errorEl.textContent = 'Passwords do not match';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Creating Account...';
+
+      try {
+        const res = await API.auth.signup({
+          name,
+          email,
+          password,
+          role: 'admin',
+          phone,
+        });
+
+        if (res.success && res.user) {
+          window.location.href = 'dashboard.html';
+        } else {
+          errorEl.textContent = res.message || 'Registration failed';
+          errorEl.classList.remove('hidden');
+          btn.disabled = false;
+          btn.innerHTML = 'Create Admin Account';
+        }
+      } catch (err) {
+        errorEl.textContent = err.message || 'Admin signup failed';
+        errorEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = 'Create Admin Account';
+      }
+    }
+  </script>
+</body>
+</html>

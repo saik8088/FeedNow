@@ -1,5 +1,5 @@
 /* ============================================================
-   FEEDNOW — ROUTE GUARDS
+   FEEDNOW — ROUTE GUARDS (Fixed with Admin Support)
    Enforces authentication & role-based route protection
    ============================================================ */
 
@@ -18,7 +18,9 @@ const Guards = {
     const { token } = this.getAuthStatus();
     if (!token) {
       console.warn('[Guards] Unauthenticated access — redirecting to login');
-      const inSub = window.location.pathname.includes('/pages/donor/') || window.location.pathname.includes('/pages/ngo/');
+      const inSub = window.location.pathname.includes('/pages/donor/') ||
+                    window.location.pathname.includes('/pages/ngo/') ||
+                    window.location.pathname.includes('/pages/admin/');
       const loginUrl = inSub ? '../login.html' : 'login.html';
       window.location.href = loginUrl;
       return false;
@@ -26,17 +28,23 @@ const Guards = {
     return true;
   },
 
-  /* Enforce specific role: 'donor' or 'ngo' */
+  /* Enforce specific role: 'donor', 'ngo', or 'admin' */
   requireRole(role) {
     if (!this.requireAuth()) return false;
 
     const { user } = this.getAuthStatus();
     if (user && user.role !== role) {
       console.warn(`[Guards] Role mismatch: user is ${user.role}, required ${role}`);
-      if (user.role === 'donor') {
-        window.location.href = window.location.pathname.includes('/pages/ngo/') ? '../donor/dashboard.html' : 'donor/dashboard.html';
+      const inSub = window.location.pathname.includes('/pages/donor/') ||
+                    window.location.pathname.includes('/pages/ngo/') ||
+                    window.location.pathname.includes('/pages/admin/');
+      
+      if (user.role === 'admin') {
+        window.location.href = inSub ? '../admin/dashboard.html' : 'admin/dashboard.html';
+      } else if (user.role === 'donor') {
+        window.location.href = inSub ? '../donor/dashboard.html' : 'donor/dashboard.html';
       } else if (user.role === 'ngo') {
-        window.location.href = window.location.pathname.includes('/pages/donor/') ? '../ngo/dashboard.html' : 'ngo/dashboard.html';
+        window.location.href = inSub ? '../ngo/dashboard.html' : 'ngo/dashboard.html';
       }
       return false;
     }
@@ -47,7 +55,9 @@ const Guards = {
   redirectIfLoggedIn() {
     const { token, user } = this.getAuthStatus();
     if (token && user) {
-      if (user.role === 'donor') {
+      if (user.role === 'admin') {
+        window.location.href = 'admin/dashboard.html';
+      } else if (user.role === 'donor') {
         window.location.href = 'donor/dashboard.html';
       } else if (user.role === 'ngo') {
         window.location.href = 'ngo/dashboard.html';
