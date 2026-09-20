@@ -248,15 +248,27 @@ const API = {
       return API.request('/admin/stats');
     },
 
+    getVerificationRequests(status) {
+      const q = status ? `?status=${status}` : '';
+      return API.request(`/admin/verification-requests${q}`);
+    },
+
     getUsers(role) {
       const q = role ? `?role=${role}` : '';
       return API.request(`/admin/users${q}`);
     },
 
-    verifyUser(id, isVerified) {
+    verifyUser(id) {
       return API.request(`/admin/users/${id}/verify`, {
         method: 'PATCH',
-        body: { isVerified },
+        body: { isVerified: true },
+      });
+    },
+
+    rejectUser(id, reason) {
+      return API.request(`/admin/users/${id}/reject`, {
+        method: 'PATCH',
+        body: { reason },
       });
     },
 

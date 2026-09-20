@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Verification Portal — FeedNow</title>
+  <title>Admin Verification Portal â€” FeedNow</title>
   <meta name="description" content="Review, verify, and manage donor and NGO compliance requests.">
   <link rel="icon" type="image/png" href="../../favicon.png">
   <link rel="stylesheet" href="../../assets/css/variables.css">
@@ -248,12 +248,12 @@
   <div class="dashboard-layout">
     
     <!-- Mobile Sidebar Toggle -->
-    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">☰</button>
+    <button class="sidebar__mobile-toggle" aria-label="Toggle Menu">â˜°</button>
     <div class="sidebar__overlay"></div>
 
-    <!-- ═══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          ADMIN SIDEBAR
-         ═══════════════════════════════════════ -->
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <aside class="sidebar">
       <div class="sidebar__header">
         <a href="../../index.html" class="sidebar__logo">
@@ -304,9 +304,9 @@
         </a>
     </aside>
 
-    <!-- ═══════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          MAIN ADMIN CONTENT
-         ═══════════════════════════════════════ -->
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <main class="dashboard-main">
       
       <header class="dashboard-main__header">
@@ -419,9 +419,9 @@
 
   </div>
 
-  <!-- ═══════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        REJECTION REASON MODAL
-       ═══════════════════════════════════════ -->
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="modal-overlay" id="rejectionModal">
     <div class="modal" style="max-width: 520px;">
       <div class="modal__header">
@@ -468,9 +468,9 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        DOCUMENT PREVIEW MODAL
-       ═══════════════════════════════════════ -->
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="modal-overlay" id="docModal">
     <div class="modal" style="max-width: 620px;">
       <div class="modal__header">
@@ -517,164 +517,65 @@
   <script src="../../assets/js/shared/guards.js"></script>
   <script src="../../assets/js/navigation.js"></script>
   <script>
-    // ──────────────────────────────────────────────
-    // MOCK DATA STORE & INITIALIZATION
-    // ──────────────────────────────────────────────
-    const DEFAULT_REQUESTS = [
-      {
-        id: 'req-1',
-        type: 'donor',
-        name: 'Royal Feast Caterers',
-        repName: 'John Doe',
-        email: 'john.feast@example.com',
-        phone: '+91 98765 43210',
-        idType: 'FSSAI License',
-        idNumber: '12345678901234',
-        proofFile: 'fssai_cert_royal_feast.pdf',
-        submittedDate: '2024-10-14',
-        status: 'pending',
-        rejectionReason: null
-      },
-      {
-        id: 'req-2',
-        type: 'donor',
-        name: 'Green Earth Organic Bistro',
-        repName: 'Priya Sharma',
-        email: 'priya@greenbistro.in',
-        phone: '+91 98111 22334',
-        idType: 'FSSAI License',
-        idNumber: '10022021000845',
-        proofFile: 'fssai_green_earth_2024.pdf',
-        submittedDate: '2024-10-12',
-        status: 'verified',
-        rejectionReason: null
-      },
-      {
-        id: 'req-3',
-        type: 'donor',
-        name: 'Taj Banquet Services',
-        repName: 'Aman Verma',
-        email: 'aman@tajcaterers.org',
-        phone: '+91 99887 66554',
-        idType: 'FSSAI License',
-        idNumber: '11223344556677',
-        proofFile: 'taj_fssai_license_scan.jpg',
-        submittedDate: '2024-10-10',
-        status: 'rejected',
-        rejectionReason: 'Certificate expired on August 2024. Please re-upload updated renewal copy.'
-      },
-      {
-        id: 'req-4',
-        type: 'donor',
-        name: 'Spice Garden Food Express',
-        repName: 'Kavita Nair',
-        email: 'kavita@spicegarden.com',
-        phone: '+91 97654 32109',
-        idType: 'FSSAI License',
-        idNumber: '14421003009988',
-        proofFile: 'fssai_spice_garden.pdf',
-        submittedDate: '2024-10-15',
-        status: 'pending',
-        rejectionReason: null
-      },
-      {
-        id: 'req-5',
-        type: 'ngo',
-        name: 'Hope Foundation India',
-        repName: 'Sarah Jenkins',
-        email: 'contact@hopefoundation.org',
-        phone: '+91 98765 11223',
-        idType: 'NGO DARPAN ID',
-        idNumber: 'DL/2021/0123456',
-        proofFile: 'hope_foundation_darpan_reg.pdf',
-        submittedDate: '2024-10-13',
-        status: 'pending',
-        rejectionReason: null
-      },
-      {
-        id: 'req-6',
-        type: 'ngo',
-        name: 'City Relief Alliance',
-        repName: 'Rahul Menon',
-        email: 'rahul@cityrelief.org',
-        phone: '+91 98450 99881',
-        idType: 'NGO DARPAN ID',
-        idNumber: 'KA/2019/0087654',
-        proofFile: 'city_relief_certificate.pdf',
-        submittedDate: '2024-10-09',
-        status: 'verified',
-        rejectionReason: null
-      },
-      {
-        id: 'req-7',
-        type: 'ngo',
-        name: 'Annapurna Sewa Trust',
-        repName: 'Geeta Patel',
-        email: 'geeta@annapurnasewa.org',
-        phone: '+91 98200 44556',
-        idType: 'NGO DARPAN ID',
-        idNumber: 'MH/2022/0345120',
-        proofFile: 'annapurna_darpan_proof.pdf',
-        submittedDate: '2024-10-15',
-        status: 'pending',
-        rejectionReason: null
-      },
-      {
-        id: 'req-8',
-        type: 'ngo',
-        name: 'Global Hunger Project',
-        repName: 'David Rao',
-        email: 'david@hungerproject.in',
-        phone: '+91 97110 33445',
-        idType: 'NGO DARPAN ID',
-        idNumber: 'TN/2018/0012987',
-        proofFile: 'ghp_darpan_unreadable.pdf',
-        submittedDate: '2024-10-08',
-        status: 'rejected',
-        rejectionReason: 'DARPAN ID could not be validated on the official NITI Aayog portal record.'
-      }
-    ];
-
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // STATE
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     let requests = [];
     let currentSearch = '';
     let currentTypeFilter = 'all';
     let currentStatusFilter = 'all';
     let currentSort = 'newest';
 
-    function loadRequests() {
-      const stored = localStorage.getItem('feednow_admin_requests');
-      if (stored) {
-        try {
-          requests = JSON.parse(stored);
-        } catch (e) {
-          requests = JSON.parse(JSON.stringify(DEFAULT_REQUESTS));
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // LOAD REAL DATA FROM API
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    async function loadRequests() {
+      const container = document.getElementById('requestsList');
+      const empty = document.getElementById('emptyState');
+      container.innerHTML = '<p style="padding:24px;color:var(--text-muted);">Loading registrations...</p>';
+      empty.classList.add('hidden');
+
+      try {
+        const res = await API.admin.getVerificationRequests();
+        if (res.success) {
+          // Map DB users to the card format the dashboard uses
+          requests = res.users.map(u => ({
+            id: u._id,
+            type: u.role,             // 'donor' | 'ngo'
+            name: u.role === 'ngo' ? (u.ngoProfile?.organizationName || u.name) : u.name,
+            repName: u.name,
+            email: u.email,
+            phone: u.phone || 'â€”',
+            idType: u.role === 'donor' ? 'FSSAI License' : 'NGO DARPAN ID',
+            idNumber: 'â€”',            // no doc number stored yet
+            proofFile: null,
+            submittedDate: u.createdAt ? u.createdAt.slice(0, 10) : 'â€”',
+            status: u.verificationStatus || 'pending',
+            rejectionReason: u.rejectionReason || null,
+          }));
+          renderAll();
+        } else {
+          showLoadError('Failed to load registrations.');
         }
-      } else {
-        requests = JSON.parse(JSON.stringify(DEFAULT_REQUESTS));
-        saveRequests();
+      } catch (err) {
+        console.error('[Admin Dashboard] loadRequests error:', err.message);
+        showLoadError('Could not reach server. ' + err.message);
       }
     }
 
-    function saveRequests() {
-      localStorage.setItem('feednow_admin_requests', JSON.stringify(requests));
+    function showLoadError(msg) {
+      const container = document.getElementById('requestsList');
+      container.innerHTML = `<p style="padding:24px;color:var(--danger);">${escapeHtml(msg)}</p>`;
     }
 
-    function resetDemoData() {
-      requests = JSON.parse(JSON.stringify(DEFAULT_REQUESTS));
-      saveRequests();
-      renderAll();
-      showToast('Mock verification data reset to default.');
-    }
-
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // STATS CALCULATION
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function updateStats() {
       const total = requests.length;
       const pending = requests.filter(r => r.status === 'pending').length;
       const verified = requests.filter(r => r.status === 'verified').length;
       const rejected = requests.filter(r => r.status === 'rejected').length;
-
       const donorCount = requests.filter(r => r.type === 'donor').length;
       const ngoCount = requests.filter(r => r.type === 'ngo').length;
 
@@ -682,15 +583,14 @@
       document.getElementById('statPending').textContent = pending;
       document.getElementById('statVerified').textContent = verified;
       document.getElementById('statRejected').textContent = rejected;
-
       document.getElementById('sidebarPendingBadge').textContent = pending;
       document.getElementById('sidebarDonorCount').textContent = `${donorCount} donors`;
       document.getElementById('sidebarNgoCount').textContent = `${ngoCount} ngos`;
     }
 
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // FILTER & SEARCH LOGIC
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function handleSearch(val) {
       currentSearch = val.toLowerCase().trim();
       renderList();
@@ -731,11 +631,8 @@
 
     function getFilteredRequests() {
       return requests.filter(req => {
-        // Type filter
         if (currentTypeFilter !== 'all' && req.type !== currentTypeFilter) return false;
-        // Status filter
         if (currentStatusFilter !== 'all' && req.status !== currentStatusFilter) return false;
-        // Search filter
         if (currentSearch) {
           const matchStr = `${req.name} ${req.repName} ${req.email} ${req.phone} ${req.idNumber} ${req.idType}`.toLowerCase();
           if (!matchStr.includes(currentSearch)) return false;
@@ -749,130 +646,95 @@
       });
     }
 
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // RENDERING
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderList() {
       const filtered = getFilteredRequests();
       const container = document.getElementById('requestsList');
       const empty = document.getElementById('emptyState');
       const countTitle = document.getElementById('resultsCountTitle');
 
-      countTitle.textContent = `Verification Requests (${filtered.length})`;
-
       if (filtered.length === 0) {
         container.innerHTML = '';
         empty.classList.remove('hidden');
+        countTitle.textContent = 'No Requests Found';
         return;
       }
 
       empty.classList.add('hidden');
+      const pendingCount = filtered.filter(r => r.status === 'pending').length;
+      countTitle.textContent = `${filtered.length} Request${filtered.length !== 1 ? 's' : ''} Â· ${pendingCount} Pending`;
 
       container.innerHTML = filtered.map(req => {
-        const isDonor = req.type === 'donor';
-        const typeBadge = isDonor
-          ? '<span class="badge badge--info"><i class="ph ph-fork-knife"></i> Food Donor</span>'
-          : '<span class="badge badge--pickup"><i class="ph ph-buildings"></i> NGO</span>';
-
-        let statusBadge = '';
-        if (req.status === 'verified') {
-          statusBadge = '<span class="badge badge--verified"><i class="ph ph-check-circle"></i> Verified</span>';
-        } else if (req.status === 'pending') {
-          statusBadge = '<span class="badge badge--verification-pending"><i class="ph ph-clock"></i> Pending Review</span>';
-        } else {
-          statusBadge = '<span class="badge badge--rejected"><i class="ph ph-x-circle"></i> Rejected</span>';
-        }
+        const statusClass = req.status === 'verified' ? 'badge--success'
+          : req.status === 'rejected' ? 'badge--danger' : 'badge--warning';
+        const statusLabel = req.status === 'verified' ? 'Verified'
+          : req.status === 'rejected' ? 'Rejected' : 'Pending';
 
         return `
-          <div class="request-card animate-fade-in-up" id="card-${req.id}">
-            <div class="request-card__header">
-              <div class="request-card__identity">
-                <div class="request-card__icon ${isDonor ? 'request-card__icon--donor' : 'request-card__icon--ngo'}">
-                  <i class="${isDonor ? 'ph ph-fork-knife' : 'ph ph-buildings'}"></i>
+          <div class="verification-card" id="card-${req.id}" data-status="${req.status}">
+            <div class="verification-card__header">
+              <div class="verification-card__identity">
+                <div class="verification-card__avatar ${req.type === 'ngo' ? 'avatar--ngo' : 'avatar--donor'}">
+                  <i class="ph ${req.type === 'ngo' ? 'ph-buildings' : 'ph-fork-knife'}"></i>
                 </div>
                 <div>
-                  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <h3 style="font-size:var(--text-base); font-weight:var(--weight-bold);">${escapeHtml(req.name)}</h3>
-                    ${typeBadge}
-                    ${statusBadge}
+                  <div class="verification-card__name">${escapeHtml(req.name)}</div>
+                  <div class="verification-card__meta">
+                    <span class="badge badge--sm ${req.type === 'ngo' ? 'badge--info' : 'badge--primary'}">
+                      ${req.type === 'ngo' ? 'NGO' : 'Donor'}
+                    </span>
+                    <span class="text-muted text-xs">${escapeHtml(req.email)}</span>
+                    ${req.phone !== 'â€”' ? `<span class="text-muted text-xs">Â· ${escapeHtml(req.phone)}</span>` : ''}
                   </div>
-                  <p class="text-xs text-muted" style="margin-top:2px;">
-                    Rep: <strong>${escapeHtml(req.repName)}</strong> · <i class="ph ph-envelope-simple"></i> ${escapeHtml(req.email)} · <i class="ph ph-phone"></i> ${escapeHtml(req.phone)}
-                  </p>
                 </div>
               </div>
-              <div class="text-xs text-muted">
-                Submitted: <strong>${req.submittedDate}</strong>
+              <div class="verification-card__status-badge">
+                <span class="badge ${statusClass}">${statusLabel}</span>
               </div>
             </div>
 
-            <div class="request-card__meta-grid">
-              <div class="request-card__meta-item">
-                <span class="request-card__meta-label">${req.idType}</span>
-                <span class="request-card__meta-val">
-                  <i class="ph ph-identification-badge" style="color:var(--primary);"></i>
-                  <code>${escapeHtml(req.idNumber)}</code>
-                </span>
+            <div class="verification-card__details">
+              <div class="detail-item">
+                <span class="detail-item__label">Rep / Contact</span>
+                <span class="detail-item__value">${escapeHtml(req.repName)}</span>
               </div>
-              
-              <div class="request-card__meta-item">
-                <span class="request-card__meta-label">Submitted Document</span>
-                <span class="request-card__meta-val" style="justify-content:space-between;">
-                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:140px;">
-                    <i class="ph ph-file-pdf" style="color:var(--danger);"></i> ${escapeHtml(req.proofFile)}
-                  </span>
-                  <button type="button" class="btn btn--ghost btn--xs" onclick="openDocModal('${req.id}')" style="padding:2px 8px; font-size:11px;">
-                    <i class="ph ph-eye"></i> Preview
-                  </button>
-                </span>
+              <div class="detail-item">
+                <span class="detail-item__label">ID Type</span>
+                <span class="detail-item__value">${escapeHtml(req.idType)}</span>
               </div>
-
-              <div class="request-card__meta-item">
-                <span class="request-card__meta-label">Authority Database</span>
-                <span class="request-card__meta-val">
-                  <i class="ph ph-shield-check" style="color:var(--primary);"></i>
-                  ${isDonor ? 'FSSAI FoSCoS Portal' : 'NITI Aayog NGO-DARPAN'}
-                </span>
+              <div class="detail-item">
+                <span class="detail-item__label">Registered</span>
+                <span class="detail-item__value">${escapeHtml(req.submittedDate)}</span>
               </div>
             </div>
 
             ${req.status === 'rejected' && req.rejectionReason ? `
-              <div class="request-card__rejection-note">
-                <i class="ph ph-warning-circle" style="font-size:1.1rem; flex-shrink:0;"></i>
-                <div>
-                  <strong>Rejection Notice:</strong> ${escapeHtml(req.rejectionReason)}
-                </div>
+              <div class="rejection-notice">
+                <i class="ph ph-warning"></i>
+                <span>${escapeHtml(req.rejectionReason)}</span>
               </div>
             ` : ''}
 
-            <div class="request-card__actions">
-              <button
-                type="button"
-                class="btn btn--ghost btn--sm"
-                onclick="openDocModal('${req.id}')"
-              >
-                <i class="ph ph-file-text"></i> View Proof
-              </button>
-
+            <div class="verification-card__actions">
               ${req.status !== 'verified' ? `
                 <button
                   type="button"
-                  class="btn btn--primary btn--sm"
-                  onclick="verifyRequest('${req.id}')"
+                  class="btn btn--success btn--sm"
+                  onclick="verifyRequest('${req.id}', '${escapeHtml(req.name)}')"
                 >
-                  <i class="ph ph-check"></i> Verify & Approve
+                  <i class="ph ph-check"></i> Approve
                 </button>
               ` : `
                 <button
                   type="button"
                   class="btn btn--ghost btn--sm"
-                  onclick="unverifyRequest('${req.id}')"
-                  title="Move back to pending review"
+                  onclick="unverifyRequest('${req.id}', '${escapeHtml(req.name)}')"
                 >
-                  <i class="ph ph-clock-counter-clockwise"></i> Reset Status
+                  <i class="ph ph-arrow-counter-clockwise"></i> Reset to Pending
                 </button>
               `}
-
               ${req.status !== 'rejected' ? `
                 <button
                   type="button"
@@ -901,48 +763,52 @@
       renderList();
     }
 
-    // ──────────────────────────────────────────────
-    // APPROVE & REJECT ACTIONS (PHASE 7)
-    // ──────────────────────────────────────────────
-    function verifyRequest(id) {
-      const req = requests.find(r => r.id === id);
-      if (!req) return;
-
-      req.status = 'verified';
-      req.rejectionReason = null;
-      saveRequests();
-      renderAll();
-      showToast(`✓ ${req.name} successfully verified!`);
-
-      // If it corresponds to demo user, also sync localStorage
-      if (req.id === 'req-1' || req.name.includes('John Doe') || req.name.includes('Royal Feast')) {
-        const donorData = JSON.parse(localStorage.getItem('feednow_donor_verification') || '{}');
-        donorData.status = 'verified';
-        localStorage.setItem('feednow_donor_verification', JSON.stringify(donorData));
-      }
-      if (req.id === 'req-5' || req.name.includes('Hope Foundation')) {
-        const ngoData = JSON.parse(localStorage.getItem('feednow_ngo_verification') || '{}');
-        ngoData.status = 'verified';
-        localStorage.setItem('feednow_ngo_verification', JSON.stringify(ngoData));
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // APPROVE & REJECT ACTIONS (REAL API)
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    async function verifyRequest(id, name) {
+      try {
+        const res = await API.admin.verifyUser(id);
+        if (res.success) {
+          const req = requests.find(r => r.id === id);
+          if (req) { req.status = 'verified'; req.rejectionReason = null; }
+          renderAll();
+          showToast(`âœ“ ${name} successfully approved!`);
+        } else {
+          showToast('Failed to approve: ' + (res.message || 'Unknown error'));
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message);
       }
     }
 
-    function unverifyRequest(id) {
-      const req = requests.find(r => r.id === id);
-      if (!req) return;
-      req.status = 'pending';
-      req.rejectionReason = null;
-      saveRequests();
-      renderAll();
-      showToast(`Status reset to Pending for ${req.name}`);
+    async function unverifyRequest(id, name) {
+      try {
+        // Reset to pending by calling reject with no reason â€” use a special backend workaround
+        // We'll just reload to keep it in sync; set verificationStatus back to pending via rejectUser with empty-ish reason
+        // Actually, expose a reset endpoint or re-use verifyUser with isVerified=false logic
+        // For now: send a PATCH to verify with isVerified=false to reset
+        const res = await API.request(`/admin/users/${id}/verify`, {
+          method: 'PATCH',
+          body: { isVerified: false },
+        });
+        if (res.success !== false) {
+          const req = requests.find(r => r.id === id);
+          if (req) { req.status = 'pending'; req.rejectionReason = null; }
+          renderAll();
+          showToast(`Status reset to Pending for ${name}`);
+        }
+      } catch (err) {
+        // fallback: just reload from server
+        await loadRequests();
+      }
     }
 
     function openRejectionModal(id) {
       const req = requests.find(r => r.id === id);
       if (!req) return;
-
       document.getElementById('rejectRequestId').value = id;
-      document.getElementById('rejectModalSubtitle').textContent = `Rejecting: ${req.name} (${req.idType}: ${req.idNumber})`;
+      document.getElementById('rejectModalSubtitle').textContent = `Rejecting: ${req.name} (${req.type.toUpperCase()})`;
       document.getElementById('rejectionReasonText').value = req.rejectionReason || '';
       document.getElementById('quickReasonSelect').value = '';
       document.getElementById('rejectionModal').classList.add('active');
@@ -958,7 +824,7 @@
       }
     }
 
-    function confirmRejection() {
+    async function confirmRejection() {
       const id = document.getElementById('rejectRequestId').value;
       const reason = document.getElementById('rejectionReasonText').value.trim();
 
@@ -970,54 +836,47 @@
       const req = requests.find(r => r.id === id);
       if (!req) return;
 
-      req.status = 'rejected';
-      req.rejectionReason = reason;
-      saveRequests();
-      closeRejectionModal();
-      renderAll();
-      showToast(`✕ ${req.name} has been rejected with notice.`);
+      const btn = document.querySelector('#rejectionModal .btn--danger');
+      if (btn) { btn.disabled = true; btn.textContent = 'Rejecting...'; }
 
-      // Sync demo user states if applicable
-      if (req.id === 'req-1' || req.name.includes('John Doe') || req.name.includes('Royal Feast')) {
-        const donorData = JSON.parse(localStorage.getItem('feednow_donor_verification') || '{}');
-        donorData.status = 'rejected';
-        donorData.rejectionReason = reason;
-        localStorage.setItem('feednow_donor_verification', JSON.stringify(donorData));
-      }
-      if (req.id === 'req-5' || req.name.includes('Hope Foundation')) {
-        const ngoData = JSON.parse(localStorage.getItem('feednow_ngo_verification') || '{}');
-        ngoData.status = 'rejected';
-        ngoData.rejectionReason = reason;
-        localStorage.setItem('feednow_ngo_verification', JSON.stringify(ngoData));
+      try {
+        const res = await API.admin.rejectUser(id, reason);
+        if (res.success) {
+          req.status = 'rejected';
+          req.rejectionReason = reason;
+          closeRejectionModal();
+          renderAll();
+          showToast(`âœ• ${req.name} has been rejected.`);
+        } else {
+          showToast('Failed to reject: ' + (res.message || 'Unknown error'));
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Confirm Rejection'; }
       }
     }
 
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // DOCUMENT PREVIEW MODAL
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function openDocModal(id) {
       const req = requests.find(r => r.id === id);
       if (!req) return;
-
-      const isDonor = req.type === 'donor';
       document.getElementById('docModalTitle').innerHTML = `
-        <i class="ph ph-file-pdf" style="color:var(--danger); font-size:1.4rem;"></i>
-        ${escapeHtml(req.name)} — Proof Preview
+        <i class="ph ph-user-circle" style="color:var(--primary); font-size:1.4rem;"></i>
+        ${escapeHtml(req.name)} â€” Profile
       `;
-      document.getElementById('docModalSubtitle').textContent = `${req.idType}: ${req.idNumber} · File: ${req.proofFile}`;
-      document.getElementById('docModalFileHeading').textContent = isDonor
-        ? 'Government Food Safety & Standards Authority Certificate'
-        : 'NITI Aayog NGO-DARPAN Registration Record';
-      
+      document.getElementById('docModalSubtitle').textContent = `${req.type.toUpperCase()} Â· ${req.email}`;
+      document.getElementById('docModalFileHeading').textContent = req.type === 'donor'
+        ? 'Food Safety & Standards Authority (FSSAI)' : 'NITI Aayog NGO-DARPAN Registration';
       document.getElementById('docModalIdInfo').innerHTML = `
-        Official Document Registry ID: <code>${escapeHtml(req.idNumber)}</code><br>
-        Entity: <strong>${escapeHtml(req.name)}</strong> · Representative: ${escapeHtml(req.repName)}
+        Email: <code>${escapeHtml(req.email)}</code><br>
+        Phone: <strong>${escapeHtml(req.phone)}</strong> Â· Registered: ${escapeHtml(req.submittedDate)}
       `;
-
-      document.getElementById('docModalRegistry').textContent = isDonor
+      document.getElementById('docModalRegistry').textContent = req.type === 'donor'
         ? 'FSSAI (Food Safety and Standards Authority of India)'
-        : 'NITI Aayog & Ministry of Corporate Affairs / Societies Act';
-
+        : 'NITI Aayog & Ministry of Corporate Affairs';
       document.getElementById('docModal').classList.add('active');
     }
 
@@ -1025,9 +884,9 @@
       document.getElementById('docModal').classList.remove('active');
     }
 
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // UTILITY HELPERS
-    // ──────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function showToast(msg) {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -1052,11 +911,15 @@
         .replace(/'/g, '&#039;');
     }
 
+    // â”€â”€ Logout â”€â”€
+    function adminLogout() {
+      API.auth.logout();
+    }
+
     // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       if (!Guards.requireRole('admin')) return;
-      loadRequests();
-      renderAll();
+      await loadRequests();
     });
   </script>
 
