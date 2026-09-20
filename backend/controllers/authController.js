@@ -34,8 +34,8 @@ const signup = async (req, res) => {
     if (!name || !email || !password || !role) {
       return res.status(400).json({ success: false, message: 'Name, email, password and role are required' });
     }
-    if (!['donor', 'ngo'].includes(role)) {
-      return res.status(400).json({ success: false, message: 'Role must be donor or ngo' });
+    if (!['donor', 'ngo', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, message: 'Role must be donor, ngo, or admin' });
     }
     if (password.length < 6) {
       return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });

@@ -186,11 +186,88 @@ const API = {
       return API.request(`/donations/${id}`);
     },
 
+    match(id) {
+      return API.request(`/donations/${id}/match`, {
+        method: 'POST',
+      });
+    },
+
+    update(id, payload) {
+      return API.request(`/donations/${id}`, {
+        method: 'PATCH',
+        body: payload,
+      });
+    },
+
     updateStatus(id, status) {
       return API.request(`/donations/${id}/status`, {
         method: 'PATCH',
         body: { status },
       });
+    },
+  },
+
+  /* ── Rescue Requests API ── */
+  rescueRequests: {
+    getMy() {
+      return API.request('/rescue-requests/my');
+    },
+
+    getById(id) {
+      return API.request(`/rescue-requests/${id}`);
+    },
+
+    getByDonation(donationId) {
+      return API.request(`/rescue-requests/donation/${donationId}`);
+    },
+
+    accept(id, payload = {}) {
+      return API.request(`/rescue-requests/${id}/accept`, {
+        method: 'PATCH',
+        body: payload,
+      });
+    },
+
+    reject(id, payload = {}) {
+      return API.request(`/rescue-requests/${id}/reject`, {
+        method: 'PATCH',
+        body: payload,
+      });
+    },
+
+    complete(id) {
+      return API.request(`/rescue-requests/${id}/complete`, {
+        method: 'PATCH',
+      });
+    },
+  },
+
+  /* ── Admin API ── */
+  admin: {
+    getStats() {
+      return API.request('/admin/stats');
+    },
+
+    getUsers(role) {
+      const q = role ? `?role=${role}` : '';
+      return API.request(`/admin/users${q}`);
+    },
+
+    verifyUser(id, isVerified) {
+      return API.request(`/admin/users/${id}/verify`, {
+        method: 'PATCH',
+        body: { isVerified },
+      });
+    },
+
+    getDonations(status) {
+      const q = status ? `?status=${status}` : '';
+      return API.request(`/admin/donations${q}`);
+    },
+
+    getRescueRequests(status) {
+      const q = status ? `?status=${status}` : '';
+      return API.request(`/admin/rescue-requests${q}`);
     },
   },
 

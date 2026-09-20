@@ -53,6 +53,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/ngos', require('./routes/ngoRoutes'));
 app.use('/api/donations', require('./routes/donationRoutes'));
+app.use('/api/rescue-requests', require('./routes/rescueRequestRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 

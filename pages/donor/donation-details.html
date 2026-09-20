@@ -166,11 +166,15 @@
           // Status Badge
           const statusBadge = document.getElementById('donationStatusBadge');
           statusBadge.textContent = d.status;
-          if (d.status === 'COMPLETED') statusBadge.className = 'badge badge--completed';
-          else if (d.status === 'DECLINED') {
+          const isComplete = ['COMPLETED', 'RESCUED'].includes(d.status);
+          const isAccepted = ['ACCEPTED', 'PARTIALLY_ACCEPTED', 'FULLY_ACCEPTED', 'READY_FOR_PICKUP', 'PICKED_UP', 'COORDINATED'].includes(d.status);
+          const isDeclined = ['DECLINED', 'REJECTED', 'CANCELLED', 'EXPIRED'].includes(d.status);
+
+          if (isComplete) statusBadge.className = 'badge badge--completed';
+          else if (isDeclined) {
             statusBadge.className = 'badge';
             statusBadge.style.cssText = 'background:#fee2e2;color:#991b1b;';
-          } else if (d.status === 'ACCEPTED' || d.status === 'COORDINATED') {
+          } else if (isAccepted) {
             statusBadge.className = 'badge badge--pickup';
           } else {
             statusBadge.className = 'badge badge--pending';
@@ -178,10 +182,10 @@
 
           // Food Info
           document.getElementById('foodName').textContent = d.foodName;
-          document.getElementById('foodMeta').textContent = `${d.foodType} • ${d.quantity}`;
+          document.getElementById('foodMeta').textContent = `${d.foodType} • ${d.quantity} ${d.unit || ''}`;
           document.getElementById('preparedAt').textContent = d.preparedAt ? new Date(d.preparedAt).toLocaleString() : 'Not specified';
           document.getElementById('pickupDeadline').textContent = d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleString() : 'Not specified';
-          document.getElementById('pickupAddress').textContent = d.pickupAddress || 'Address on file';
+          document.getElementById('pickupAddress').textContent = d.pickupAddress || d.location?.address || 'Address on file';
 
           if (d.notes) {
             document.getElementById('notesContainer').style.display = 'block';
@@ -193,29 +197,32 @@
           const coordTitle = document.getElementById('coordTitle');
           const coordDesc = document.getElementById('coordDesc');
 
-          if (d.status === 'PENDING') {
+          if (['AVAILABLE', 'MATCHING'].includes(d.status)) {
+            coordTitle.textContent = 'Matching Nearby NGOs';
+            coordDesc.textContent = 'Our algorithm is calculating compatibility and routing to nearby NGOs.';
+          } else if (['PENDING', 'REQUESTED'].includes(d.status)) {
             coordTitle.textContent = 'Waiting for NGO Acceptance';
             coordDesc.textContent = `${ngoName} is currently reviewing your food offer.`;
-          } else if (d.status === 'ACCEPTED') {
+          } else if (['ACCEPTED', 'PARTIALLY_ACCEPTED', 'FULLY_ACCEPTED'].includes(d.status)) {
             coordContent.style.background = 'var(--primary-50)';
             coordContent.querySelector('div').style.color = 'var(--primary-dark)';
             coordTitle.textContent = 'Donation Accepted!';
-            coordDesc.textContent = `${ngoName} has accepted your donation. Pickup coordination is underway.`;
-          } else if (d.status === 'COORDINATED') {
+            coordDesc.textContent = `${ngoName} has accepted. Pickup coordination is underway.`;
+          } else if (['COORDINATED', 'READY_FOR_PICKUP', 'PICKED_UP'].includes(d.status)) {
             coordContent.style.background = 'var(--info-bg)';
             coordContent.querySelector('div').style.color = 'var(--info-text)';
             coordTitle.textContent = 'Pickup Scheduled';
-            coordDesc.textContent = `The NGO team will collect the food before ${new Date(d.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`;
-          } else if (d.status === 'COMPLETED') {
+            coordDesc.textContent = `The NGO team will collect the food before ${d.pickupDeadline ? new Date(d.pickupDeadline).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'deadline'}.`;
+          } else if (isComplete) {
             coordContent.style.background = 'var(--success-bg)';
             coordContent.querySelector('div').style.color = 'var(--success-text)';
             coordTitle.textContent = 'Donation Completed!';
             coordDesc.textContent = `Food successfully collected and safely delivered. Thank you for your impact!`;
-          } else if (d.status === 'DECLINED') {
+          } else if (isDeclined) {
             coordContent.style.background = '#fee2e2';
             coordContent.querySelector('div').style.color = '#991b1b';
-            coordTitle.textContent = 'Donation Declined';
-            coordDesc.textContent = `Unfortunately the NGO could not accept this offer at this time.`;
+            coordTitle.textContent = `Donation ${d.status}`;
+            coordDesc.textContent = `This donation offer is no longer active.`;
           }
 
           // Render timeline
@@ -230,15 +237,28 @@
     function renderTimeline(d) {
       const list = document.getElementById('timelineList');
       const steps = [
-        { key: 'CREATED', label: 'Request Sent', desc: new Date(d.createdAt).toLocaleString() },
-        { key: 'PENDING', label: 'NGO Reviewing', desc: 'Reviewed by NGO team' },
-        { key: 'ACCEPTED', label: 'Accepted', desc: 'NGO confirmed acceptance' },
-        { key: 'COORDINATED', label: 'Pickup Coordinated', desc: 'Pickup scheduled' },
-        { key: 'COMPLETED', label: 'Completed', desc: 'Delivered to beneficiaries' },
+        { key: 'CREATED', label: 'Offer Created', desc: new Date(d.createdAt).toLocaleString() },
+        { key: 'MATCHED', label: 'NGO Matched', desc: 'Matched with local partner' },
+        { key: 'ACCEPTED', label: 'Accepted', desc: 'Confirmed by NGO' },
+        { key: 'PICKUP', label: 'Pickup Ready', desc: 'Ready for collection' },
+        { key: 'COMPLETED', label: 'Rescued', desc: 'Delivered to people in need' },
       ];
 
-      const statusOrder = ['CREATED', 'PENDING', 'ACCEPTED', 'COORDINATED', 'COMPLETED'];
-      const currentIndex = d.status === 'DECLINED' ? 1 : statusOrder.indexOf(d.status);
+      const statusMapIdx = {
+        AVAILABLE: 0,
+        MATCHING: 1,
+        REQUESTED: 1,
+        PENDING: 1,
+        ACCEPTED: 2,
+        PARTIALLY_ACCEPTED: 2,
+        FULLY_ACCEPTED: 2,
+        READY_FOR_PICKUP: 3,
+        COORDINATED: 3,
+        PICKED_UP: 3,
+        RESCUED: 4,
+        COMPLETED: 4,
+      };
+      const currentIndex = statusMapIdx[d.status] !== undefined ? statusMapIdx[d.status] : 1;
 
       list.innerHTML = steps.map((s, idx) => {
         let dotClass = '';

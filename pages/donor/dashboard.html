@@ -195,49 +195,9 @@
           </div>
 
           <div class="donation-list" id="recentDonationsList">
-            
-            <div class="donation-item">
-              <div class="donation-item__info">
-                <div class="donation-item__icon"><i class="ph ph-bowl-food"></i></div>
-                <div class="donation-item__details">
-                  <h4>Vegetable Curry & Rice</h4>
-                  <p>50 Meals • To: Hope Foundation</p>
-                </div>
-              </div>
-              <div class="donation-item__status">
-                <span class="badge badge--pending">Pending NGO Acceptance</span>
-                <span class="text-xs text-muted">2 hours ago</span>
-              </div>
+            <div style="padding: var(--space-6); text-align: center; color: var(--text-muted);">
+              <span class="spinner"></span> Loading recent donations...
             </div>
-
-            <div class="donation-item">
-              <div class="donation-item__info">
-                <div class="donation-item__icon"><i class="ph ph-bread"></i></div>
-                <div class="donation-item__details">
-                  <h4>Assorted Breads</h4>
-                  <p>20 Packs • To: City Relief Center</p>
-                </div>
-              </div>
-              <div class="donation-item__status">
-                <span class="badge badge--pickup">Pickup Scheduled</span>
-                <span class="text-xs text-muted">Yesterday at 4:30 PM</span>
-              </div>
-            </div>
-
-            <div class="donation-item">
-              <div class="donation-item__info">
-                <div class="donation-item__icon"><i class="ph ph-carrot"></i></div>
-                <div class="donation-item__details">
-                  <h4>Fresh Fruits</h4>
-                  <p>15 Kilograms • To: Community Kitchen</p>
-                </div>
-              </div>
-              <div class="donation-item__status">
-                <span class="badge badge--completed">Completed</span>
-                <span class="text-xs text-muted">Oct 12, 2026</span>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -269,19 +229,27 @@
         const res = await API.dashboard.getDonor();
         if (res.success && res.stats) {
           document.getElementById('totalDonationsVal').textContent = res.stats.total;
-          document.getElementById('completedDonationsVal').textContent = res.stats.completed;
-          document.getElementById('pendingDonationsVal').textContent = res.stats.pending;
+          document.getElementById('completedDonationsVal').textContent = res.stats.completed || res.stats.totalMealsSaved || 0;
+          document.getElementById('pendingDonationsVal').textContent = res.stats.pending || res.stats.active || 0;
         }
 
         const list = document.getElementById('recentDonationsList');
         if (res.recentDonations && res.recentDonations.length > 0) {
           list.innerHTML = res.recentDonations.map(d => {
             const statusBadgeMap = {
+              AVAILABLE: '<span class="badge badge--pending">Available</span>',
+              MATCHING: '<span class="badge badge--pending">Matching</span>',
+              REQUESTED: '<span class="badge badge--pending">Requested</span>',
+              PARTIALLY_ACCEPTED: '<span class="badge badge--pickup">Partially Accepted</span>',
+              FULLY_ACCEPTED: '<span class="badge badge--pickup">Fully Accepted</span>',
+              READY_FOR_PICKUP: '<span class="badge badge--pickup">Ready for Pickup</span>',
+              PICKED_UP: '<span class="badge badge--pickup">Picked Up</span>',
+              RESCUED: '<span class="badge badge--completed">Rescued</span>',
+              COMPLETED: '<span class="badge badge--completed">Completed</span>',
+              EXPIRED: '<span class="badge badge--declined" style="background:#fee2e2;color:#991b1b;">Expired</span>',
+              CANCELLED: '<span class="badge badge--declined" style="background:#fee2e2;color:#991b1b;">Cancelled</span>',
               PENDING: '<span class="badge badge--pending">Pending Review</span>',
               ACCEPTED: '<span class="badge badge--pickup">Accepted</span>',
-              COORDINATED: '<span class="badge badge--pickup">Pickup Coordinated</span>',
-              COMPLETED: '<span class="badge badge--completed">Completed</span>',
-              DECLINED: '<span class="badge badge--declined" style="background:#fee2e2;color:#991b1b;">Declined</span>',
             };
             const badge = statusBadgeMap[d.status] || `<span class="badge badge--pending">${d.status}</span>`;
             const dateStr = d.createdAt ? new Date(d.createdAt).toLocaleDateString() : '';

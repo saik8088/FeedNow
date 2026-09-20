@@ -125,7 +125,9 @@
           });
 
           if (res.success && res.user) {
-            if (res.user.role === 'ngo') {
+            if (res.user.role === 'admin') {
+              window.location.href = 'admin/dashboard.html';
+            } else if (res.user.role === 'ngo') {
               window.location.href = 'ngo/dashboard.html';
             } else {
               window.location.href = 'donor/dashboard.html';

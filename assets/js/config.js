@@ -48,12 +48,20 @@ const CONFIG = {
 
   // Donation statuses
   DONATION_STATUS: {
-    PENDING: 'pending',
-    ACCEPTED: 'accepted',
-    DECLINED: 'declined',
-    PICKUP_SCHEDULED: 'pickup_scheduled',
-    COMPLETED: 'completed',
-    CANCELLED: 'cancelled',
+    AVAILABLE: 'AVAILABLE',
+    MATCHING: 'MATCHING',
+    REQUESTED: 'REQUESTED',
+    PARTIALLY_ACCEPTED: 'PARTIALLY_ACCEPTED',
+    FULLY_ACCEPTED: 'FULLY_ACCEPTED',
+    READY_FOR_PICKUP: 'READY_FOR_PICKUP',
+    PICKED_UP: 'PICKED_UP',
+    RESCUED: 'RESCUED',
+    COMPLETED: 'COMPLETED',
+    EXPIRED: 'EXPIRED',
+    CANCELLED: 'CANCELLED',
+    PENDING: 'PENDING',
+    ACCEPTED: 'ACCEPTED',
+    DECLINED: 'DECLINED',
   },
 
   // Food types

@@ -91,6 +91,7 @@ const updateMyProfile = async (req, res) => {
       'organizationName', 'description', 'phone', 'address',
       'city', 'latitude', 'longitude', 'foodTypes', 'requirements',
       'pickupAvailable', 'isAcceptingDonations',
+      'foodStatus', 'mealsNeeded', 'peopleToServe',
     ];
     const updates = {};
     allowed.forEach((key) => {

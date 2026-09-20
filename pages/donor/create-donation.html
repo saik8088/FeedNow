@@ -241,23 +241,26 @@
         deadlineDate.setDate(deadlineDate.getDate() + 1);
       }
 
-      const btn = document.getElementById('submitBtn');
-      UI.setButtonLoading(btn, true);
-
       try {
         const res = await API.donations.create({
-          ngoId: currentNgoId,
           foodName,
           foodType,
-          quantity: `${quantity} ${unit}`,
+          quantity: Number(quantity),
+          unit: unit || 'Meals',
           preparedAt: preparedTime ? new Date(preparedTime).toISOString() : new Date().toISOString(),
           pickupDeadline: deadlineDate.toISOString(),
           pickupAddress,
           notes,
         });
 
-        if (res.success) {
-          window.location.href = 'donation-success.html';
+        if (res.success && res.donation) {
+          // Trigger automatic smart matching
+          try {
+            await API.donations.match(res.donation._id);
+          } catch (mErr) {
+            console.log('Auto-matching:', mErr.message);
+          }
+          window.location.href = 'donations.html';
         } else {
           alert(res.message || 'Failed to create donation');
           UI.setButtonLoading(btn, false);

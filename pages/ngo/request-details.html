@@ -214,8 +214,8 @@
       const statusBadge = document.getElementById('statusBadge');
       statusBadge.textContent = d.status;
       if (d.status === 'PENDING') statusBadge.className = 'badge badge--pending';
-      else if (d.status === 'ACCEPTED' || d.status === 'COORDINATED') statusBadge.className = 'badge badge--pickup';
-      else if (d.status === 'COMPLETED') statusBadge.className = 'badge badge--completed';
+      else if (['ACCEPTED', 'COORDINATED', 'READY_FOR_PICKUP'].includes(d.status)) statusBadge.className = 'badge badge--pickup';
+      else if (['COMPLETED', 'RESCUED'].includes(d.status)) statusBadge.className = 'badge badge--completed';
       else statusBadge.className = 'badge badge--declined';
 
       document.getElementById('foodName').textContent = d.foodName;
@@ -249,7 +249,7 @@
           <button class="btn btn--danger btn--lg" style="flex: 1;" onclick="UI.openModal('declineModal')">Decline Request</button>
           <button class="btn btn--primary btn--lg" style="flex: 2;" onclick="UI.openModal('acceptModal')">Accept & Coordinate</button>
         `;
-      } else if (d.status === 'ACCEPTED') {
+      } else if (['ACCEPTED', 'READY_FOR_PICKUP'].includes(d.status)) {
         actions.innerHTML = `
           <button class="btn btn--secondary btn--lg" style="flex: 1;" onclick="handleCoordinate()">Coordinate Pickup</button>
           <button class="btn btn--primary btn--lg" style="flex: 1;" onclick="handleComplete()">Complete Donation</button>
@@ -258,16 +258,16 @@
         actions.innerHTML = `
           <button class="btn btn--primary btn--lg" style="flex: 1;" onclick="handleComplete()">Mark as Completed</button>
         `;
-      } else if (d.status === 'COMPLETED') {
+      } else if (['COMPLETED', 'RESCUED'].includes(d.status)) {
         actions.innerHTML = `
           <div style="color: var(--success); font-weight: var(--weight-semibold); width: 100%; text-align: center; padding: var(--space-2);">
             ✓ This donation has been completed.
           </div>
         `;
-      } else if (d.status === 'DECLINED') {
+      } else if (['DECLINED', 'REJECTED', 'CANCELLED', 'EXPIRED'].includes(d.status)) {
         actions.innerHTML = `
           <div style="color: var(--danger); font-weight: var(--weight-semibold); width: 100%; text-align: center; padding: var(--space-2);">
-            ✕ This donation was declined.
+            ✕ This donation was ${d.status.toLowerCase()}.
           </div>
         `;
       }

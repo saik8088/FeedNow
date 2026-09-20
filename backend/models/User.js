@@ -1,5 +1,5 @@
 /* ============================================================
-   FEEDNOW — User Model
+   FEEDNOW — User Model (Fixed — admin role added)
    ============================================================ */
 
 const mongoose = require('mongoose');
@@ -27,12 +27,21 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['donor', 'ngo'],
+      enum: ['donor', 'ngo', 'admin'],
       required: [true, 'Role is required'],
     },
     phone: {
       type: String,
       trim: true,
+    },
+    // Admin-set verification for donors/NGOs
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }

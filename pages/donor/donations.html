@@ -204,7 +204,8 @@
         allDonations = res && res.donations ? res.donations : [];
 
         // Count active
-        const activeCount = allDonations.filter(d => ['PENDING', 'ACCEPTED', 'COORDINATED'].includes(d.status)).length;
+        const activeStatuses = ['AVAILABLE', 'MATCHING', 'REQUESTED', 'PARTIALLY_ACCEPTED', 'FULLY_ACCEPTED', 'READY_FOR_PICKUP', 'PICKED_UP', 'PENDING', 'ACCEPTED', 'COORDINATED'];
+        const activeCount = allDonations.filter(d => activeStatuses.includes(d.status)).length;
         document.getElementById('activeCount').textContent = activeCount;
 
         renderTable(allDonations);
@@ -229,17 +230,29 @@
       }
 
       const statusMap = {
+        AVAILABLE: '<span class="badge badge--pending">Available</span>',
+        MATCHING: '<span class="badge badge--pending">Matching NGOs</span>',
+        REQUESTED: '<span class="badge badge--pending">Requested</span>',
+        PARTIALLY_ACCEPTED: '<span class="badge badge--pickup">Partially Accepted</span>',
+        FULLY_ACCEPTED: '<span class="badge badge--pickup">Fully Accepted</span>',
+        READY_FOR_PICKUP: '<span class="badge badge--pickup">Ready for Pickup</span>',
+        PICKED_UP: '<span class="badge badge--pickup">Picked Up</span>',
+        RESCUED: '<span class="badge badge--completed">Rescued</span>',
+        COMPLETED: '<span class="badge badge--completed">Completed</span>',
+        EXPIRED: '<span class="badge" style="background:#fee2e2;color:#991b1b;">Expired</span>',
+        CANCELLED: '<span class="badge" style="background:#fee2e2;color:#991b1b;">Cancelled</span>',
         PENDING: '<span class="badge badge--pending">Pending Review</span>',
         ACCEPTED: '<span class="badge badge--pickup">Accepted</span>',
         COORDINATED: '<span class="badge badge--pickup">Pickup Scheduled</span>',
-        COMPLETED: '<span class="badge badge--completed">Completed</span>',
         DECLINED: '<span class="badge" style="background:#fee2e2;color:#991b1b;">Declined</span>',
       };
 
       tbody.innerHTML = donations.map(d => {
         const dateStr = d.createdAt ? new Date(d.createdAt).toLocaleString() : '';
         const badge = statusMap[d.status] || `<span class="badge">${d.status}</span>`;
-        const ngoName = d.ngoName || d.ngoId?.name || 'NGO';
+        const ngoName = (d.rescueRequests && d.rescueRequests.length > 0)
+          ? d.rescueRequests.map(r => r.ngoId?.name).filter(Boolean).join(', ')
+          : (d.ngoName || d.ngoId?.name || (d.status === 'AVAILABLE' ? 'Unassigned' : 'Matching...'));
 
         return `
           <tr style="cursor: pointer;" onclick="window.location.href='donation-details.html?id=${d._id}'">
@@ -253,7 +266,7 @@
               </div>
             </td>
             <td data-label="NGO">${ngoName}</td>
-            <td data-label="Quantity">${d.quantity}</td>
+            <td data-label="Quantity">${d.quantity} ${d.unit || ''}</td>
             <td data-label="Date">${dateStr}</td>
             <td data-label="Status">${badge}</td>
             <td data-label="Action"><a href="donation-details.html?id=${d._id}" class="btn btn--ghost btn--sm">View</a></td>
@@ -271,15 +284,16 @@
           tab.classList.add('active');
 
           const filter = tab.getAttribute('data-filter');
+          const activeStatuses = ['AVAILABLE', 'MATCHING', 'REQUESTED', 'PARTIALLY_ACCEPTED', 'FULLY_ACCEPTED', 'READY_FOR_PICKUP', 'PICKED_UP', 'PENDING', 'ACCEPTED', 'COORDINATED'];
 
           if (filter === 'all') {
             renderTable(allDonations);
           } else if (filter === 'active') {
-            renderTable(allDonations.filter(d => ['PENDING', 'ACCEPTED', 'COORDINATED'].includes(d.status)));
+            renderTable(allDonations.filter(d => activeStatuses.includes(d.status)));
           } else if (filter === 'completed') {
-            renderTable(allDonations.filter(d => d.status === 'COMPLETED'));
+            renderTable(allDonations.filter(d => ['COMPLETED', 'RESCUED'].includes(d.status)));
           } else if (filter === 'declined') {
-            renderTable(allDonations.filter(d => d.status === 'DECLINED'));
+            renderTable(allDonations.filter(d => ['DECLINED', 'REJECTED', 'EXPIRED', 'CANCELLED'].includes(d.status)));
           }
         });
       });
